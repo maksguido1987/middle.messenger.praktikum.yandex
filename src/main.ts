@@ -1,8 +1,7 @@
-import "./style.scss";
+import "./main.scss";
 import { App } from "./App";
 
-// Инициализация приложения
 document.addEventListener("DOMContentLoaded", () => {
-  const app = new App("#app");
+  const app = new App("app");
   app.init();
 });

@@ -1,45 +1,28 @@
 import Handlebars from "handlebars";
-import { Button } from "./components/button/Button";
-import { Input } from "./components/input/Input";
+import { Button, Input, FormTitle, Link } from "./components";
+import { Login, Signin } from "./pages";
+
+Handlebars.registerPartial("Button", Button);
+Handlebars.registerPartial("Input", Input);
+Handlebars.registerPartial("FormTitle", FormTitle);
+Handlebars.registerPartial("Link", Link);
 
 export class App {
   private rootElement: HTMLElement;
 
   constructor(rootSelector: string) {
-    const root = document.querySelector(rootSelector);
+    const root = document.getElementById(rootSelector);
 
     if (!root) {
       throw new Error(`Элемент с селектором "${rootSelector}" не найден`);
     }
 
     this.rootElement = root as HTMLElement;
-
-    // Регистрируем компоненты в Handlebars
-    Handlebars.registerPartial("Button", Button);
-    Handlebars.registerPartial("Input", Input);
   }
 
   private render() {
-    const template = `
-      <div class="app-container">
-        <h1>Тестовое приложение</h1>
-        <div class="form-group">
-          {{{Input label="Имя пользователя" id="username" name="username" type="text" required=true}}}
-        </div>
-        <div class="form-group">
-          {{{Input label="Электронная почта" id="email" name="email" type="email" required=true}}}
-        </div>
-        <div class="form-group">
-          {{{Input label="Пароль" id="password" name="password" type="password" required=true}}}
-        </div>
-        <div class="form-actions">
-          {{{Button text="Отправить" type="submit" class="submit-button"}}}
-        </div>
-      </div>
-    `;
-
-    const compiledTemplate = Handlebars.compile(template);
-    this.rootElement.innerHTML = compiledTemplate({});
+    const template = Handlebars.compile(Login);
+    this.rootElement.innerHTML = template({});
 
     this.addEventListeners();
   }
@@ -52,13 +35,11 @@ export class App {
     if (form) {
       form.addEventListener("submit", (e) => {
         e.preventDefault();
-        console.log("Форма отправлена");
       });
     }
   }
 
   public init() {
     this.render();
-    console.log("Приложение инициализировано");
   }
 }

@@ -1,0 +1,12 @@
+@import "../../vars.scss";
+
+.link {
+  color: $primary-color;
+  text-decoration: none;
+  text-align: center;
+  font-size: $font-size-sm;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

@@ -1,0 +1,17 @@
+@import "../../vars.scss";
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  justify-content: center;
+}
+
+.submit-button {
+  min-width: 150px;
+}

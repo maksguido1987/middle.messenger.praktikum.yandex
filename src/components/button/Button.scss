@@ -1,23 +1,24 @@
-$primary-color: #3498db;
+@import "../../vars";
+
 $hover-color: #2980b9;
 
 .button {
+  width: 100%;
   padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
+  border-radius: $border-radius-md;
   background-color: $primary-color;
-  color: white;
-  font-size: 14px;
+  color: $text-white;
+  font-size: $font-size-md;
   cursor: pointer;
   transition: background-color 0.2s ease;
 
   &:hover {
     background-color: $hover-color;
+    box-shadow: $shadow-hover;
   }
 
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
+    box-shadow: $shadow-default;
   }
 
   &:active {

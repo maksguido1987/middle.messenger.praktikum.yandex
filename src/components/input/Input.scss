@@ -1,50 +1,61 @@
-$primary-color: #3498db;
-$error-color: #e74c3c;
+@import "../../vars.scss";
+
 $border-color: #bdc3c7;
 $label-color: #7f8c8d;
 $transition-speed: 0.2s;
+$light-blue: #ebf5fb;
+$required-star-color: #ff8c00;
 
 .input-container {
   position: relative;
-  margin-bottom: 20px;
   width: 100%;
+  color: $text-primary;
 
   .input {
     width: 100%;
-    padding: 10px 0;
+    padding: 10px;
     font-size: 16px;
-    border: none;
     border-bottom: 1px solid $border-color;
     background-color: transparent;
-    transition: border-color $transition-speed ease;
+    transition: all $transition-speed ease;
 
     &:focus {
-      outline: none;
       border-color: $primary-color;
+      background-color: $light-blue;
 
       & ~ .input-underline {
         transform: scaleX(1);
       }
 
       & ~ .input-label {
-        top: -20px;
+        top: -10px;
+        left: 0;
         font-size: 12px;
         color: $primary-color;
       }
     }
 
-    &:not(:placeholder-shown) ~ .input-label {
-      top: -20px;
-      font-size: 12px;
+    &:not(:placeholder-shown) {
+      background-color: $light-blue;
+
+      & ~ .input-label {
+        top: -10px;
+        left: 0;
+        font-size: 12px;
+        color: $primary-color;
+      }
     }
   }
 
   .input-label {
     position: absolute;
     top: 10px;
-    left: 0;
+    left: 10px;
+    padding: 1px 2px;
     font-size: 16px;
     color: $label-color;
+    background-color: $text-white;
+    border-radius: 0 0 $border-radius-sm 0;
     pointer-events: none;
     transition: $transition-speed ease all;
   }
@@ -77,4 +88,23 @@ $transition-speed: 0.2s;
       background-color: $error-color;
     }
   }
+}
+
+.input:-webkit-autofill + .input-label {
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+  color: $primary-color;
+}
+
+.input:autofill + .input-label {
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+  color: $primary-color;
+}
+
+.input:-webkit-autofill,
+.input:autofill {
+  -webkit-box-shadow: 0 0 0 30px $light-blue inset !important;
 }

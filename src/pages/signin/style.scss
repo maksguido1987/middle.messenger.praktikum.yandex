@@ -1,0 +1,11 @@
+@import "../../vars.scss";
+
+.signin-button-container {
+  margin-top: $spacing-md;
+  margin-bottom: $spacing-sm;
+}
+
+.signin-link {
+  text-align: center;
+  font-size: $font-size-sm;
+}
