@@ -9,9 +9,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "start": "vite build && node server.cjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "express": "^4.21.2",
     "handlebars": "^4.7.8"
   },
   "devDependencies": {
