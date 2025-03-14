@@ -1,7 +1,14 @@
 import Handlebars from "handlebars";
 import { Button, Input, FormTitle, Link, Avatar } from "./components";
 import { Login, Signin, Chat } from "./pages";
-import { ChatItem, ChatList, ChatSearch } from "./pages/chat/components";
+import {
+  AttachButton,
+  ChatHeader,
+  ChatInput,
+  ChatItem,
+  ChatList,
+  ChatSearch,
+} from "./pages/chat/components";
 import { ChatListComponent } from "./pages/chat/components/chat-list/ChatList";
 
 Handlebars.registerPartial("Button", Button);
@@ -12,6 +19,9 @@ Handlebars.registerPartial("Avatar", Avatar);
 Handlebars.registerPartial("ChatSearch", ChatSearch);
 Handlebars.registerPartial("ChatList", ChatList);
 Handlebars.registerPartial("ChatItem", ChatItem);
+Handlebars.registerPartial("ChatHeader", ChatHeader);
+Handlebars.registerPartial("ChatInput", ChatInput);
+Handlebars.registerPartial("AttachButton", AttachButton);
 
 export class App {
   private rootElement: HTMLElement;

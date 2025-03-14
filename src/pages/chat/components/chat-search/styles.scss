@@ -1,19 +1,19 @@
-@import "../../../../vars.scss";
+@use "../../../../vars.scss" as vars;
 
 .chat-search {
   padding: 11px;
-  border-bottom: 1px solid $bg-secondary;
+  border-bottom: 1px solid vars.$bg-secondary;
   position: relative;
 
   &__input {
     width: 290px;
     height: 32px;
-    border-radius: $border-radius-sm;
-    background-color: $bg-secondary;
+    border-radius: vars.$border-radius-sm;
+    background-color: vars.$bg-secondary;
     font-size: 14px;
 
     &::placeholder {
-      color: $text-secondary;
+      color: vars.$text-secondary;
       font-size: 14px;
     }
   }
@@ -26,7 +26,7 @@
     transform: translateY(-50%);
     width: 24px;
     height: 24px;
-    background-color: $text-secondary;
+    background-color: vars.$text-secondary;
     mask-image: url("/images/search.svg");
     mask-repeat: no-repeat;
     mask-position: center;
@@ -38,13 +38,13 @@
 // Сброс стилей базового Input
 .input-container .input.reset-input {
   border: none;
-  background-color: $bg-secondary;
+  background-color: vars.$bg-secondary;
   padding: 0 10px 0 30px;
   height: 32px;
 
   &:focus,
   &:not(:placeholder-shown) {
-    background-color: $bg-secondary;
+    background-color: vars.$bg-secondary;
     border: none;
 
     & ~ .input-underline {

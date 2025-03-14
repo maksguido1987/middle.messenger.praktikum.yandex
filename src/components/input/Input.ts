@@ -1,4 +1,4 @@
-import "./Input.scss";
+import "./style.scss";
 
 export const Input = `
     <div class="input-container">

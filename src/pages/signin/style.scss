@@ -1,8 +1,8 @@
-@import "../../vars.scss";
+@use "../../vars.scss" as vars;
 
 .signin-button-container {
-  margin-top: $spacing-md;
-  margin-bottom: $spacing-sm;
+  margin-top: vars.$spacing-md;
+  margin-bottom: vars.$spacing-sm;
 }
 
 .signin-link {

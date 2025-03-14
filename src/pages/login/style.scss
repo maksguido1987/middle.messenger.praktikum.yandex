@@ -1,4 +1,4 @@
-@import "../../vars.scss";
+@use "../../vars.scss" as vars;
 
 .form-group {
   margin-bottom: 20px;
@@ -8,8 +8,9 @@
   margin-top: 30px;
   display: flex;
   flex-direction: column;
-  gap: $spacing-md;
+  gap: vars.$spacing-md;
   justify-content: center;
+  align-items: center;
 }
 
 .submit-button {

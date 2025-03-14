@@ -1,4 +1,12 @@
-@import "./vars.scss";
+@use "./vars.scss" as *;
+@forward "./pages/login/style";
+@forward "./pages/signin/style";
+@forward "./pages/chat/style";
+@forward "./pages/chat/components/chat-list/style";
+@forward "./pages/chat/components/chat-item/style";
+@forward "./pages/chat/components/chat-header/style";
+@forward "./pages/chat/components/chat-search/styles";
+@forward "./pages/chat/components/chat-input/style";
 
 * {
   margin: 0;
@@ -63,10 +71,3 @@ textarea {
   border-radius: $border-radius-lg;
   box-shadow: $shadow-form;
 }
-
-@import "./pages/login/style.scss";
-@import "./pages/signin/style.scss";
-@import "./pages/chat/style.scss";
-
-@import "./pages/chat/components/chat-list/style.scss";
-@import "./pages/chat/components/chat-item/style.scss";
