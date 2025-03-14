@@ -1,0 +1,32 @@
+@import "../../vars";
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: $secondary-color;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &__initials {
+    color: $text-white;
+    font-weight: 600;
+    font-size: $font-size-sm;
+    text-transform: uppercase;
+  }
+
+  &.chat-item__avatar {
+    width: 47px;
+    height: 47px;
+  }
+
+  &.chat-header__avatar {
+    width: 34px;
+    height: 34px;
+  }
+}

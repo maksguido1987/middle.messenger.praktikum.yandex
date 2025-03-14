@@ -1,0 +1,46 @@
+<main class="chat-page">
+  <div class="chat-sidebar">
+    {{> ChatSearch }}
+    {{> ChatList }}
+  </div>
+
+  <div class="chat-content">
+    <div class="chat-header">
+      <div class="chat-header__profile">
+        <div class="chat-header__avatar"></div>
+        <div class="chat-header__name">Иван Иванов</div>
+      </div>
+      <div class="chat-header__actions">
+        <button class="chat-header__menu-button">
+          <div class="dots-menu">
+            <span class="dots-menu__dot"></span>
+            <span class="dots-menu__dot"></span>
+            <span class="dots-menu__dot"></span>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-messages">
+      <!-- Здесь будут отображаться сообщения -->
+      <div class="message message--incoming">
+        <div class="message__content">Привет, как дела?</div>
+        <div class="message__time">10:30</div>
+      </div>
+      <div class="message message--outgoing">
+        <div class="message__content">Привет! Всё хорошо, спасибо!</div>
+        <div class="message__time">10:32</div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <button class="chat-input__attach-button">
+        <span class="chat-input__attach-icon"></span>
+      </button>
+      <input type="text" placeholder="Сообщение" class="chat-input__field" />
+      <button class="chat-input__send-button">
+        <span class="chat-input__send-icon"></span>
+      </button>
+    </div>
+  </div>
+</main>

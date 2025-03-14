@@ -66,3 +66,7 @@ textarea {
 
 @import "./pages/login/style.scss";
 @import "./pages/signin/style.scss";
+@import "./pages/chat/style.scss";
+
+@import "./pages/chat/components/chat-list/style.scss";
+@import "./pages/chat/components/chat-item/style.scss";
