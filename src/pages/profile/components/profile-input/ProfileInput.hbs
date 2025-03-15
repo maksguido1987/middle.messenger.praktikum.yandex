@@ -1,0 +1,11 @@
+<div class="profile-input {{#if readonly}}{{#unless isEditing}}readonly{{/unless}}{{/if}}">
+    <label class="profile-input__label">{{label}}</label>
+    <input 
+        type="text" 
+        class="profile-input__input {{class}}" 
+        value="{{value}}" 
+        name="{{name}}"
+        {{#if id}}id="{{id}}"{{/if}}
+        {{#if readonly}}{{#unless isEditing}}readonly{{/unless}}{{/if}}
+    />
+</div>

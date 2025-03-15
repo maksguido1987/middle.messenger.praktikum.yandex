@@ -1,0 +1,50 @@
+@use "../../../../vars.scss" as *;
+
+.profile-avatar {
+  position: relative;
+  width: 130px;
+  height: 130px;
+  margin-bottom: $spacing-md;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+
+  &__image {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0);
+    color: transparent;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+  }
+
+  &:hover &__overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: $text-white;
+  }
+
+  &__text {
+    font-size: $font-size-sm;
+    text-align: center;
+    padding: 0 $spacing-md;
+  }
+
+  &__input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+  }
+}

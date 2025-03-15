@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 import { Button, Input, FormTitle, Link, Avatar } from "./components";
-import { Login, Signin, Chat } from "./pages";
+import { Login, Signin, Chat, Profile } from "./pages";
 import {
   AttachButton,
   ChatHeader,
@@ -10,6 +10,7 @@ import {
   ChatSearch,
 } from "./pages/chat/components";
 import { ChatListComponent } from "./pages/chat/components/chat-list/ChatList";
+import { LoadAvatar, ProfileInput } from "./pages/profile/components";
 
 Handlebars.registerPartial("Button", Button);
 Handlebars.registerPartial("Input", Input);
@@ -22,6 +23,8 @@ Handlebars.registerPartial("ChatItem", ChatItem);
 Handlebars.registerPartial("ChatHeader", ChatHeader);
 Handlebars.registerPartial("ChatInput", ChatInput);
 Handlebars.registerPartial("AttachButton", AttachButton);
+Handlebars.registerPartial("ProfileInput", ProfileInput);
+Handlebars.registerPartial("LoadAvatar", LoadAvatar);
 
 export class App {
   private rootElement: HTMLElement;
@@ -47,6 +50,9 @@ export class App {
         break;
       case "/login":
         template = Handlebars.compile(Login);
+        break;
+      case "/profile":
+        template = Handlebars.compile(Profile);
         break;
       default:
         template = Handlebars.compile(Chat);

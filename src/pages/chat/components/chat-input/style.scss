@@ -1,12 +1,12 @@
-@use "../../../../vars.scss" as vars;
+@use "../../../../vars.scss" as *;
 
 .chat-input {
   height: 54px;
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: vars.$bg-secondary;
-  border-top: 1px solid vars.$bg-secondary;
+  background-color: $bg-secondary;
+  border-top: 1px solid $bg-secondary;
 
   &__attach-button {
     background: none;

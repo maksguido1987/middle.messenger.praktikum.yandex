@@ -1,5 +1,12 @@
 @use "../../vars.scss" as vars;
 
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .form-group {
   margin-bottom: 20px;
 }

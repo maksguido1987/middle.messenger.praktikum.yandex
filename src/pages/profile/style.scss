@@ -1,0 +1,84 @@
+@use "../../vars.scss" as *;
+@forward "./components/load-avatar/style";
+@forward "./components/profile-input/style";
+
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1000px;
+}
+
+.profile-avatar-container {
+  margin-bottom: $spacing-xl;
+}
+
+.profile-name {
+  font-size:  $font-size-lg;
+  font-weight: 600;
+  color: $text-primary;
+  margin-bottom: $spacing-md;
+}
+
+.profile-form {
+  width: 100%;
+
+  &__field {
+    display: flex;
+    align-items: center;
+    margin-bottom: $spacing-md;
+  }
+
+  &__label {
+    flex: 0 0 30%;
+    color: $text-primary;
+    font-size: v  $font-size-md;
+    padding-right: $spacing-md;
+  }
+
+  &__value {
+    flex: 0 0 70%;
+  }
+
+  &__readonly {
+    padding: 10px;
+    color: $text-primary;
+    font-size: $font-size-md;
+  }
+}
+
+.profile-links {
+  margin-top: $spacing-xl;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &__item {
+    margin-bottom: $spacing-md;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__edit,
+  &__password {
+    color: $primary-color;
+    font-size: $font-size-md;
+  }
+
+  &__logout {
+    color: $error-color;
+    font-size: $font-size-md;
+  }
+}
+
+.profile-actions {
+  margin-top: $spacing-xl;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  &__save {
+    min-width: 200px;
+  }
+}

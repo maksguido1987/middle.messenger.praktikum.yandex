@@ -1,5 +1,12 @@
 @use "../../vars.scss" as vars;
 
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
 .signin-button-container {
   margin-top: vars.$spacing-md;
   margin-bottom: vars.$spacing-sm;
