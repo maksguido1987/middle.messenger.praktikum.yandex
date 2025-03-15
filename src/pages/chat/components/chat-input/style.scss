@@ -1,6 +1,6 @@
 @use "../../../../vars.scss" as *;
 
-.chat-input {
+.chat-form {
   height: 54px;
   display: flex;
   align-items: center;
@@ -9,9 +9,6 @@
   border-top: 1px solid $bg-secondary;
 
   &__attach-button {
-    background: none;
-    border: none;
-    cursor: pointer;
     padding: 10px;
   }
 
@@ -25,13 +22,12 @@
   &__field {
     flex: 1;
     padding: 10px;
-    border: 1px solid #eaeaea;
+    border: 1px solid $bg-secondary;
     border-radius: 30px;
-    outline: none;
     margin: 0 10px;
 
     &::placeholder {
-      color: #999;
+      color: $text-secondary;
     }
   }
 
@@ -39,9 +35,7 @@
     width: 28px;
     height: 28px;
     border-radius: 50%;
-    background-color: #3369f3;
-    border: none;
-    cursor: pointer;
+    background-color: $primary-color;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -51,7 +45,7 @@
     display: block;
     width: 13px;
     height: 12px;
-    background-color: white;
+    background-color: $bg-white;
     mask-image: url("data:image/svg+xml,%3Csvg width='13' height='12' viewBox='0 0 13 12' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M8.5 2.5L10.5 6L8.5 9.5L2.5 6L8.5 2.5Z' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E");
     mask-repeat: no-repeat;
     mask-position: center;

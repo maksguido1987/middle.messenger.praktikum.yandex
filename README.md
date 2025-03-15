@@ -48,8 +48,14 @@ npm run start
 
 ### Применение
 
-После запуска приложение будет доступно по адресу [localhost:3000](http://localhost:3000)
+После запуска приложение будет доступно по адресу
+
+[localhost:3000](http://localhost:3000)
 
 ### Приложение развернуто на Netlify
 
 [messenger-praktikum](https://maksik-messenger-praktikum.netlify.app/)
+
+### Ссылка на макет в figma
+
+[макет](https://www.figma.com/design/jF5fFFzgGOxQeB4CmKWTiE/Chat_external_link?node-id=0-1&p=f&t=PjaqyzEO9dLuzOGc-0)

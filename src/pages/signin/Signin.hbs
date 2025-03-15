@@ -1,4 +1,4 @@
-<div class="signin-container">
+<main class="signin-container">
   <form class="form-container">
     {{> FormTitle title="Регистрация"}}
     
@@ -11,21 +11,18 @@
 
     {{> Input
       label="Логин"
-      type="text"
       name="login"
       placeholder=" "
     }}
 
     {{> Input
       label="Имя"
-      type="text"
       name="first_name"
       placeholder=" "
     }}
 
     {{> Input
       label="Фамилия"
-      type="text"
       name="second_name"
       placeholder=" "
     }}
@@ -58,4 +55,4 @@
     
     {{> Link href="/login" text="Уже есть аккаунт? Войти" class="signin-link" }}
   </form>
-</div>
+</main>
