@@ -1,14 +1,6 @@
 import Handlebars from "handlebars";
 import { Button, Input, FormTitle, Link, Avatar } from "./components";
-import {
-  Login,
-  Signin,
-  Chat,
-  Profile,
-  EditPassword,
-  Error404,
-  Error500,
-} from "./pages";
+import { Login, Signin, Chat, Profile, EditPassword, Error404 } from "./pages";
 import {
   AttachButton,
   ChatHeader,
@@ -103,16 +95,31 @@ export class App {
       });
     }
 
-    // const links = this.rootElement.querySelectorAll(".link");
+    const links = this.rootElement.querySelectorAll(".link");
 
-    // links.forEach((link) => {
-    //   link.addEventListener("click", (e) => {
-    //     e.preventDefault();
-    //   });
-    // });
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        const href = (link as HTMLAnchorElement).getAttribute("href");
+
+        if (href) {
+          // Изменяем URL без перезагрузки страницы
+          window.history.pushState({}, "", href);
+
+          // Вызываем рендер для обновления содержимого
+          this.render();
+        }
+      });
+    });
   }
 
   public init() {
     this.render();
+
+    // Добавляем обработчик для кнопки "назад" в браузере
+    window.addEventListener("popstate", () => {
+      this.render();
+    });
   }
 }
