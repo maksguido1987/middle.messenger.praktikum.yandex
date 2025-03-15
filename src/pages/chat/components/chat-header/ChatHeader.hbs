@@ -3,6 +3,23 @@
     {{> Avatar size="medium" }}
     <div class="chat-header__name">{{name}}</div>
   </div>
+  <div>
+    {{> Link
+      text="Логин"
+      href="/login"
+      class="chat-header__link"
+    }}
+    {{> Link
+      text="Регистрация"
+      href="/signin"
+      class="chat-header__link"
+    }}
+    {{> Link
+      text="Профиль"
+      href="/profile"
+      class="chat-header__link"
+    }}
+  </div>
   <div class="chat-header__actions">
     <button class="chat-header__menu-button">
       <div class="dots-menu">
