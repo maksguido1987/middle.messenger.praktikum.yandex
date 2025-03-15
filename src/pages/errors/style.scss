@@ -55,7 +55,7 @@
   text-align: center;
 
   &:hover {
-    background-color: darken($primary-color, 10%);
+    background-color: $primary-color-hover;
     box-shadow: $shadow-hover;
   }
 
