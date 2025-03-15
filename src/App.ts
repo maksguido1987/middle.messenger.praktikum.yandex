@@ -1,6 +1,14 @@
 import Handlebars from "handlebars";
 import { Button, Input, FormTitle, Link, Avatar } from "./components";
-import { Login, Signin, Chat, Profile, EditPassword, Error404 } from "./pages";
+import {
+  Login,
+  Signin,
+  Chat,
+  Profile,
+  EditPassword,
+  Error404,
+  Error500,
+} from "./pages";
 import {
   AttachButton,
   ChatHeader,
@@ -65,8 +73,14 @@ export class App {
           isPasswordChange: false,
         });
         break;
-      default:
+      case "/404":
         this.rootElement.innerHTML = Handlebars.compile(Error404)({});
+        break;
+      case "/500":
+        this.rootElement.innerHTML = Handlebars.compile(Error500)({});
+        break;
+      default:
+        this.rootElement.innerHTML = Handlebars.compile(Chat)({});
     }
 
     this.addEventListeners();

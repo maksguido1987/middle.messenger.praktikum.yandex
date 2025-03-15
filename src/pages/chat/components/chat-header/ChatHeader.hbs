@@ -1,4 +1,4 @@
-<div class="chat-header">
+<header class="chat-header">
   <div class="chat-header__profile">
     {{> Avatar size="medium" }}
     <div class="chat-header__name">{{name}}</div>
@@ -19,6 +19,16 @@
       href="/profile"
       class="chat-header__link"
     }}
+        {{> Link
+      text="404"
+      href="/404"
+      class="chat-header__link"
+    }}
+        {{> Link
+      text="500"
+      href="/500"
+      class="chat-header__link"
+    }}
   </div>
   <div class="chat-header__actions">
     <button class="chat-header__menu-button">
@@ -29,4 +39,4 @@
       </div>
     </button>
   </div>
-</div>
+</header>
