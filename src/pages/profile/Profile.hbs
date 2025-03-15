@@ -1,132 +1,103 @@
-<main class="profile-container">
-  <div class="profile-avatar-container">
-    {{>LoadAvatar}}
-    <div class="profile-name">{{displayName}}</div>
+<main class="profile-page">
+  <div class="profile-page__container">
+      <div class="profile-avatar-container">
+        {{>LoadAvatar}}
+        <div class="profile-name">{{displayName}}</div>
+      </div>
+    
+      <form class="profile-form" id="profile-form">
+        {{#if isPasswordChange}}
+          {{>EditPassword}}
+        {{else}}
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Почта"
+              value=email
+              name="email"
+              id="email"
+              isEditing=isEditing
+            }}
+          </div>
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Логин"
+              value=login
+              name="login"
+              id="login"
+              isEditing=isEditing
+            }}
+          </div>
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Имя"
+              value=firstName
+              name="firstName"
+              id="firstName"
+              isEditing=isEditing
+            }}
+          </div>
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Фамилия"
+              value=lastName
+              name="lastName"
+              id="lastName"
+              isEditing=isEditing
+            }}
+          </div>
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Имя в чате"
+              value=displayName
+              name="displayName"
+              id="displayName"
+              isEditing=isEditing
+            }}
+          </div>
+          <div class="profile-form__field">
+            {{>ProfileInput
+              label="Телефон"
+              value=phone
+              name="phone"
+              id="phone"
+              isEditing=isEditing
+            }}
+          </div>
+    
+          {{#if isEditing}}
+            <div class="profile-actions">
+              {{>Button
+                text="Сохранить изменения"
+                type="submit"
+                class="profile-actions__save"
+              }}
+            </div>
+          {{else}}
+            <div class="profile-links">
+              <div class="profile-links__item">
+                {{>Link
+                  text="Изменить данные"
+                  href="/profile?is_editing=true"
+                  class="profile-links__edit"
+                }}
+              </div>
+              <div class="profile-links__item">
+                {{>Link
+                  text="Изменить пароль"
+                  href="/profile?is_password_change=true"
+                  class="profile-links__password"
+                }}
+              </div>
+              <div class="profile-links__item">
+                {{>Link
+                  text="Выйти"
+                  href="/logout"
+                  class="profile-links__logout"
+                }}
+              </div>
+            </div>
+          {{/if}}
+        {{/if}}
+      </form>
   </div>
-
-  <form class="profile-form" id="profile-form">
-    {{#if isPasswordChange}}
-      <div class="profile-form__field">
-        <div class="profile-form__label">Старый пароль</div>
-        <div class="profile-form__value">
-          {{>Input
-            type="password"
-            id="oldPassword"
-            name="oldPassword"
-          }}
-        </div>
-      </div>
-      <div class="profile-form__field">
-        <div class="profile-form__label">Новый пароль</div>
-        <div class="profile-form__value">
-          {{>Input
-            type="password"
-            id="newPassword"
-            name="newPassword"
-          }}
-        </div>
-      </div>
-      <div class="profile-form__field">
-        <div class="profile-form__label">Повторите новый пароль</div>
-        <div class="profile-form__value">
-          {{>Input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-          }}
-        </div>
-      </div>
-      <div class="profile-actions">
-        {{>Button
-          text="Сохранить изменения"
-          type="submit"
-          class="profile-actions__save"
-        }}
-      </div>
-    {{else}}
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Почта"
-          value=email
-          name="email"
-          id="email"
-        }}
-      </div>
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Логин"
-          value=login
-          name="login"
-          id="login"
-        }}
-      </div>
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Имя"
-          value=firstName
-          name="firstName"
-          id="firstName"
-        }}
-      </div>
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Фамилия"
-          value=lastName
-          name="lastName"
-          id="lastName"
-        }}
-      </div>
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Имя в чате"
-          value=displayName
-          name="displayName"
-          id="displayName"
-        }}
-      </div>
-      <div class="profile-form__field">
-        {{>ProfileInput
-          label="Телефон"
-          value=phone
-          name="phone"
-          id="phone"
-          readonly=true
-        }}
-      </div>
-
-      {{#if isEditing}}
-        <div class="profile-actions">
-          {{>Button
-            text="Сохранить изменения"
-            type="submit"
-            class="profile-actions__save"
-          }}
-        </div>
-      {{else}}
-        <div class="profile-links">
-          <div class="profile-links__item">
-            {{>Link
-              text="Изменить данные"
-              href="#"
-              class="profile-links__edit"
-            }}
-          </div>
-          <div class="profile-links__item">
-            {{>Link
-              text="Изменить пароль"
-              href="#"
-              class="profile-links__password"
-            }}
-          </div>
-          <div class="profile-links__item">
-            {{>Link
-              text="Выйти"
-              href="#"
-              class="profile-links__logout"
-            }}
-          </div>
-        </div>
-      {{/if}}
-    {{/if}}
-  </form>
 </main>

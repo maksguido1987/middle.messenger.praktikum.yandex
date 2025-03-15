@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
 import { Button, Input, FormTitle, Link, Avatar } from "./components";
-import { Login, Signin, Chat, Profile } from "./pages";
+import { Login, Signin, Chat, Profile, EditPassword } from "./pages";
 import {
   AttachButton,
   ChatHeader,
@@ -25,6 +25,7 @@ Handlebars.registerPartial("ChatInput", ChatInput);
 Handlebars.registerPartial("AttachButton", AttachButton);
 Handlebars.registerPartial("ProfileInput", ProfileInput);
 Handlebars.registerPartial("LoadAvatar", LoadAvatar);
+Handlebars.registerPartial("EditPassword", EditPassword);
 
 export class App {
   private rootElement: HTMLElement;
@@ -40,25 +41,30 @@ export class App {
   }
 
   private render() {
-    let template: HandlebarsTemplateDelegate<any>;
-
     const location = window.location.pathname;
 
     switch (location) {
       case "/signin":
-        template = Handlebars.compile(Signin);
+        this.rootElement.innerHTML = Handlebars.compile(Signin)({});
         break;
       case "/login":
-        template = Handlebars.compile(Login);
+        this.rootElement.innerHTML = Handlebars.compile(Login)({});
         break;
       case "/profile":
-        template = Handlebars.compile(Profile);
+        this.rootElement.innerHTML = Handlebars.compile(Profile)({
+          displayName: "Иванов Иван",
+          email: "ivanov@yandex.ru",
+          login: "ivanov",
+          firstName: "Иван",
+          lastName: "Иванов",
+          phone: "+7 (909) 967 30 30",
+          isEditing: false,
+          isPasswordChange: false,
+        });
         break;
       default:
-        template = Handlebars.compile(Chat);
+        this.rootElement.innerHTML = Handlebars.compile(Chat)({});
     }
-
-    this.rootElement.innerHTML = template({});
 
     this.addEventListeners();
 

@@ -5,7 +5,6 @@ import "./style.scss";
 interface ProfileInputProps {
   label: string;
   value: string;
-  readonly?: boolean;
   class?: string;
   name?: string;
   id?: string;
