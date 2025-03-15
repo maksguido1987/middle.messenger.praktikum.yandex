@@ -51,20 +51,7 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
             {{/if}}
         {{/unless}}
     </div>
-`,cr=`<div class="login-container">\r
-  <form class="form-container">\r
-  {{>FormTitle title="Вход"}}\r
-\r
-  {{>Input label="Логин" id="login" name="login" type="text" required=true}}\r
-\r
-  {{>Input label="Пароль" id="password" name="password" type="password" required=true}}\r
-\r
-  <div class="form-actions">\r
-    {{>Button text="Войти" type="submit" class="submit-button"}}\r
-    {{>Link href="/signin" text="Ещё не зарегистрированы?"}}\r
-  </div>\r
-</form>\r
-</div>`,hr=`<div class="signin-container">\r
+`,cr=`<div class="signin-container">\r
   <form class="form-container">\r
     {{> FormTitle title="Регистрация"}}\r
     \r
@@ -125,7 +112,7 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
     {{> Link href="/login" text="Уже есть аккаунт? Войти" class="signin-link" }}\r
   </form>\r
 </div>\r
-`,pr=`<main class="chat-page">
+`,hr=`<main class="chat-page">
   <div class="chat-sidebar">
     {{> ChatSearch }}
     {{> ChatList }}
@@ -146,7 +133,7 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
     </div>
     {{> ChatInput }}
   </div>
-</main>`,fr=`<main class="profile-page">
+</main>`,pr=`<main class="profile-page">
   <div class="profile-page__container">
       <div class="profile-avatar-container">
         {{>LoadAvatar}}
@@ -248,7 +235,7 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
         {{/if}}
       </form>
   </div>
-</main>`,dr=`<div>
+</main>`,fr=`<div>
   <div class="profile-form__field">
       {{>ProfileInput
         label="Старый пароль"
@@ -280,13 +267,34 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
       class="profile-actions__save"
     }}
   </div>
-</div>`,mr=`<div class="chat-search">
+</div>`,dr=`<div class="login-container">\r
+  <form class="form-container">\r
+  {{>FormTitle title="Вход"}}\r
+\r
+  {{>Input label="Логин" id="login" name="login" type="text" required=true}}\r
+\r
+  {{>Input label="Пароль" id="password" name="password" type="password" required=true}}\r
+\r
+  <div class="form-actions">\r
+    {{>Button text="Войти" type="submit" class="submit-button"}}\r
+    {{>Link href="/signin" text="Ещё не зарегистрированы?"}}\r
+  </div>\r
+</form>\r
+</div>`,mr=`<div class="error-page">\r
+  <div class="error-container">\r
+    <div class="error-code">404</div>\r
+    <h1 class="error-title">Страница не найдена</h1>\r
+    <p class="error-message">Запрашиваемая страница не существует или была\r
+      перемещена</p>\r
+    {{> Link href="/" text="Вернуться на главную"}}\r
+  </div>\r
+</div>`,gr=`<div class="chat-search">
   {{> Input type="text" placeholder="Поиск" class="chat-search__input reset-input" }}
 </div>`,Lt=`<div class="chat-list">
   {{#each chats}}
     {{> ChatItem name=this.name lastMessage=this.lastMessage time=this.time unread=this.unread }}
   {{/each}}
-</div>`,gr=`<div class="chat-item">
+</div>`,vr=`<div class="chat-item">
   <div class="chat-item__avatar">
     {{> Avatar size="medium" }}
   </div>
@@ -300,46 +308,46 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
       <div class="chat-item__unread">{{unread}}</div>
     {{/if}}
   </div>
-</div>`,vr=`<div class="chat-header">
-  <div class="chat-header__profile">
-    {{> Avatar size="medium" }}
-    <div class="chat-header__name">{{name}}</div>
-  </div>
-  <div>
-    {{> Link
-      text="Логин"
-      href="/login"
-      class="chat-header__link"
-    }}
-    {{> Link
-      text="Регистрация"
-      href="/signin"
-      class="chat-header__link"
-    }}
-    {{> Link
-      text="Профиль"
-      href="/profile"
-      class="chat-header__link"
-    }}
-  </div>
-  <div class="chat-header__actions">
-    <button class="chat-header__menu-button">
-      <div class="dots-menu">
-        <span class="dots-menu__dot"></span>
-        <span class="dots-menu__dot"></span>
-        <span class="dots-menu__dot"></span>
-      </div>
-    </button>
-  </div>
-</div>`,_r=`<div class="chat-input">
+</div>`,_r=`<div class="chat-header">\r
+  <div class="chat-header__profile">\r
+    {{> Avatar size="medium" }}\r
+    <div class="chat-header__name">{{name}}</div>\r
+  </div>\r
+  <div>\r
+    {{> Link\r
+      text="Логин"\r
+      href="/login"\r
+      class="chat-header__link"\r
+    }}\r
+    {{> Link\r
+      text="Регистрация"\r
+      href="/signin"\r
+      class="chat-header__link"\r
+    }}\r
+    {{> Link\r
+      text="Профиль"\r
+      href="/profile"\r
+      class="chat-header__link"\r
+    }}\r
+  </div>\r
+  <div class="chat-header__actions">\r
+    <button class="chat-header__menu-button">\r
+      <div class="dots-menu">\r
+        <span class="dots-menu__dot"></span>\r
+        <span class="dots-menu__dot"></span>\r
+        <span class="dots-menu__dot"></span>\r
+      </div>\r
+    </button>\r
+  </div>\r
+</div>`,Sr=`<div class="chat-input">
   {{> AttachButton }}
   <input type="text" placeholder="Сообщение" class="chat-input__field" />
   <button class="chat-input__send-button">
     <span class="chat-input__send-icon"></span>
   </button>
-</div>`,Sr=`<button class="chat-input__attach-button">
+</div>`,yr=`<button class="chat-input__attach-button">
   <img src="../../../images/attach.svg" alt="attach" class="chat-input__attach-icon" />
-</button>`,yr=[{id:1,name:"Иван Иванов",lastMessage:"Привет, как дела?",time:"10:30",unread:2},{id:2,name:"Петр Петров",lastMessage:"Когда встречаемся?",time:"09:15"},{id:3,name:"Анна Сидорова",lastMessage:"Спасибо за информацию!",time:"Вчера",unread:3},{id:4,name:"Мария Кузнецова",lastMessage:"Документы готовы, можно забирать",time:"Вчера"},{id:5,name:"Алексей Смирнов",lastMessage:"Завтра в 15:00 встречаемся у офиса",time:"Пн",unread:1},{id:6,name:"Ольга Николаева",lastMessage:"Проект сдан успешно!",time:"Пн"},{id:7,name:"Дмитрий Козлов",lastMessage:"Перезвони мне, пожалуйста",time:"25 фев"}];class kr{constructor(m){Se(this,"element");this.element=document.createElement("div"),m.appendChild(this.element),this.render()}render(){const m={chats:yr};this.element.innerHTML=O.compile(Lt)(m)}}const br=`<div class="profile-input {{#unless isEditing}}readonly{{/unless}}">
+</button>`,kr=[{id:1,name:"Иван Иванов",lastMessage:"Привет, как дела?",time:"10:30",unread:2},{id:2,name:"Петр Петров",lastMessage:"Когда встречаемся?",time:"09:15"},{id:3,name:"Анна Сидорова",lastMessage:"Спасибо за информацию!",time:"Вчера",unread:3},{id:4,name:"Мария Кузнецова",lastMessage:"Документы готовы, можно забирать",time:"Вчера"},{id:5,name:"Алексей Смирнов",lastMessage:"Завтра в 15:00 встречаемся у офиса",time:"Пн",unread:1},{id:6,name:"Ольга Николаева",lastMessage:"Проект сдан успешно!",time:"Пн"},{id:7,name:"Дмитрий Козлов",lastMessage:"Перезвони мне, пожалуйста",time:"25 фев"}];class br{constructor(m){Se(this,"element");this.element=document.createElement("div"),m.appendChild(this.element),this.render()}render(){const m={chats:kr};this.element.innerHTML=O.compile(Lt)(m)}}const Pr=`<div class="profile-input {{#unless isEditing}}readonly{{/unless}}">
     <label class="profile-input__label">{{label}}</label>
     <input 
         type="text" 
@@ -350,7 +358,7 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
         {{#if id}}id="{{id}}"{{/if}}
     />
 </div>
-`,Pr=`<div class="profile-avatar">
+`,Cr=`<div class="profile-avatar">
   {{>Avatar src=avatar size="large" class="profile-avatar__image"}}
   <div class="profile-avatar__overlay">
     <span class="profile-avatar__text">Поменять аватар</span>
@@ -361,4 +369,4 @@ Expecting `+C.join(", ")+", got '"+(this.terminals_[b]||b)+"'":w="Parse error on
       accept="image/*"
     />
   </div>
-</div>`;O.registerPartial("Button",sr);O.registerPartial("Input",ar);O.registerPartial("FormTitle",or);O.registerPartial("Link",ur);O.registerPartial("Avatar",lr);O.registerPartial("ChatSearch",mr);O.registerPartial("ChatList",Lt);O.registerPartial("ChatItem",gr);O.registerPartial("ChatHeader",vr);O.registerPartial("ChatInput",_r);O.registerPartial("AttachButton",Sr);O.registerPartial("ProfileInput",br);O.registerPartial("LoadAvatar",Pr);O.registerPartial("EditPassword",dr);class Cr{constructor(m){Se(this,"rootElement");const y=document.getElementById(m);if(!y)throw new Error(`Элемент с селектором "${m}" не найден`);this.rootElement=y}render(){const m=window.location.pathname;switch(m){case"/signin":this.rootElement.innerHTML=O.compile(hr)({});break;case"/login":this.rootElement.innerHTML=O.compile(cr)({});break;case"/profile":this.rootElement.innerHTML=O.compile(fr)({displayName:"Иванов Иван",email:"ivanov@yandex.ru",login:"ivanov",firstName:"Иван",lastName:"Иванов",phone:"+7 (909) 967 30 30",isEditing:!1,isPasswordChange:!1});break;default:this.rootElement.innerHTML=O.compile(pr)({})}this.addEventListeners(),(m==="/"||m==="/chat")&&this.initChatComponents()}initChatComponents(){const m=this.rootElement.querySelector(".chat-list");m&&new kr(m)}addEventListeners(){const m=this.rootElement.querySelector(".form-container");m&&m.addEventListener("submit",y=>{y.preventDefault()})}init(){this.render()}}document.addEventListener("DOMContentLoaded",()=>{new Cr("app").init()});
+</div>`;O.registerPartial("Button",sr);O.registerPartial("Input",ar);O.registerPartial("FormTitle",or);O.registerPartial("Link",ur);O.registerPartial("Avatar",lr);O.registerPartial("ChatSearch",gr);O.registerPartial("ChatList",Lt);O.registerPartial("ChatItem",vr);O.registerPartial("ChatHeader",_r);O.registerPartial("ChatInput",Sr);O.registerPartial("AttachButton",yr);O.registerPartial("ProfileInput",Pr);O.registerPartial("LoadAvatar",Cr);O.registerPartial("EditPassword",fr);class Lr{constructor(m){Se(this,"rootElement");const y=document.getElementById(m);if(!y)throw new Error(`Элемент с селектором "${m}" не найден`);this.rootElement=y}render(){const m=window.location.pathname;switch(m){case"/":this.rootElement.innerHTML=O.compile(hr)({});break;case"/signin":this.rootElement.innerHTML=O.compile(cr)({});break;case"/login":this.rootElement.innerHTML=O.compile(dr)({});break;case"/profile":this.rootElement.innerHTML=O.compile(pr)({displayName:"Иванов Иван",email:"ivanov@yandex.ru",login:"ivanov",firstName:"Иван",lastName:"Иванов",phone:"+7 (909) 967 30 30",isEditing:!1,isPasswordChange:!1});break;default:this.rootElement.innerHTML=O.compile(mr)({})}this.addEventListeners(),(m==="/"||m==="/chat")&&this.initChatComponents()}initChatComponents(){const m=this.rootElement.querySelector(".chat-list");m&&new br(m)}addEventListeners(){const m=this.rootElement.querySelector(".form-container");m&&m.addEventListener("submit",S=>{S.preventDefault()}),this.rootElement.querySelectorAll(".link").forEach(S=>{S.addEventListener("click",_=>{_.preventDefault();const h=S.getAttribute("href");h&&(window.history.pushState({},"",h),this.render())})})}init(){this.render(),window.addEventListener("popstate",()=>{this.render()})}}document.addEventListener("DOMContentLoaded",()=>{new Lr("app").init()});
