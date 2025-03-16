@@ -1,0 +1,15 @@
+<li class="chat-item">
+  <div class="chat-item__avatar">
+    {{> Avatar size="medium" }}
+  </div>
+  <div class="chat-item__info">
+    <div class="chat-item__name">{{name}}</div>
+    <div class="chat-item__last-message">{{lastMessage}}</div>
+  </div>
+  <div class="chat-item__meta">
+    <div class="chat-item__time">{{time}}</div>
+    {{#if unread}}
+      <div class="chat-item__unread">{{unread}}</div>
+    {{/if}}
+  </div>
+</li>

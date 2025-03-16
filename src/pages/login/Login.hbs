@@ -1,0 +1,14 @@
+<main class="login-container">
+  <form class="form-container">
+  {{>FormTitle title="Вход"}}
+
+  {{>Input label="Логин" id="login" name="login" type="text" required=true}}
+
+  {{>Input label="Пароль" id="password" name="password" type="password" required=true}}
+
+  <div class="form-actions">
+    {{>Button text="Войти" type="submit" class="submit-button"}}
+    {{>Link href="/signin" text="Ещё не зарегистрированы?"}}
+  </div>
+</form>
+</main>

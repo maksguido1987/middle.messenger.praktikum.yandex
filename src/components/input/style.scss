@@ -1,0 +1,110 @@
+@use "../../vars.scss" as vars;
+
+$border-color: #bdc3c7;
+$label-color: #7f8c8d;
+$transition-speed: 0.2s;
+$light-blue: #ebf5fb;
+$required-star-color: #ff8c00;
+
+.input-container {
+  position: relative;
+  width: 100%;
+  color: vars.$text-primary;
+
+  .input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-bottom: 1px solid $border-color;
+    background-color: transparent;
+    transition: all $transition-speed ease;
+
+    &:focus {
+      border-color: vars.$primary-color;
+      background-color: $light-blue;
+
+      & ~ .input-underline {
+        transform: scaleX(1);
+      }
+
+      & ~ .input-label {
+        top: -10px;
+        left: 0;
+        font-size: 12px;
+        color: vars.$primary-color;
+      }
+    }
+
+    &:not(:placeholder-shown) {
+      background-color: $light-blue;
+
+      & ~ .input-label {
+        top: -10px;
+        left: 0;
+        font-size: 12px;
+        color: vars.$primary-color;
+      }
+    }
+  }
+
+  .input-label {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 1px 2px;
+    font-size: 16px;
+    color: $label-color;
+    background-color: vars.$text-white;
+    border-radius: 0 0 vars.$border-radius-sm 0;
+    pointer-events: none;
+    transition: $transition-speed ease all;
+  }
+
+  .input-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: vars.$primary-color;
+    transform: scaleX(0);
+    transition: transform $transition-speed ease;
+  }
+
+  .input-error {
+    margin-top: 5px;
+    color: vars.$error-color;
+    font-size: 12px;
+  }
+
+  .input.error {
+    border-color: vars.$error-color;
+
+    & ~ .input-label {
+      color: vars.$error-color;
+    }
+
+    & ~ .input-underline {
+      background-color: vars.$error-color;
+    }
+  }
+}
+
+.input:-webkit-autofill + .input-label {
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+  color: vars.$primary-color;
+}
+
+.input:autofill + .input-label {
+  top: -20px;
+  left: 0;
+  font-size: 12px;
+  color: vars.$primary-color;
+}
+
+.input:-webkit-autofill,
+.input:autofill {
+  -webkit-box-shadow: 0 0 0 30px $light-blue inset !important;
+}

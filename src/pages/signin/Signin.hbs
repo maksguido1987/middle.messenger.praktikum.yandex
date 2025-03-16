@@ -1,0 +1,58 @@
+<main class="signin-container">
+  <form class="form-container">
+    {{> FormTitle title="Регистрация"}}
+    
+    {{> Input
+      label="Почта"
+      type="email"
+      name="email"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Логин"
+      name="login"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Имя"
+      name="first_name"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Фамилия"
+      name="second_name"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Телефон"
+      type="tel"
+      name="phone"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Пароль"
+      type="password"
+      name="password"
+      placeholder=" "
+    }}
+
+    {{> Input
+      label="Пароль (еще раз)"
+      type="password"
+      name="password_confirm"
+      placeholder=" "
+    }}
+
+    {{> Button
+      text="Зарегистрироваться"
+      type="submit"
+    }}
+    
+    {{> Link href="/login" text="Уже есть аккаунт? Войти" class="signin-link" }}
+  </form>
+</main>

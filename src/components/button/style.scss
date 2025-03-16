@@ -1,0 +1,27 @@
+@use "../../vars.scss" as vars;
+
+$hover-color: #2980b9;
+
+.button {
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: vars.$border-radius-md;
+  background-color: vars.$primary-color;
+  color: vars.$text-white;
+  font-size: vars.$font-size-md;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $hover-color;
+    box-shadow: vars.$shadow-hover;
+  }
+
+  &:focus {
+    box-shadow: vars.$shadow-default;
+  }
+
+  &:active {
+    transform: translateY(1px);
+  }
+}

@@ -1,0 +1,12 @@
+@use "../../vars.scss" as vars;
+
+.link {
+  color: vars.$primary-color;
+  text-decoration: none;
+  text-align: center;
+  font-size: vars.$font-size-sm;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

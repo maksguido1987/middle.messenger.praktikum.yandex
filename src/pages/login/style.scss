@@ -1,0 +1,25 @@
+@use "../../vars.scss" as vars;
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: vars.$spacing-md;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-button {
+  min-width: 150px;
+}

@@ -1,0 +1,66 @@
+@use "../../../../vars.scss" as *;
+
+.chat-search {
+  padding: 11px;
+  border-bottom: 1px solid $bg-secondary;
+  position: relative;
+
+  &__input {
+    width: 290px;
+    height: 32px;
+    border-radius: $border-radius-sm;
+    background-color: $bg-secondary;
+    font-size: 14px;
+
+    &::placeholder {
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: $text-secondary;
+    mask-image: url("/images/search.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+    z-index: 1;
+  }
+}
+
+// Сброс стилей базового Input
+.input-container .input.reset-input {
+  border: none;
+  background-color: $bg-secondary;
+  padding: 0 10px 0 30px;
+  height: 32px;
+
+  &:focus,
+  &:not(:placeholder-shown) {
+    background-color: $bg-secondary;
+    border: none;
+
+    & ~ .input-underline {
+      transform: scaleX(0);
+    }
+
+    & ~ .input-label {
+      display: none;
+    }
+  }
+
+  & ~ .input-label {
+    display: none;
+  }
+
+  & ~ .input-underline {
+    display: none;
+  }
+}

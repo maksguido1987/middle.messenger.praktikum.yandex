@@ -1,0 +1,5 @@
+<ul class="chat-list">
+  {{#each chats}}
+    {{> ChatItem name=this.name lastMessage=this.lastMessage time=this.time unread=this.unread }}
+  {{/each}}
+</ul>

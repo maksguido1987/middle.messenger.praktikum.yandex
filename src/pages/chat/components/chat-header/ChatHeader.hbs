@@ -1,0 +1,42 @@
+<header class="chat-header">
+  <div class="chat-header__profile">
+    {{> Avatar size="medium" }}
+    <div class="chat-header__name">{{name}}</div>
+  </div>
+  <div>
+    {{> Link
+      text="Логин"
+      href="/login"
+      class="chat-header__link"
+    }}
+    {{> Link
+      text="Регистрация"
+      href="/signin"
+      class="chat-header__link"
+    }}
+    {{> Link
+      text="Профиль"
+      href="/profile"
+      class="chat-header__link"
+    }}
+        {{> Link
+      text="404"
+      href="/404"
+      class="chat-header__link"
+    }}
+        {{> Link
+      text="500"
+      href="/500"
+      class="chat-header__link"
+    }}
+  </div>
+  <div class="chat-header__actions">
+    <button class="chat-header__menu-button">
+      <div class="dots-menu">
+        <span class="dots-menu__dot"></span>
+        <span class="dots-menu__dot"></span>
+        <span class="dots-menu__dot"></span>
+      </div>
+    </button>
+  </div>
+</header>

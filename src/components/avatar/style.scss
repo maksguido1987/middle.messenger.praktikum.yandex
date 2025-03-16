@@ -1,0 +1,37 @@
+@use "../../vars.scss" as vars;
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: vars.$bg-secondary;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+
+  &__initials {
+    color: vars.$text-white;
+    font-weight: 600;
+    font-size: vars.$font-size-sm;
+    text-transform: uppercase;
+  }
+
+  &--small {
+    width: 28px;
+    height: 28px;
+  }
+
+  &--medium {
+    width: 47px;
+    height: 47px;
+  }
+
+  &--large {
+    width: 64px;
+    height: 64px;
+  }
+}
