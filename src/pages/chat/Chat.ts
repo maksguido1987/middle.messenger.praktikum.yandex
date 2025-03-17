@@ -1,6 +1,6 @@
-import Handlebars from "handlebars";
-import template from "./Chat.hbs?raw";
-import "./style.scss";
+import Handlebars from 'handlebars';
+import template from './Chat.hbs?raw';
+import './style.scss';
 
 interface ChatProps {
   chats?: Array<{
@@ -41,24 +41,31 @@ interface ChatProps {
   };
 }
 
+/**
+ * Класс компонента чата
+ */
 export class Chat {
   private props: ChatProps;
   private element: HTMLElement | null = null;
 
+  /**
+   * Создает экземпляр компонента чата
+   * @param {ChatProps} props - Свойства компонента
+   */
   constructor(props: ChatProps) {
     this.props = {
       ...props,
       chatHeader: {
-        avatar: "https://via.placeholder.com/40",
-        name: "Иван Иванов",
-        status: "онлайн",
+        avatar: 'https://via.placeholder.com/40',
+        name: 'Иван Иванов',
+        status: 'онлайн',
       },
       chatSearch: {
-        placeholder: "Поиск",
+        placeholder: 'Поиск',
         events: {
           input: (e: Event) => {
             const target = e.target as HTMLInputElement;
-            console.log("Search:", target.value);
+            console.log('Search:', target.value);
           },
         },
       },
@@ -67,24 +74,24 @@ export class Chat {
         events: {
           click: (e: Event) => {
             const target = e.target as HTMLElement;
-            const chatItem = target.closest(".chat-item");
+            const chatItem = target.closest('.chat-item');
             if (chatItem) {
-              const chatId = chatItem.getAttribute("data-chat-id");
-              console.log("Selected chat:", chatId);
+              const chatId = chatItem.getAttribute('data-chat-id');
+              console.log('Selected chat:', chatId);
             }
           },
         },
       },
       chatInput: {
-        placeholder: "Сообщение",
+        placeholder: 'Сообщение',
         events: {
           submit: (e: Event) => {
             e.preventDefault();
             const form = e.target as HTMLFormElement;
-            const input = form.querySelector("input") as HTMLInputElement;
+            const input = form.querySelector('input') as HTMLInputElement;
             if (input.value.trim()) {
-              console.log("Send message:", input.value);
-              input.value = "";
+              console.log('Send message:', input.value);
+              input.value = '';
             }
           },
         },
@@ -92,17 +99,25 @@ export class Chat {
     };
   }
 
+  /**
+   * Рендерит компонент чата
+   * @return {HTMLElement} DOM элемент компонента
+   */
   render() {
     const compiledTemplate = Handlebars.compile(template);
     const html = compiledTemplate(this.props);
 
-    const wrapper = document.createElement("div");
+    const wrapper = document.createElement('div');
     wrapper.innerHTML = html;
     this.element = wrapper.firstElementChild as HTMLElement;
 
     return this.element;
   }
 
+  /**
+   * Возвращает DOM элемент компонента
+   * @return {HTMLElement | null} DOM элемент компонента
+   */
   getElement() {
     return this.element;
   }
