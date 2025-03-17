@@ -10,17 +10,28 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "start": "vite build && node server.cjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.ts",
+    "lint:style": "stylelint \"**/*.scss\"",
+    "lint:fix": "eslint . --ext .js,.ts --fix",
+    "lint:style:fix": "stylelint \"**/*.scss\" --fix"
   },
   "dependencies": {
     "express": "^4.21.2",
-    "handlebars": "^4.7.8"
+    "handlebars": "^4.7.8",
+    "lint": "^1.1.2"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-google": "^0.14.0",
     "saas": "^1.0.0",
     "sass-embedded": "^1.85.1",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard": "^36.0.0",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
-    "vite-plugin-handlebars": "^2.0.0"
+    "vite-plugin-handlebars": "^1.5.0"
   }
 }
