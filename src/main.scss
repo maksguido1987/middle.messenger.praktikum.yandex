@@ -1,9 +1,9 @@
-@use "./vars.scss" as *;
-@forward "./pages/login/style";
-@forward "./pages/signin/style";
-@forward "./pages/chat/style";
-@forward "./pages/profile/style";
-@forward "./pages/errors/style";
+@use './vars.scss' as *;
+@forward './pages/login/style';
+@forward './pages/signin/style';
+@forward './pages/chat/style';
+@forward './pages/profile/style';
+@forward './pages/errors/style';
 
 * {
   margin: 0;
@@ -18,9 +18,9 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;

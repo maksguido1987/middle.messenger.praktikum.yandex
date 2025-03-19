@@ -1,9 +1,9 @@
-@use "../../vars.scss" as *;
-@forward "./components/chat-list/style";
-@forward "./components/chat-item/style";
-@forward "./components/chat-header/style";
-@forward "./components/chat-search/style";
-@forward "./components/chat-input/style";
+@use '../../vars.scss' as *;
+@forward './components/chat-list/style';
+@forward './components/chat-item/style';
+@forward './components/chat-header/style';
+@forward './components/chat-search/style';
+@forward './components/chat-input/style';
 
 .chat-page {
   display: flex;
