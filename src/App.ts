@@ -1,14 +1,6 @@
 import Handlebars from 'handlebars';
 import {Button, Input, FormTitle, Link, Avatar} from './components';
-import {
-  Login,
-  Signin,
-  Chat,
-  Profile,
-  EditPassword,
-  Error404,
-  Error500,
-} from './pages';
+import {Login, Signin, Chat, Profile, EditPassword, Error404, Error500} from './pages';
 import {
   AttachButton,
   ChatHeader,
@@ -115,9 +107,7 @@ export class App {
    * Добавляет обработчики событий для форм и ссылок
    */
   private addEventListeners() {
-    const form = this.rootElement.querySelector(
-      '.form-container',
-    ) as HTMLElement;
+    const form = this.rootElement.querySelector('.form-container') as HTMLElement;
 
     if (form) {
       form.addEventListener('submit', (e) => {
