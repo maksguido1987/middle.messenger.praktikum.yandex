@@ -8,18 +8,10 @@ type EventHandler = (...args: unknown[]) => void;
 export class EventBus {
   private events: Map<string, EventHandler[]>;
 
-  /**
-   * Инициализация events
-   */
   constructor() {
     this.events = new Map();
   }
 
-  /**
-   * Подписывает обработчик на событие
-   * @param {string} event - Название события
-   * @param {EventHandler} handler - Функция-обработчик
-   */
   on(event: string, handler: EventHandler): void {
     if (!this.events.has(event)) {
       this.events.set(event, []);
@@ -27,11 +19,6 @@ export class EventBus {
     this.events.get(event)?.push(handler);
   }
 
-  /**
-   * Отписывает обработчик от события
-   * @param {string} event - Название события
-   * @param {EventHandler} handler - Функция-обработчик
-   */
   off(event: string, handler: EventHandler): void {
     if (!this.events.has(event)) {
       throw new Error(`Нет события: ${event}`);
@@ -49,11 +36,6 @@ export class EventBus {
     }
   }
 
-  /**
-   * Вызывает все обработчики события с переданными аргументами
-   * @param {string} event - Название события
-   * @param {...unknown[]} args - Аргументы для обработчиков
-   */
   emit(event: EmitEvents, ...args: unknown[]): void {
     if (!this.events.has(event)) {
       throw new Error(`Нет события: ${event}`);

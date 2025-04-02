@@ -2,41 +2,38 @@ import {EmitEvents} from '../global-types';
 import {EventBus} from './EventBus';
 import Handlebars from 'handlebars';
 
-type Attributes = Partial<HTMLElement>;
+type Attributes = {
+  [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
+} & {
+  [key: string]: string | undefined;
+};
+type Events = Partial<{
+  [K in keyof HTMLElementEventMap]: (event: HTMLElementEventMap[K]) => void;
+}>;
 type Children = Record<string, Block | Block[]>;
 
 type Props = {
   attributes?: Attributes;
   children?: Children;
-} & Record<string, unknown>;
-
-type Meta = {
-  tagName: string;
-  props: Props;
+  events?: Events;
 };
 
 const DEFAULT_TAG_NAME = 'div';
 
 export abstract class Block {
-  props: Props;
-  eventBus: EventBus;
-
+  protected attributes: Attributes;
+  protected eventBus: () => EventBus;
   protected children: Children = {};
+  protected events: Events = {};
+  protected _element: HTMLElement | HTMLTemplateElement | null = null;
 
-  private _element: HTMLElement | null = null;
-  private _meta: Meta = {tagName: DEFAULT_TAG_NAME, props: {}};
-
-  constructor(tagName: string = DEFAULT_TAG_NAME, props: Props = {}, children: Children = {}) {
+  constructor(props: Props = {}) {
     const eventBus = new EventBus();
 
-    this._meta = {
-      tagName,
-      props,
-    };
-
-    this.children = children;
-    this.props = this._makePropsProxy(props);
-    this.eventBus = eventBus;
+    this.attributes = this._makePropsProxy(props.attributes || {});
+    this.children = props.children || {};
+    this.events = props.events || {};
+    this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(EmitEvents.INIT);
   }
@@ -48,19 +45,28 @@ export abstract class Block {
     eventBus.on(EmitEvents.FLOW_RENDER, this._render.bind(this));
   }
 
+  private _addEvents() {
+    if (!this.events) {
+      return;
+    }
+
+    Object.entries(this.events).forEach(([event, callback]) => {
+      this._element?.addEventListener(event, callback as EventListener);
+    });
+  }
+
   private _createResources() {
-    const {tagName} = this._meta;
-    this._element = this._createDocumentElement(tagName);
-    this.addAttributes(this._meta.props.attributes);
+    this._element = this._createDocumentElement(DEFAULT_TAG_NAME);
+    this.addAttributes(this.attributes);
   }
 
   init() {
-    this._createResources();
-    this.eventBus.emit(EmitEvents.FLOW_RENDER);
+    // this._createResources();
+    this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
   private _componentDidMount() {
-    this.componentDidMount(this.props);
+    this.componentDidMount(this.attributes);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -73,7 +79,7 @@ export abstract class Block {
   }
 
   dispatchComponentDidMount() {
-    this.eventBus.emit(EmitEvents.FLOW_CDM);
+    this.eventBus().emit(EmitEvents.FLOW_CDM);
   }
 
   private _componentDidUpdate(...args: unknown[]) {
@@ -89,15 +95,16 @@ export abstract class Block {
     return true;
   }
 
-  setProps = (nextProps: Props) => {
-    if (!nextProps) {
-      return;
-    }
+  // setProps = (nextAttributes: Attributes) => {
+  //   if (!nextAttributes) {
+  //     return;
+  //   }
 
-    Object.assign(this.props, nextProps);
-  };
+  //   Object.assign(this.attributes, nextAttributes);
+  // };
 
   get element() {
+    console.log(this._element); // почему тут null?
     return this._element;
   }
 
@@ -107,25 +114,23 @@ export abstract class Block {
     if (this._element && block) {
       // Компилируем шаблон через Handlebars
       const template = Handlebars.compile(block);
-
       // Рендерим с данными из props
-      const html = template(this.props);
+      const html = template(this.attributes);
 
-      // Создаем временный контейнер
-      const temp = document.createElement('template');
-      temp.innerHTML = html;
+      const fragment = this._createDocumentElement('template');
+      fragment.innerHTML = html;
+      const newElement = fragment.content.firstElementChild;
 
-      // Очищаем текущий элемент
-      while (this._element.firstChild) {
-        this._element.removeChild(this._element.firstChild);
-      }
+      // if (this._element) {
+      //   this._element.replaceWith(newElement);
+      // }
+      this._element = newElement;
 
-      // Вставляем новый контент
-      this._element.appendChild(temp.content);
+      this._addEvents();
+      this.addAttributes(this.attributes);
     }
   }
 
-  // Метод render должен возвращать строку с Handlebars шаблоном
   render(): string {
     return '';
   }
@@ -134,17 +139,13 @@ export abstract class Block {
     return this.element;
   }
 
-  _makePropsProxy(props: Props) {
+  _makePropsProxy(props: Attributes) {
     return new Proxy(props, {
       get: (target, prop: string) => {
         if (prop.startsWith('_')) {
           throw new Error('Нет прав');
         }
-        const value = target[prop];
-        if (typeof value === 'function') {
-          return value.bind(target);
-        }
-        return value;
+        return target[prop];
       },
 
       set: (target, prop: string, value) => {
@@ -152,8 +153,8 @@ export abstract class Block {
           throw new Error('Нет прав');
         }
         const oldProps = {...target};
-        target[prop] = value;
-        this.eventBus.emit(EmitEvents.FLOW_RENDER, oldProps, target);
+        target[prop] = String(value);
+        this.eventBus().emit(EmitEvents.FLOW_RENDER, oldProps, target);
         return true;
       },
 
@@ -163,12 +164,13 @@ export abstract class Block {
     });
   }
 
-  _createDocumentElement(tagName: string): HTMLElement {
-    // Можно сделать метод, который через фрагменты в цикле создаёт сразу несколько блоков
+  _createDocumentElement(tagName: string): HTMLElement | HTMLTemplateElement {
     return document.createElement(tagName);
   }
 
   addAttributes(attributes?: Attributes) {
+    console.log('this._element', this._element);
+    console.log('attributes',  attributes);
     if (!this._element || !attributes) {
       return;
     }
@@ -178,17 +180,17 @@ export abstract class Block {
     });
   }
 
-  show() {
-    if (!this._element) {
-      return;
-    }
-    this._element.style.display = 'block';
-  }
+  // show() {
+  //   if (!this._element) {
+  //     return;
+  //   }
+  //   this._element.style.display = 'block';
+  // }
 
-  hide() {
-    if (!this._element) {
-      return;
-    }
-    this._element.style.display = 'none';
-  }
+  // hide() {
+  //   if (!this._element) {
+  //     return;
+  //   }
+  //   this._element.style.display = 'none';
+  // }
 }
