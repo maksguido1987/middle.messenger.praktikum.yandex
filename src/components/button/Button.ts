@@ -20,7 +20,6 @@ export class Button extends Block {
         },
       },
     });
-    console.log('props', props); // {text: 'Click me', type: 'button'}
   }
 
   render(): string {

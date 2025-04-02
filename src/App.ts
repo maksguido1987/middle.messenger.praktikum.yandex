@@ -12,7 +12,6 @@ export class App {
    */
   constructor(rootSelector: string) {
     const root = document.getElementById(rootSelector);
-    // console.log(new LoginPage().getContent());
 
     if (!root) {
       throw new Error(`Элемент с селектором "${rootSelector}" не найден`);
@@ -25,9 +24,7 @@ export class App {
    * Рендерит компоненты в зависимости от текущего маршрута
    */
   private render() {
-
-    this.rootElement.innerHTML = new LoginPage().getContent();
-
+    this.rootElement.replaceWith(new LoginPage().getContent());
   }
 
   /**

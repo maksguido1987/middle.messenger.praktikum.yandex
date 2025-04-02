@@ -17,7 +17,7 @@ export class LoginPage extends Block {
     return `
       <div id="login-page">
         <h1>Login</h1>
-        {{{Button}}}
+        {{{ Button }}}
       </div>
     `;
   }

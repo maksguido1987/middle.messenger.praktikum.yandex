@@ -4,33 +4,33 @@ import Handlebars from 'handlebars';
 
 type Attributes = {
   [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
-} & {
-  [key: string]: string | undefined;
 };
 type Events = Partial<{
   [K in keyof HTMLElementEventMap]: (event: HTMLElementEventMap[K]) => void;
 }>;
 type Children = Record<string, Block | Block[]>;
+type CustomProps = Record<string, string | undefined>;
 
 type Props = {
-  attributes?: Attributes;
+  HTMLAttributes?: Attributes;
   children?: Children;
   events?: Events;
+  customProps?: CustomProps;
 };
 
-const DEFAULT_TAG_NAME = 'div';
-
 export abstract class Block {
-  protected attributes: Attributes;
+  protected HTMLAttributes: Attributes;
   protected eventBus: () => EventBus;
   protected children: Children = {};
   protected events: Events = {};
-  protected _element: HTMLElement | HTMLTemplateElement | null = null;
+  protected customProps: CustomProps = {};
+  protected _element: HTMLElement | null = null;
 
   constructor(props: Props = {}) {
     const eventBus = new EventBus();
 
-    this.attributes = this._makePropsProxy(props.attributes || {});
+    this.HTMLAttributes = this._makePropsProxy(props.HTMLAttributes || {});
+    this.customProps = this._makePropsProxy(props.customProps || {});
     this.children = props.children || {};
     this.events = props.events || {};
     this.eventBus = () => eventBus;
@@ -55,18 +55,12 @@ export abstract class Block {
     });
   }
 
-  private _createResources() {
-    this._element = this._createDocumentElement(DEFAULT_TAG_NAME);
-    this.addAttributes(this.attributes);
-  }
-
   init() {
-    // this._createResources();
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
   private _componentDidMount() {
-    this.componentDidMount(this.attributes);
+    this.componentDidMount(this.HTMLAttributes);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -95,40 +89,34 @@ export abstract class Block {
     return true;
   }
 
-  // setProps = (nextAttributes: Attributes) => {
-  //   if (!nextAttributes) {
-  //     return;
-  //   }
+  setProps = (nextAttributes: Attributes) => {
+    if (!nextAttributes) {
+      return;
+    }
 
-  //   Object.assign(this.attributes, nextAttributes);
-  // };
+    Object.assign(this.HTMLAttributes, nextAttributes);
+  };
 
   get element() {
-    console.log(this._element); // почему тут null?
-    return this._element;
+    return this._element ?? '';
   }
 
   private _render() {
     const block = this.render();
 
-    if (this._element && block) {
-      // Компилируем шаблон через Handlebars
-      const template = Handlebars.compile(block);
-      // Рендерим с данными из props
-      const html = template(this.attributes);
+    // Компилируем шаблон через Handlebars
+    const template = Handlebars.compile(block);
+    // Рендерим с данными из props
+    const html = template(this.HTMLAttributes);
 
-      const fragment = this._createDocumentElement('template');
-      fragment.innerHTML = html;
-      const newElement = fragment.content.firstElementChild;
+    const fragment = this._createDocumentElement('template');
+    fragment.innerHTML = html;
+    const newElement = fragment.content.firstElementChild;
 
-      // if (this._element) {
-      //   this._element.replaceWith(newElement);
-      // }
-      this._element = newElement;
+    this._element = newElement;
 
-      this._addEvents();
-      this.addAttributes(this.attributes);
-    }
+    this._addEvents();
+    this.addAttributes(this.HTMLAttributes);
   }
 
   render(): string {
@@ -139,7 +127,7 @@ export abstract class Block {
     return this.element;
   }
 
-  _makePropsProxy(props: Attributes) {
+  _makePropsProxy(props: Attributes & CustomProps) {
     return new Proxy(props, {
       get: (target, prop: string) => {
         if (prop.startsWith('_')) {
@@ -169,8 +157,6 @@ export abstract class Block {
   }
 
   addAttributes(attributes?: Attributes) {
-    console.log('this._element', this._element);
-    console.log('attributes',  attributes);
     if (!this._element || !attributes) {
       return;
     }
@@ -180,17 +166,17 @@ export abstract class Block {
     });
   }
 
-  // show() {
-  //   if (!this._element) {
-  //     return;
-  //   }
-  //   this._element.style.display = 'block';
-  // }
+  show() {
+    if (!this._element) {
+      return;
+    }
+    this._element.style.display = 'block';
+  }
 
-  // hide() {
-  //   if (!this._element) {
-  //     return;
-  //   }
-  //   this._element.style.display = 'none';
-  // }
+  hide() {
+    if (!this._element) {
+      return;
+    }
+    this._element.style.display = 'none';
+  }
 }
