@@ -1,4 +1,5 @@
 import {LoginPage} from './pages/login/LoginPage';
+import {SigninPage} from './pages/signin/SigninPage';
 
 /**
  * Основной класс приложения для управления маршрутизацией и рендерингом
@@ -17,14 +18,23 @@ export class App {
       throw new Error(`Элемент с селектором "${rootSelector}" не найден`);
     }
 
-    this.rootElement = root as HTMLElement;
+    this.rootElement = root;
   }
 
   /**
    * Рендерит компоненты в зависимости от текущего маршрута
    */
   private render() {
-    this.rootElement.replaceWith(new LoginPage().getContent());
+    const location = window.location.pathname;
+
+    switch (location) {
+      case '/login':
+        this.rootElement.replaceWith(new LoginPage().getContent());
+        break;
+      case '/signin':
+        this.rootElement.replaceWith(new SigninPage().getContent());
+        break;
+    }
   }
 
   /**

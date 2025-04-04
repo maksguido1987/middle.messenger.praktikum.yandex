@@ -1,35 +1,19 @@
-import {EmitEvents} from '../global-types';
+import {BlockProps, Children, CustomProps, EmitEvents, Events} from '../global-types';
 import {EventBus} from './EventBus';
 import Handlebars from 'handlebars';
-
-type Attributes = {
-  [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
-};
-type Events = Partial<{
-  [K in keyof HTMLElementEventMap]: (event: HTMLElementEventMap[K]) => void;
-}>;
-type Children = Record<string, Block | Block[]>;
-type CustomProps = Record<string, string | undefined>;
-
-type Props = {
-  HTMLAttributes?: Attributes;
-  children?: Children;
-  events?: Events;
-  customProps?: CustomProps;
-};
+import {v4 as uuidv4} from 'uuid';
 
 export abstract class Block {
-  protected HTMLAttributes: Attributes;
   protected eventBus: () => EventBus;
   protected children: Children = {};
   protected events: Events = {};
   protected customProps: CustomProps = {};
   protected _element: HTMLElement | null = null;
+  protected _placeholder?: string = `child_${uuidv4()}`;
 
-  constructor(props: Props = {}) {
+  constructor(props: BlockProps = {}) {
     const eventBus = new EventBus();
 
-    this.HTMLAttributes = this._makePropsProxy(props.HTMLAttributes || {});
     this.customProps = this._makePropsProxy(props.customProps || {});
     this.children = props.children || {};
     this.events = props.events || {};
@@ -60,7 +44,7 @@ export abstract class Block {
   }
 
   private _componentDidMount() {
-    this.componentDidMount(this.HTMLAttributes);
+    this.componentDidMount(this.customProps);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -68,7 +52,7 @@ export abstract class Block {
     });
   }
 
-  componentDidMount(oldProps: Props) {
+  componentDidMount(oldProps: BlockProps) {
     return true;
   }
 
@@ -77,7 +61,7 @@ export abstract class Block {
   }
 
   private _componentDidUpdate(...args: unknown[]) {
-    const [oldProps, newProps] = args as [Props, Props];
+    const [oldProps, newProps] = args as [BlockProps, BlockProps];
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -85,16 +69,16 @@ export abstract class Block {
     this._render();
   }
 
-  componentDidUpdate(oldProps: Props, newProps: Props) {
+  componentDidUpdate(oldProps: BlockProps, newProps: BlockProps) {
     return true;
   }
 
-  setProps = (nextAttributes: Attributes) => {
+  setProps = (nextAttributes: CustomProps) => {
     if (!nextAttributes) {
       return;
     }
 
-    Object.assign(this.HTMLAttributes, nextAttributes);
+    Object.assign(this.customProps, nextAttributes);
   };
 
   get element() {
@@ -104,19 +88,34 @@ export abstract class Block {
   private _render() {
     const block = this.render();
 
-    // Компилируем шаблон через Handlebars
     const template = Handlebars.compile(block);
-    // Рендерим с данными из props
-    const html = template(this.HTMLAttributes);
+    const propsAndChildren = {...this.customProps, ...this.children};
 
-    const fragment = this._createDocumentElement('template');
+    Object.entries(this.children).forEach(([key, child]) => {
+      propsAndChildren[key] = `<div data-id="${child._placeholder}"></div>`;
+    });
+
+    const html = template(propsAndChildren);
+
+    const fragment = this._createDocumentElement('template') as HTMLTemplateElement;
     fragment.innerHTML = html;
     const newElement = fragment.content.firstElementChild;
+    if (this._element && newElement) {
+      this._element.replaceWith(newElement);
+    }
+    this._element = newElement as HTMLElement;
 
-    this._element = newElement;
+    // Заменяем плейсхолдеры на реальные компоненты
+    Object.values(this.children).forEach((child) => {
+      const placeholder = newElement?.querySelector(`[data-id="${child._placeholder}"]`);
+
+      if (placeholder && child.getContent()) {
+        placeholder.replaceWith(child.getContent());
+      }
+    });
 
     this._addEvents();
-    this.addAttributes(this.HTMLAttributes);
+    this.addAttributes(this.customProps);
   }
 
   render(): string {
@@ -127,7 +126,7 @@ export abstract class Block {
     return this.element;
   }
 
-  _makePropsProxy(props: Attributes & CustomProps) {
+  _makePropsProxy(props: CustomProps) {
     return new Proxy(props, {
       get: (target, prop: string) => {
         if (prop.startsWith('_')) {
@@ -156,8 +155,8 @@ export abstract class Block {
     return document.createElement(tagName);
   }
 
-  addAttributes(attributes?: Attributes) {
-    if (!this._element || !attributes) {
+  addAttributes(attributes?: CustomProps) {
+    if (!attributes) {
       return;
     }
 

@@ -5,13 +5,12 @@
   justify-content: center;
   align-items: center;
   height: 100%;
-}
 
-.signin-button-container {
-  margin-top: vars.$spacing-md;
-  margin-bottom: vars.$spacing-sm;
-}
-
-.signin-link {
-  text-align: center;
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e1e1e;
+    margin-bottom: 30px;
+    text-align: center;
+  }
 }

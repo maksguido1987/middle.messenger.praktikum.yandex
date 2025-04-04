@@ -1,23 +1,23 @@
+import {LoginForm} from '../../components/forms/login-form/LoginForm';
 import {Block} from '../../core/Block';
-import {Button} from '../../components/button/Button';
-
 export class LoginPage extends Block {
   constructor() {
     super({
       children: {
-        Button: new Button({
-          text: 'Click me',
-          type: 'button',
-        }),
+        LoginForm: new LoginForm(),
       },
     });
   }
 
   render() {
     return `
-      <div id="login-page">
-        <h1>Login</h1>
-        {{{ Button }}}
+      <div id="app">
+        <main class="login-container">
+          <div class="form-container">
+            <h1>Вход</h1>
+            {{{ LoginForm }}}
+          </div>
+        </main>
       </div>
     `;
   }
