@@ -8,11 +8,11 @@ export class SigninForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => this._fetchFormData(e),
+        submit: (e: Event) => this.fetchFormData(e),
       },
       children: {
         InputEmail: new Input({
-          customProps: {
+          attributes: {
             type: 'email',
             placeholder: 'Почта',
             name: 'email',
@@ -20,7 +20,7 @@ export class SigninForm extends Block {
           },
         }),
         InputLogin: new Input({
-          customProps: {
+          attributes: {
             type: 'text',
             placeholder: 'Логин',
             name: 'login',
@@ -28,7 +28,7 @@ export class SigninForm extends Block {
           },
         }),
         InputName: new Input({
-          customProps: {
+          attributes: {
             type: 'text',
             placeholder: 'Имя',
             name: 'first_name',
@@ -36,7 +36,7 @@ export class SigninForm extends Block {
           },
         }),
         InputSecondName: new Input({
-          customProps: {
+          attributes: {
             type: 'text',
             placeholder: 'Фамилия',
             name: 'second_name',
@@ -44,7 +44,7 @@ export class SigninForm extends Block {
           },
         }),
         InputPhone: new Input({
-          customProps: {
+          attributes: {
             type: 'tel',
             placeholder: 'Телефон',
             name: 'phone',
@@ -52,7 +52,7 @@ export class SigninForm extends Block {
           },
         }),
         InputPassword: new Input({
-          customProps: {
+          attributes: {
             type: 'password',
             placeholder: 'Пароль',
             name: 'password',
@@ -60,7 +60,7 @@ export class SigninForm extends Block {
           },
         }),
         InputPasswordConfirm: new Input({
-          customProps: {
+          attributes: {
             type: 'password',
             placeholder: 'Пароль (еще раз)',
             name: 'password_confirm',
@@ -68,13 +68,13 @@ export class SigninForm extends Block {
           },
         }),
         Button: new Button({
-          customProps: {
+          attributes: {
             type: 'submit',
             text: 'Войти',
           },
         }),
         Link: new Link({
-          customProps: {
+          attributes: {
             href: '/login',
             text: 'Уже есть аккаунт? Войти',
           },
@@ -83,17 +83,10 @@ export class SigninForm extends Block {
     });
   }
 
-  private _fetchFormData(e: Event) {
-    e.preventDefault();
-
-    if (e.target instanceof HTMLFormElement) {
-      return (Array.from(e.target.elements) as HTMLInputElement[])
-        .filter((item) => !!item.name)
-        .forEach((element) => {
-          const {name, value} = element;
-          console.log({name, value});
-        });
-    }
+  private fetchFormData(e: Event) {
+    const formData = this.getFormData(e);
+    console.log(formData);
+    return formData;
   }
 
   render() {

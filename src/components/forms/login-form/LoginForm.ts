@@ -8,11 +8,11 @@ export class LoginForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => this._fetchFormData(e),
+        submit: (e: Event) => this.fetchFormData(e),
       },
       children: {
         InputLogin: new Input({
-          customProps: {
+          attributes: {
             type: 'text',
             placeholder: 'Логин',
             name: 'login',
@@ -20,7 +20,7 @@ export class LoginForm extends Block {
           },
         }),
         InputPassword: new Input({
-          customProps: {
+          attributes: {
             type: 'password',
             placeholder: 'Пароль',
             name: 'password',
@@ -28,13 +28,13 @@ export class LoginForm extends Block {
           },
         }),
         Button: new Button({
-          customProps: {
+          attributes: {
             type: 'submit',
             text: 'Войти',
           },
         }),
         Link: new Link({
-          customProps: {
+          attributes: {
             href: '/signin',
             text: 'Ещё не зарегистрированы?',
           },
@@ -43,17 +43,11 @@ export class LoginForm extends Block {
     });
   }
 
-  private _fetchFormData(e: Event) {
+  private fetchFormData(e: Event) {
     e.preventDefault();
 
-    if (e.target instanceof HTMLFormElement) {
-      return (Array.from(e.target.elements) as HTMLInputElement[])
-        .filter((item) => !!item.name)
-        .forEach((element) => {
-          const {name, value} = element;
-          console.log({name, value});
-        });
-    }
+    const formData = this.getFormData(e);
+    console.log(formData);
   }
 
   render() {

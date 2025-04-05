@@ -7,17 +7,18 @@ export const enum EmitEvents {
   FLOW_CDU = 'flow:component-did-update',
 }
 
-type Attributes = {
-  [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
-};
 export type Events = Partial<{
   [K in keyof HTMLElementEventMap]: (event: HTMLElementEventMap[K]) => void;
 }>;
 export type Children = Record<string, Block>;
-export type CustomProps = Attributes & Record<string, string | undefined>;
+export type Attributes = {
+  [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
+} & Record<string, unknown>;
 
 export interface BlockProps {
   children?: Children;
   events?: Events;
-  customProps?: CustomProps;
+  attributes?: Attributes;
+  state?: Record<string, unknown>;
+  customValues?: Record<string, unknown>;
 }

@@ -1,4 +1,4 @@
-import {BlockProps, Children, CustomProps, EmitEvents, Events} from '../global-types';
+import {BlockProps, Children, Attributes, EmitEvents, Events} from '../global-types';
 import {EventBus} from './EventBus';
 import Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
@@ -7,14 +7,16 @@ export abstract class Block {
   protected eventBus: () => EventBus;
   protected children: Children = {};
   protected events: Events = {};
-  protected customProps: CustomProps = {};
+  protected attributes: Attributes = {};
+  protected state: Record<string, unknown> = {};
   protected _element: HTMLElement | null = null;
   protected _placeholder?: string = `child_${uuidv4()}`;
 
   constructor(props: BlockProps = {}) {
     const eventBus = new EventBus();
 
-    this.customProps = this._makePropsProxy(props.customProps || {});
+    this.attributes = this._makePropsProxy(props.attributes || {});
+    this.state = this._makePropsProxy(props.state || {});
     this.children = props.children || {};
     this.events = props.events || {};
     this.eventBus = () => eventBus;
@@ -44,7 +46,7 @@ export abstract class Block {
   }
 
   private _componentDidMount() {
-    this.componentDidMount(this.customProps);
+    this.componentDidMount(this.attributes);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -73,12 +75,21 @@ export abstract class Block {
     return true;
   }
 
-  setProps = (nextAttributes: CustomProps) => {
+  setProps = (nextAttributes: Attributes) => {
     if (!nextAttributes) {
       return;
     }
 
-    Object.assign(this.customProps, nextAttributes);
+    Object.assign(this.attributes, nextAttributes);
+  };
+
+  setState = (nextState: Record<string, unknown>) => {
+    if (!nextState) {
+      return;
+    }
+
+    Object.assign(this.state, nextState);
+    this.eventBus().emit(EmitEvents.FLOW_RENDER);
   };
 
   get element() {
@@ -89,7 +100,7 @@ export abstract class Block {
     const block = this.render();
 
     const template = Handlebars.compile(block);
-    const propsAndChildren = {...this.customProps, ...this.children};
+    const propsAndChildren = {...this.attributes, ...this.state, ...this.children};
 
     Object.entries(this.children).forEach(([key, child]) => {
       propsAndChildren[key] = `<div data-id="${child._placeholder}"></div>`;
@@ -115,7 +126,7 @@ export abstract class Block {
     });
 
     this._addEvents();
-    this.addAttributes(this.customProps);
+    this.addAttributes(this.attributes);
   }
 
   render(): string {
@@ -126,7 +137,7 @@ export abstract class Block {
     return this.element;
   }
 
-  _makePropsProxy(props: CustomProps) {
+  _makePropsProxy(props: Attributes) {
     return new Proxy(props, {
       get: (target, prop: string) => {
         if (prop.startsWith('_')) {
@@ -155,7 +166,7 @@ export abstract class Block {
     return document.createElement(tagName);
   }
 
-  addAttributes(attributes?: CustomProps) {
+  addAttributes(attributes?: Attributes) {
     if (!attributes) {
       return;
     }
@@ -177,5 +188,27 @@ export abstract class Block {
       return;
     }
     this._element.style.display = 'none';
+  }
+
+  protected getFormData(e: Event): {name: string; value: string}[] {
+    e.preventDefault();
+
+    if (!(e.target instanceof HTMLFormElement)) {
+      return [];
+    }
+
+    return Array.from(e.target.elements)
+      .filter((item): item is HTMLInputElement => {
+        return (
+          item instanceof HTMLInputElement &&
+          !!item.name &&
+          item.type !== 'submit' &&
+          item.type !== 'button'
+        );
+      })
+      .map((element) => ({
+        name: element.name,
+        value: element.value,
+      }));
   }
 }

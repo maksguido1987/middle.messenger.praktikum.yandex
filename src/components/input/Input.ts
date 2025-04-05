@@ -2,11 +2,11 @@ import {BlockProps} from '../../global-types';
 import {Block} from '../../core/Block';
 import './style.scss';
 
-interface InputProps extends Omit<BlockProps, 'customProps'> {
-  customProps: {
+interface InputProps extends Omit<BlockProps, 'attributes'> {
+  attributes: {
     id: string;
     name: string;
-  } & BlockProps['customProps'];
+  } & BlockProps['attributes'];
 }
 
 export class Input extends Block {

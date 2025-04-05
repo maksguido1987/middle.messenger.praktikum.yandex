@@ -1,5 +1,6 @@
 import {LoginPage} from './pages/login/LoginPage';
-import {SigninPage} from './pages/signin/SigninPage';
+import { ProfilePage } from './pages/profile/ProfilePage';
+import { SigninPage } from './pages/signin/SigninPage';
 
 /**
  * Основной класс приложения для управления маршрутизацией и рендерингом
@@ -28,6 +29,9 @@ export class App {
     const location = window.location.pathname;
 
     switch (location) {
+      case '/profile':
+        this.rootElement.replaceWith(new ProfilePage().getContent());
+        break;
       case '/login':
         this.rootElement.replaceWith(new LoginPage().getContent());
         break;

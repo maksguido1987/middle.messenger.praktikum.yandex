@@ -1,6 +1,5 @@
 @use "../../vars.scss" as *;
 @forward "./components/load-avatar/style";
-@forward "./components/profile-input/style";
 
 .profile-page {
   height: 100%;
@@ -26,33 +25,6 @@
   font-weight: 600;
   color: $text-primary;
   margin-bottom: $spacing-md;
-}
-
-.profile-form {
-  width: 100%;
-
-  &__field {
-    display: flex;
-    align-items: center;
-    margin-bottom: $spacing-md;
-  }
-
-  &__label {
-    flex: 0 0 30%;
-    color: $text-primary;
-    font-size: v  $font-size-md;
-    padding-right: $spacing-md;
-  }
-
-  &__value {
-    flex: 0 0 70%;
-  }
-
-  &__readonly {
-    padding: 10px;
-    color: $text-primary;
-    font-size: $font-size-md;
-  }
 }
 
 .profile-links {
