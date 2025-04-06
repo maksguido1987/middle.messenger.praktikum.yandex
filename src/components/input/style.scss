@@ -16,4 +16,12 @@ $light-blue: #ebf5fb;
     border-color: vars.$primary-color;
     background-color: $light-blue;
   }
+  &.error {
+    border-color: vars.$error-color;
+  }
+}
+
+.validate-error {
+  color: vars.$error-color;
+  font-size: 12px;
 }

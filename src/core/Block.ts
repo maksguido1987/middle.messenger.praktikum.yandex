@@ -413,14 +413,14 @@ export abstract class Block {
   /**
    * Получает данные формы
    * @param {Event} e - Событие отправки формы
-   * @return {Array<{name: string, value: string}>} Массив данных формы
+   * @return {Record<string, {value: string}>} Объект данных формы
    * @protected
    */
-  protected getFormData(e: Event): {name: string; value: string}[] {
+  protected getFormData(e: Event): Record<string, {value: string}> {
     e.preventDefault();
 
     if (!(e.target instanceof HTMLFormElement)) {
-      return [];
+      return {};
     }
 
     return Array.from(e.target.elements)
@@ -432,10 +432,13 @@ export abstract class Block {
           item.type !== 'button'
         );
       })
-      .map((element) => ({
-        name: element.name,
-        value: element.value,
-      }));
+      .reduce(
+        (acc, element) => {
+          acc[element.name] = {value: element.value};
+          return acc;
+        },
+        {} as Record<string, {value: string}>,
+      );
   }
 
   /**

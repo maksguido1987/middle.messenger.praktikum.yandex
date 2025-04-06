@@ -5,27 +5,33 @@ import {Button} from '../../button/Button';
 export class PasswordForm extends Block {
   constructor() {
     super({
+      events: {
+        submit: (e: Event) => {
+          e.preventDefault();
+          this.fetchFormData(e);
+        },
+      },
       children: {
         OldPasswordInput: new Input({
           attributes: {
-            id: 'oldPassword',
-            name: 'oldPassword',
+            id: 'old_password',
+            name: 'old_password',
             type: 'password',
             placeholder: 'Старый пароль',
           },
         }),
         NewPasswordInput: new Input({
           attributes: {
-            id: 'newPassword',
-            name: 'newPassword',
+            id: 'new_password',
+            name: 'new_password',
             type: 'password',
             placeholder: 'Новый пароль',
           },
         }),
         ConfirmPasswordInput: new Input({
           attributes: {
-            id: 'confirmPassword',
-            name: 'confirmPassword',
+            id: 'confirm_password',
+            name: 'confirm_password',
             type: 'password',
             placeholder: 'Подтвердите пароль',
           },
@@ -35,15 +41,15 @@ export class PasswordForm extends Block {
             text: 'Сохранить изменения',
             type: 'submit',
           },
-          events: {
-            click: (e: Event) => {
-              e.preventDefault();
-              console.log('Сохранить изменения');
-            },
-          },
         }),
       },
     });
+  }
+
+  private fetchFormData(e: Event) {
+    e.preventDefault();
+    const formData = this.getFormData(e);
+    console.log(formData);
   }
 
   render() {

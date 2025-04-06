@@ -63,22 +63,3 @@
     transform: translateY(1px);
   }
 }
-
-@media (max-width: 480px) {
-  .error-container {
-    width: 90%;
-    padding: $spacing-lg;
-  }
-
-  .error-code {
-    font-size: 80px;
-  }
-
-  .error-title {
-    font-size: 18px;
-  }
-
-  .error-message {
-    font-size: 14px;
-  }
-}

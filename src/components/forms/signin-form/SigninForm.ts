@@ -63,8 +63,8 @@ export class SigninForm extends Block {
           attributes: {
             type: 'password',
             placeholder: 'Пароль (еще раз)',
-            name: 'password_confirm',
-            id: 'password_confirm',
+            name: 'confirm_password',
+            id: 'confirm_password',
           },
         }),
         Button: new Button({

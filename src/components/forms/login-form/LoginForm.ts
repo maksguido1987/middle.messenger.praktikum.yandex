@@ -45,7 +45,6 @@ export class LoginForm extends Block {
 
   private fetchFormData(e: Event) {
     e.preventDefault();
-
     const formData = this.getFormData(e);
     console.log(formData);
   }

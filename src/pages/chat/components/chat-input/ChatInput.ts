@@ -1,5 +1,5 @@
 import {Block} from '../../../../core/Block';
-import { AttachButton } from './AttachButton';
+import {AttachButton} from './AttachButton';
 import './style.scss';
 
 interface ChatInputProps {
@@ -16,10 +16,22 @@ export class ChatInput extends Block {
   constructor(props: ChatInputProps) {
     super({
       ...props,
+      events: {
+        submit: (e: Event) => {
+          e.preventDefault();
+          this.fetchFormData(e);
+        },
+      },
       children: {
         AttachButton: new AttachButton({}),
       },
     });
+  }
+
+  private fetchFormData(e: Event) {
+    e.preventDefault();
+    const formData = this.getFormData(e);
+    console.log(formData);
   }
 
   render(): string {

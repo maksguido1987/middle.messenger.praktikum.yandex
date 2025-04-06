@@ -6,6 +6,12 @@ import '../style.scss';
 export class ProfileForm extends Block {
   constructor() {
     super({
+      events: {
+        submit: (e: Event) => {
+          e.preventDefault();
+          this.fetchFormData(e);
+        },
+      },
       children: {
         EmailInput: new Input({
           attributes: {
@@ -33,8 +39,8 @@ export class ProfileForm extends Block {
         }),
         LastNameInput: new Input({
           attributes: {
-            id: 'last_name',
-            name: 'last_name',
+            id: 'second_name',
+            name: 'second_name',
             value: 'Иванов',
             placeholder: 'Иванов',
           },
@@ -60,15 +66,15 @@ export class ProfileForm extends Block {
             text: 'Сохранить изменения',
             type: 'submit',
           },
-          events: {
-            click: (e: Event) => {
-              e.preventDefault();
-              console.log('Сохранить изменения');
-            },
-          },
         }),
       },
     });
+  }
+
+  private fetchFormData(e: Event) {
+    e.preventDefault();
+    const formData = this.getFormData(e);
+    console.log(formData);
   }
 
   render() {
