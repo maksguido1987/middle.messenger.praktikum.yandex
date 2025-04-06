@@ -1,0 +1,10 @@
+build
+node_modules
+vite.config.ts
+index.html
+server.cjs
+.prettierrc
+.stylelintrc.json
+.eslintrc.json
+.gitignore
+vite-env.d.ts

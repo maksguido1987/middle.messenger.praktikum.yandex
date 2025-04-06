@@ -6,8 +6,9 @@
   position: relative;
 
   &__input {
-    width: 290px;
+    width: 100%;
     height: 32px;
+    padding: 0 10px 0 30px;
     border-radius: $border-radius-sm;
     background-color: $bg-secondary;
     font-size: 14px;

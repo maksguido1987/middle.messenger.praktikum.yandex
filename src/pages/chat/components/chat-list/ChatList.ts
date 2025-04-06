@@ -1,22 +1,21 @@
-import { mockChats } from "./mockData";
-import Handlebars from "handlebars";
-import template from "./ChatList.hbs?raw";
-import "./style.scss";
-/** Временное решение для отображения списка чатов */
-export class ChatListComponent {
-  private element: HTMLElement;
+import {Block} from '../../../../core/Block';
+import {ChatItem} from '../chat-item/ChatItem';
+import {mockChats} from './mockData';
 
-  constructor(container: HTMLElement) {
-    this.element = document.createElement("div");
-    container.appendChild(this.element);
-    this.render();
+export class ChatList extends Block {
+  constructor() {
+    super({
+      lists: {
+        items: mockChats.map((chat) => new ChatItem({state: {...chat}})),
+      },
+    });
   }
 
-  render() {
-    const context = {
-      chats: mockChats,
-    };
-
-    this.element.innerHTML = Handlebars.compile(template)(context);
+  public render(): string {
+    return `
+      <ul class="chat-list">
+        {{{items}}}
+      </ul>
+    `;
   }
 }
