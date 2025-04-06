@@ -1,6 +1,6 @@
 import {BlockProps, Children, Attributes, EmitEvents, Events, Lists} from '../global-types';
 import {EventBus} from './EventBus';
-import Handlebars from 'handlebars';
+import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
 
 export abstract class Block {
