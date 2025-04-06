@@ -22,6 +22,14 @@ export class App {
     }
 
     this.rootElement = root;
+
+    // Инициализация роутера
+    window.addEventListener('popstate', () => {
+      this.render();
+    });
+
+    // Первоначальный рендер
+    this.render();
   }
 
   /**
@@ -29,38 +37,48 @@ export class App {
    */
   private render() {
     const location = window.location.pathname;
+    let newContent: HTMLElement | null = null;
 
     switch (location) {
       case '/':
-        this.rootElement.replaceWith(new Chat().getContent());
+        newContent = new Chat().getContent() as HTMLElement;
         break;
       case '/profile':
-        this.rootElement.replaceWith(new ProfilePage().getContent());
+        newContent = new ProfilePage().getContent() as HTMLElement;
         break;
       case '/login':
-        this.rootElement.replaceWith(new LoginPage().getContent());
+        newContent = new LoginPage().getContent() as HTMLElement;
         break;
       case '/signin':
-        this.rootElement.replaceWith(new SigninPage().getContent());
+        newContent = new SigninPage().getContent() as HTMLElement;
         break;
       case '/404':
-        this.rootElement.replaceWith(
-          new ErrorPage({
-            title: 'Страница не найдена',
-            code: '404',
-            description: 'Запрашиваемая страница не существует или была перемещена',
-          }).getContent(),
-        );
+        newContent = new ErrorPage({
+          title: 'Страница не найдена',
+          code: '404',
+          description: 'Запрашиваемая страница не существует или была перемещена',
+        }).getContent() as HTMLElement;
         break;
       case '/500':
-        this.rootElement.replaceWith(
-          new ErrorPage({
-            title: 'Ошибка сервера',
-            code: '500',
-            description: 'Сервер временно не отвечает. Мы уже работаем над устранением проблемы',
-          }).getContent(),
-        );
+        newContent = new ErrorPage({
+          title: 'Ошибка сервера',
+          code: '500',
+          description: 'Сервер временно не отвечает. Мы уже работаем над устранением проблемы',
+        }).getContent() as HTMLElement;
         break;
+      default:
+        newContent = new ErrorPage({
+          title: 'Страница не найдена',
+          code: '404',
+          description: 'Запрашиваемая страница не существует или была перемещена',
+        }).getContent() as HTMLElement;
+    }
+
+    if (newContent) {
+      // Очищаем содержимое корневого элемента
+      this.rootElement.innerHTML = '';
+      // Добавляем новый контент
+      this.rootElement.appendChild(newContent);
     }
   }
 

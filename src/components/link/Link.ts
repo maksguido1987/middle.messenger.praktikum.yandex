@@ -4,7 +4,21 @@ import './style.scss';
 
 export class Link extends Block {
   constructor(props: BlockProps) {
-    super(props);
+    super({
+      ...props,
+      events: {
+        click: (e: Event) => {
+          e.preventDefault();
+
+          const href = (e.target as HTMLAnchorElement).getAttribute('href');
+
+          if (href) {
+            window.history.pushState({}, '', href);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }
+        },
+      },
+    });
   }
 
   render() {
