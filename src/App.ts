@@ -1,7 +1,8 @@
-import { Chat } from './pages/chat/Chat';
+import {Chat} from './pages/chat/Chat';
+import {ErrorPage} from './pages/errors/Error';
 import {LoginPage} from './pages/login/LoginPage';
-import { ProfilePage } from './pages/profile/ProfilePage';
-import { SigninPage } from './pages/signin/SigninPage';
+import {ProfilePage} from './pages/profile/ProfilePage';
+import {SigninPage} from './pages/signin/SigninPage';
 
 /**
  * Основной класс приложения для управления маршрутизацией и рендерингом
@@ -30,7 +31,7 @@ export class App {
     const location = window.location.pathname;
 
     switch (location) {
-      case '/chat':
+      case '/':
         this.rootElement.replaceWith(new Chat().getContent());
         break;
       case '/profile':
@@ -41,6 +42,24 @@ export class App {
         break;
       case '/signin':
         this.rootElement.replaceWith(new SigninPage().getContent());
+        break;
+      case '/404':
+        this.rootElement.replaceWith(
+          new ErrorPage({
+            title: 'Страница не найдена',
+            code: '404',
+            description: 'Запрашиваемая страница не существует или была перемещена',
+          }).getContent(),
+        );
+        break;
+      case '/500':
+        this.rootElement.replaceWith(
+          new ErrorPage({
+            title: 'Ошибка сервера',
+            code: '500',
+            description: 'Сервер временно не отвечает. Мы уже работаем над устранением проблемы',
+          }).getContent(),
+        );
         break;
     }
   }
