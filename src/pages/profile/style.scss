@@ -1,5 +1,5 @@
-@use "../../vars.scss" as *;
-@forward "./components/load-avatar/style";
+@use '../../vars.scss' as *;
+@forward './components/load-avatar/style';
 
 .profile-page {
   height: 100%;
@@ -21,7 +21,7 @@
 }
 
 .profile-name {
-  font-size:  $font-size-lg;
+  font-size: $font-size-lg;
   font-weight: 600;
   color: $text-primary;
   margin-bottom: $spacing-md;
@@ -48,7 +48,6 @@
 
   &__logout {
     color: $error-color;
-    font-size: $font-size-md;
   }
 }
 

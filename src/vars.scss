@@ -1,6 +1,6 @@
 // Цвета
 $primary-color: #3369f3;
-$primary-color-hover: #3369f336;
+$primary-color-hover: rgb(51 105 243 / 21%);
 $secondary-color: #999999;
 $error-color: #ff2f2f;
 $success-color: #2fae35;
@@ -23,16 +23,16 @@ $spacing-lg: 24px;
 $spacing-xl: 32px;
 
 // Шрифты
-$font-family: 'Inter', sans-serif;
+$font-family: Inter, sans-serif;
 $font-size-xs: 12px;
 $font-size-sm: 14px;
 $font-size-md: 16px;
 $font-size-lg: 20px;
 
 // Тени
-$shadow-form: 0 0 6px rgba(0, 0, 0, 0.14);
-$shadow-default: 0 0 6px rgba(0, 0, 0, 0.14);
-$shadow-hover: 0 0 10px rgba(0, 0, 0, 0.2);
+$shadow-form: 0 0 6px rgb(0 0 0 / 14%);
+$shadow-default: 0 0 6px rgb(0 0 0 / 14%);
+$shadow-hover: 0 0 10px rgb(0 0 0 / 20%);
 
 // Границы
 $border-radius-sm: 4px;
