@@ -1,3 +1,4 @@
+import { Chat } from './pages/chat/Chat';
 import {LoginPage} from './pages/login/LoginPage';
 import { ProfilePage } from './pages/profile/ProfilePage';
 import { SigninPage } from './pages/signin/SigninPage';
@@ -29,6 +30,9 @@ export class App {
     const location = window.location.pathname;
 
     switch (location) {
+      case '/chat':
+        this.rootElement.replaceWith(new Chat().getContent());
+        break;
       case '/profile':
         this.rootElement.replaceWith(new ProfilePage().getContent());
         break;

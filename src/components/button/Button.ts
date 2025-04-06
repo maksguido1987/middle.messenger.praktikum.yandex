@@ -7,6 +7,11 @@ export class Button extends Block {
     super(props);
   }
 
+  componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): boolean {
+    console.log(oldProps, newProps);
+    return true;
+  }
+
   render(): string {
     return `
       <button class="button {{class}}" type="{{type}}">

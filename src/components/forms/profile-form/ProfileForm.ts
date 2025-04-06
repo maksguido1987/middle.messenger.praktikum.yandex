@@ -60,6 +60,12 @@ export class ProfileForm extends Block {
             text: 'Сохранить изменения',
             type: 'submit',
           },
+          events: {
+            click: (e: Event) => {
+              e.preventDefault();
+              console.log('Сохранить изменения');
+            },
+          },
         }),
       },
     });

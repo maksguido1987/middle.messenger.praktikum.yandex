@@ -1,4 +1,4 @@
-@use "../../../../vars.scss" as *;
+@use '../../../../vars.scss' as *;
 
 .chat-form {
   height: 54px;
@@ -50,5 +50,17 @@
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: contain;
+  }
+}
+
+.chat-input__attach-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+
+  &:hover {
+    opacity: 0.8;
   }
 }

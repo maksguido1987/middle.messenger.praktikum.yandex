@@ -1,0 +1,41 @@
+.avatar {
+  border-radius: 50%;
+  background-color: #f2f2f2;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23999"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>');
+    opacity: 0.5;
+    display: none;
+  }
+
+  &:not([style*='background-image']) {
+    &::before {
+      display: block;
+    }
+  }
+
+  &--small {
+    width: 36px;
+    height: 36px;
+  }
+
+  &--medium {
+    width: 47px;
+    height: 47px;
+  }
+
+  &--large {
+    width: 130px;
+    height: 130px;
+  }
+}
