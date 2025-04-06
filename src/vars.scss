@@ -1,17 +1,17 @@
 // Цвета
 $primary-color: #3369f3;
 $primary-color-hover: rgb(51 105 243 / 21%);
-$secondary-color: #999999;
+$secondary-color: #999;
 $error-color: #ff2f2f;
 $success-color: #2fae35;
 
 // Текст
-$text-white: #ffffff;
+$text-white: #fff;
 $text-primary: #1e1e1e;
-$text-secondary: #999999;
+$text-secondary: #999;
 
 // Фоны
-$bg-white: #ffffff;
+$bg-white: #fff;
 $bg-secondary: #efefef;
 $bg-chat: #fbfbfb;
 
@@ -23,7 +23,7 @@ $spacing-lg: 24px;
 $spacing-xl: 32px;
 
 // Шрифты
-$font-family: Inter, sans-serif;
+$font-family: 'Inter', sans-serif;
 $font-size-xs: 12px;
 $font-size-sm: 14px;
 $font-size-md: 16px;
