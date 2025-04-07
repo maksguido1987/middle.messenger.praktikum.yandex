@@ -6,7 +6,7 @@ export class PasswordForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => {
+        submit: (e: SubmitEvent) => {
           e.preventDefault();
           this.fetchFormData(e);
         },
@@ -46,10 +46,47 @@ export class PasswordForm extends Block {
     });
   }
 
-  private fetchFormData(e: Event) {
+  private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
     const formData = this.getFormData(e);
+
+    if (!this.validateForm(e)) {
+      return;
+    }
+
+    if (formData.new_password.value !== formData.confirm_password.value) {
+      this.showError('Новые пароли не совпадают');
+      return;
+    }
+
+    document.querySelector('.form-error')?.remove();
     console.log(formData);
+  }
+
+  private showError(message: string) {
+    if (!(this.element instanceof HTMLElement)) return;
+
+    const form = this.element;
+    if (!form) return;
+
+    // Удаляем существующую ошибку, если она есть
+    const existingError = form.querySelector('.form-error');
+    if (existingError) {
+      existingError.remove();
+    }
+
+    // Создаем новый элемент ошибки
+    const errorElement = document.createElement('div');
+    errorElement.className = 'form-error';
+    errorElement.textContent = message;
+
+    // Добавляем ошибку перед кнопкой
+    const buttonContainer = form.querySelector('.form-actions');
+    if (buttonContainer) {
+      buttonContainer.insertBefore(errorElement, buttonContainer.firstChild);
+    } else {
+      form.appendChild(errorElement);
+    }
   }
 
   render() {

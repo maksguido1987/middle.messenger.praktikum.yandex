@@ -2,13 +2,14 @@ import {BlockProps, Children, Attributes, EmitEvents, Events, Lists} from '../gl
 import {EventBus} from './EventBus';
 import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
+import {defaultValidationConfig} from './validation';
 
-export abstract class Block {
+export abstract class Block<T extends BlockProps = BlockProps> {
   protected eventBus: () => EventBus;
   protected children: Children = {};
   protected events: Events = {};
-  protected attributes: Attributes = {};
-  protected state: Record<string, unknown> = {};
+  protected attributes: NonNullable<T['attributes']> = {} as NonNullable<T['attributes']>;
+  protected state: NonNullable<T['state']> = {} as NonNullable<T['state']>;
   protected lists: Lists = {};
 
   private _element: HTMLElement | null = null;
@@ -16,11 +17,11 @@ export abstract class Block {
   private _isMounted: boolean = false;
   private _renderTimeout: number | null = null;
 
-  constructor(props: BlockProps = {}) {
+  constructor(props: T = {} as T) {
     const eventBus = new EventBus();
 
-    this.attributes = this._makePropsProxy(props.attributes || {});
-    this.state = this._makePropsProxy(props.state || {});
+    this.attributes = this._makePropsProxy(props.attributes || {}) as NonNullable<T['attributes']>;
+    this.state = this._makePropsProxy(props.state || {}) as NonNullable<T['state']>;
     this.children = props.children || {};
     this.events = props.events || {};
     this.lists = this._makePropsProxy(props.lists || {}) as Lists;
@@ -29,11 +30,6 @@ export abstract class Block {
     eventBus.emit(EmitEvents.INIT);
   }
 
-  /**
-   * Регистрирует обработчики событий жизненного цикла компонента
-   * @param {EventBus} eventBus - Шина событий компонента
-   * @private
-   */
   private _registerEvents(eventBus: EventBus) {
     eventBus.on(EmitEvents.INIT, this.init.bind(this));
     eventBus.on(EmitEvents.FLOW_CDM, this._componentDidMount.bind(this));
@@ -41,10 +37,6 @@ export abstract class Block {
     eventBus.on(EmitEvents.FLOW_RENDER, this._render.bind(this));
   }
 
-  /**
-   * Добавляет обработчики событий к DOM-элементу компонента
-   * @private
-   */
   private _addEvents() {
     if (!this.events) {
       return;
@@ -55,19 +47,12 @@ export abstract class Block {
     });
   }
 
-  /**
-   * Инициализирует компонент
-   */
   init() {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
-  /**
-   * Внутренний метод, вызываемый после монтирования компонента
-   * @private
-   */
   private _componentDidMount() {
-    this.componentDidMount(this.attributes);
+    this.componentDidMount(this.attributes as T);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -75,31 +60,18 @@ export abstract class Block {
     });
   }
 
-  /**
-   * Хук жизненного цикла, вызываемый после монтирования компонента
-   * @param {BlockProps} oldProps - Предыдущие свойства компонента
-   * @return {boolean}
-   */
-  componentDidMount(oldProps: BlockProps) {
+  componentDidMount(oldProps: T): boolean {
     console.log('Component mounted with props:', oldProps);
     return true;
   }
 
-  /**
-   * Запускает процесс монтирования компонента
-   */
   dispatchComponentDidMount() {
     this._isMounted = true;
     this.eventBus().emit(EmitEvents.FLOW_CDM);
   }
 
-  /**
-   * Внутренний метод обновления компонента
-   * @param {unknown[]} args - Аргументы обновления
-   * @private
-   */
   private _componentDidUpdate(...args: unknown[]) {
-    const [oldProps, newProps] = args as [BlockProps, BlockProps];
+    const [oldProps, newProps] = args as [T, T];
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -107,13 +79,7 @@ export abstract class Block {
     this._render();
   }
 
-  /**
-   * Хук жизненного цикла, вызываемый при обновлении компонента
-   * @param {BlockProps} oldProps - Предыдущие свойства
-   * @param {BlockProps} newProps - Новые свойства
-   * @return {boolean}
-   */
-  componentDidUpdate(oldProps: BlockProps, newProps: BlockProps) {
+  componentDidUpdate(oldProps: T, newProps: T): boolean {
     const isPropsChanged = !this._isEqual(oldProps, newProps);
 
     if (isPropsChanged) {
@@ -124,11 +90,7 @@ export abstract class Block {
     return false;
   }
 
-  /**
-   * Устанавливает новые свойства компонента
-   * @param {Attributes} nextAttributes - Новые свойства
-   */
-  setProps = (nextAttributes: Attributes) => {
+  setProps = (nextAttributes: NonNullable<T['attributes']>): void => {
     if (!nextAttributes) {
       return;
     }
@@ -136,10 +98,6 @@ export abstract class Block {
     Object.assign(this.attributes, nextAttributes);
   };
 
-  /**
-   * Устанавливает новое состояние компонента
-   * @param {Record<string, unknown>} nextState - Новое состояние
-   */
   setState = (nextState: Record<string, unknown>) => {
     if (!nextState) {
       return;
@@ -149,9 +107,6 @@ export abstract class Block {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   };
 
-  /**
-   * Возвращает DOM-элемент компонента
-   */
   get element() {
     return this._element ?? '';
   }
@@ -222,28 +177,14 @@ export abstract class Block {
     this.addAttributes(this.attributes);
   }
 
-  /**
-   * Абстрактный метод рендеринга, должен быть переопределен в наследниках
-   * @return {string} HTML-строка компонента
-   */
   render(): string {
     return '';
   }
 
-  /**
-   * Возвращает DOM-элемент компонента
-   * @return {HTMLElement}
-   */
   getContent() {
     return this.element;
   }
 
-  /**
-   * Создает прокси для свойств компонента
-   * @param {Attributes} props - Свойства для проксирования
-   * @return {Proxy}
-   * @private
-   */
   _makePropsProxy(props: Attributes | Record<string, (Block | string)[]>) {
     return new Proxy(props, {
       get: (target, prop: string) => {
@@ -269,20 +210,10 @@ export abstract class Block {
     });
   }
 
-  /**
-   * Создает DOM-элемент
-   * @param {string} tagName - Имя тега
-   * @return {HTMLElement | HTMLTemplateElement}
-   * @private
-   */
   _createDocumentElement(tagName: string): HTMLElement | HTMLTemplateElement {
     return document.createElement(tagName);
   }
 
-  /**
-   * Добавляет атрибуты к DOM-элементу компонента
-   * @param {Attributes} attributes - Атрибуты для добавления
-   */
   addAttributes(attributes?: Attributes) {
     if (!attributes) {
       return;
@@ -293,9 +224,6 @@ export abstract class Block {
     });
   }
 
-  /**
-   * Показывает компонент
-   */
   show() {
     if (!this._element) {
       return;
@@ -303,9 +231,6 @@ export abstract class Block {
     this._element.style.display = 'block';
   }
 
-  /**
-   * Скрывает компонент
-   */
   hide() {
     if (!this._element) {
       return;
@@ -313,13 +238,6 @@ export abstract class Block {
     this._element.style.display = 'none';
   }
 
-  /**
-   * Сравнивает два объекта на равенство
-   * @param {unknown} obj1 - Первый объект
-   * @param {unknown} obj2 - Второй объект
-   * @return {boolean}
-   * @private
-   */
   private _isEqual(obj1: unknown, obj2: unknown): boolean {
     if (obj1 === obj2) {
       return true;
@@ -341,10 +259,6 @@ export abstract class Block {
     );
   }
 
-  /**
-   * Выполняет отложенное обновление компонента
-   * @protected
-   */
   protected deferredUpdate() {
     if (this._renderTimeout !== null) {
       window.clearTimeout(this._renderTimeout);
@@ -355,36 +269,20 @@ export abstract class Block {
     }, 0);
   }
 
-  /**
-   * Принудительно обновляет компонент
-   */
   public forceUpdate() {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
-  /**
-   * Создает ref для DOM-элемента
-   * @template T - Тип DOM-элемента
-   * @return {Object} Объект ref
-   * @protected
-   */
   protected createRef<T extends HTMLElement>(): {current: T | null} {
     return {
       current: null,
     };
   }
 
-  /**
-   * Хук жизненного цикла, вызываемый перед удалением компонента
-   */
   public componentWillUnmount() {
     // Хук жизненного цикла перед удалением компонента
   }
 
-  /**
-   * Размонтирует компонент
-   * @private
-   */
   private _unmount() {
     if (!this._isMounted) {
       return;
@@ -396,10 +294,6 @@ export abstract class Block {
     this._isMounted = false;
   }
 
-  /**
-   * Удаляет обработчики событий компонента
-   * @private
-   */
   private _removeEvents() {
     if (!this.events || !this._element) {
       return;
@@ -410,12 +304,6 @@ export abstract class Block {
     });
   }
 
-  /**
-   * Получает данные формы
-   * @param {Event} e - Событие отправки формы
-   * @return {Record<string, {value: string}>} Объект данных формы
-   * @protected
-   */
   protected getFormData(e: Event): Record<string, {value: string}> {
     e.preventDefault();
 
@@ -441,9 +329,88 @@ export abstract class Block {
       );
   }
 
-  /**
-   * Уничтожает компонент
-   */
+  protected validateForm(e: Event): boolean {
+    if (!(e.target instanceof HTMLFormElement)) {
+      return false;
+    }
+
+    let isValid = true;
+    const elements = Array.from(e.target.elements);
+
+    for (const element of elements) {
+      if (
+        !(element instanceof HTMLInputElement) ||
+        !element.name ||
+        element.type === 'submit' ||
+        element.type === 'button'
+      ) {
+        continue;
+      }
+
+      const fieldConfig = defaultValidationConfig[element.name];
+      if (!fieldConfig) {
+        continue;
+      }
+
+      const value = element.value;
+      let fieldIsValid = true;
+      let errorMessage = '';
+
+      for (const rule of fieldConfig.rules) {
+        let ruleValid = true;
+
+        switch (rule.type) {
+          case 'required':
+            ruleValid = value.trim() !== '';
+            break;
+          case 'minLength':
+            ruleValid = value.length >= (rule.value as number);
+            break;
+          case 'maxLength':
+            ruleValid = value.length <= (rule.value as number);
+            break;
+          case 'pattern':
+            ruleValid = (rule.value as RegExp).test(value);
+            break;
+          case 'email':
+            ruleValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+            break;
+          case 'phone':
+            ruleValid = /^\+?[0-9]{10,15}$/.test(value.replace(/[^0-9]/g, ''));
+            break;
+        }
+
+        if (!ruleValid) {
+          fieldIsValid = false;
+          errorMessage = rule.message;
+          break;
+        }
+      }
+
+      this.updateFieldUI(element, fieldIsValid, errorMessage);
+      if (!fieldIsValid) {
+        isValid = false;
+      }
+    }
+
+    return isValid;
+  }
+
+  protected updateFieldUI(input: HTMLInputElement, isValid: boolean, errorMessage: string): void {
+    const formGroup = input.closest('.form-group');
+    if (!formGroup) return;
+
+    const errorElement =
+      formGroup.querySelector('.validate-error') || document.createElement('small');
+    errorElement.className = 'validate-error';
+    if (!formGroup.contains(errorElement)) {
+      formGroup.appendChild(errorElement);
+    }
+
+    input.classList.toggle('error', !isValid);
+    errorElement.textContent = isValid ? '' : errorMessage;
+  }
+
   public destroy() {
     this._unmount();
     this.eventBus = () => new EventBus();

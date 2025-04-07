@@ -7,7 +7,7 @@ export class ProfileForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => {
+        submit: (e: SubmitEvent) => {
           e.preventDefault();
           this.fetchFormData(e);
         },
@@ -17,7 +17,6 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'email',
             name: 'email',
-            value: 'test@test.com',
             placeholder: 'test@test.com',
           },
         }),
@@ -25,15 +24,13 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'login',
             name: 'login',
-            value: 'test',
-            placeholder: 'test',
+            placeholder: 'Логин',
           },
         }),
         FirstNameInput: new Input({
           attributes: {
             id: 'first_name',
             name: 'first_name',
-            value: 'Максим',
             placeholder: 'Максим',
           },
         }),
@@ -41,7 +38,6 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'second_name',
             name: 'second_name',
-            value: 'Иванов',
             placeholder: 'Иванов',
           },
         }),
@@ -49,7 +45,6 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'display_name',
             name: 'display_name',
-            value: 'Максим Иванов',
             placeholder: 'Максим Иванов',
           },
         }),
@@ -57,7 +52,6 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'phone',
             name: 'phone',
-            value: '+7 (909) 967 30 30',
             placeholder: '+7 (909) 967 30 30',
           },
         }),
@@ -71,8 +65,13 @@ export class ProfileForm extends Block {
     });
   }
 
-  private fetchFormData(e: Event) {
+  private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
+
+    if (!this.validateForm(e)) {
+      return;
+    }
+
     const formData = this.getFormData(e);
     console.log(formData);
   }
@@ -80,25 +79,25 @@ export class ProfileForm extends Block {
   render() {
     return `
       <form class="profile-form" id="profile-form">
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ EmailInput }}}
         </div>
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ LoginInput }}}
         </div>
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ FirstNameInput }}}
         </div>
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ LastNameInput }}}
         </div>
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ DisplayNameInput }}}
         </div>
-        <div class="profile-form__field">
+        <div class="form-group">
           {{{ PhoneInput }}}
         </div>
-        <div class="profile-actions">
+        <div class="form-actions">
           {{{ SaveButton }}}
         </div>
       </form>

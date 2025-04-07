@@ -5,7 +5,7 @@ import './style.scss';
 interface ChatInputProps {
   value: string;
   events?: {
-    submit: (e: Event) => void;
+    submit: (e: SubmitEvent) => void;
   };
 }
 
@@ -17,7 +17,7 @@ export class ChatInput extends Block {
     super({
       ...props,
       events: {
-        submit: (e: Event) => {
+        submit: (e: SubmitEvent) => {
           e.preventDefault();
           this.fetchFormData(e);
         },
@@ -28,7 +28,7 @@ export class ChatInput extends Block {
     });
   }
 
-  private fetchFormData(e: Event) {
+  private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
     const formData = this.getFormData(e);
     console.log(formData);

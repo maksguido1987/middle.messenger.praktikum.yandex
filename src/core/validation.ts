@@ -19,7 +19,7 @@ export const defaultValidationConfig: Record<string, FieldConfig> = {
       },
       {
         type: 'pattern',
-        value: /^[A-ZА-Я][a-zа-я-]*$/,
+        value: /^[A-ZА-ЯЁ][a-zа-яё-]*$/,
         message: 'Имя должно начинаться с заглавной буквы и содержать только буквы и дефис',
       },
     ],
@@ -33,7 +33,7 @@ export const defaultValidationConfig: Record<string, FieldConfig> = {
       },
       {
         type: 'pattern',
-        value: /^[A-ZА-Я][a-zа-я-]*$/,
+        value: /^[A-ZА-ЯЁ][a-zа-яё-]*$/,
         message: 'Фамилия должна начинаться с заглавной буквы и содержать только буквы и дефис',
       },
     ],
