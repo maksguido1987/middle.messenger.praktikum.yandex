@@ -8,12 +8,11 @@ export class LoginForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => this.fetchFormData(e),
+        submit: (e: SubmitEvent) => this.fetchFormData(e),
       },
       children: {
         InputLogin: new Input({
           attributes: {
-            type: 'text',
             placeholder: 'Логин',
             name: 'login',
             id: 'login',
@@ -43,9 +42,13 @@ export class LoginForm extends Block {
     });
   }
 
-  private fetchFormData(e: Event) {
+  private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
     const formData = this.getFormData(e);
+
+    if (!this.validateForm(e)) {
+      return;
+    }
     console.log(formData);
   }
 

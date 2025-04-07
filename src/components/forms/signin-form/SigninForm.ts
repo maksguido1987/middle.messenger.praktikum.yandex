@@ -8,7 +8,7 @@ export class SigninForm extends Block {
   constructor() {
     super({
       events: {
-        submit: (e: Event) => this.fetchFormData(e),
+        submit: (e: SubmitEvent) => this.fetchFormData(e),
       },
       children: {
         InputEmail: new Input({
@@ -21,7 +21,6 @@ export class SigninForm extends Block {
         }),
         InputLogin: new Input({
           attributes: {
-            type: 'text',
             placeholder: 'Логин',
             name: 'login',
             id: 'login',
@@ -29,7 +28,6 @@ export class SigninForm extends Block {
         }),
         InputName: new Input({
           attributes: {
-            type: 'text',
             placeholder: 'Имя',
             name: 'first_name',
             id: 'first_name',
@@ -37,7 +35,6 @@ export class SigninForm extends Block {
         }),
         InputSecondName: new Input({
           attributes: {
-            type: 'text',
             placeholder: 'Фамилия',
             name: 'second_name',
             id: 'second_name',
@@ -83,8 +80,12 @@ export class SigninForm extends Block {
     });
   }
 
-  private fetchFormData(e: Event) {
+  private fetchFormData(e: SubmitEvent) {
     const formData = this.getFormData(e);
+
+    if (!this.validateForm(e)) {
+      return;
+    }
     console.log(formData);
     return formData;
   }

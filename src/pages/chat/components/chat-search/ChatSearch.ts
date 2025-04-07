@@ -4,7 +4,7 @@ import './style.scss';
 
 interface ChatSearchProps {
   events?: {
-    submit: (e: Event) => void;
+    submit: (e: SubmitEvent) => void;
   };
 }
 
@@ -25,8 +25,8 @@ export class ChatSearch extends Block {
             class: 'chat-search__input reset-input',
           },
           events: {
-            blur: () => {
-              console.log('blur');
+            blur: (e: FocusEvent) => {
+              console.log('blur', e);
             },
             input: (e: Event) => {
               console.log('input', e);

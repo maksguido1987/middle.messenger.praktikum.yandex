@@ -23,7 +23,7 @@ export class Chat extends Block {
         chatInput: new ChatInput({
           value: '',
           events: {
-            submit: (e: Event) => {
+            submit: (e: SubmitEvent) => {
               e.preventDefault();
               // Здесь будет логика отправки сообщения
             },
@@ -31,7 +31,7 @@ export class Chat extends Block {
         }),
         chatSearch: new ChatSearch({
           events: {
-            submit: (e: Event) => {
+            submit: (e: SubmitEvent) => {
               e.preventDefault();
               // Здесь будет логика поиска
             },

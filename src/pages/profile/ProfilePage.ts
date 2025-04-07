@@ -3,7 +3,6 @@ import {Link} from '../../components/link/Link';
 import {ProfileForm} from '../../components/forms/profile-form/ProfileForm';
 import {PasswordForm} from '../../components/forms/password-form/PasswordForm';
 import {LoadAvatar} from './components/load-avatar/LoadAvatar';
-import {EmitEvents} from '../../global-types';
 
 export class ProfilePage extends Block {
   protected _isEditing = false;
@@ -28,26 +27,11 @@ export class ProfilePage extends Block {
             text: 'Изменить данные',
             href: '/profile?is_editing=true',
           },
-          events: {
-            click: (e: Event) => {
-              e.preventDefault();
-              this._isEditing = true;
-              this._isPasswordChange = false;
-              this.eventBus().emit(EmitEvents.FLOW_RENDER);
-            },
-          },
         }),
         PasswordLink: new Link({
           attributes: {
             text: 'Изменить пароль',
             href: '/profile?is_password_change=true',
-          },
-          events: {
-            click: (e: Event) => {
-              e.preventDefault();
-              this._isPasswordChange = true;
-              this.eventBus().emit(EmitEvents.FLOW_RENDER);
-            },
           },
         }),
         LogoutLink: new Link({
@@ -58,6 +42,22 @@ export class ProfilePage extends Block {
         }),
       },
     });
+
+    // Добавляем обработчик изменения URL
+    window.addEventListener('popstate', this.handleUrlChange.bind(this));
+    // Инициализируем начальное состояние
+    this.handleUrlChange();
+  }
+
+  private getQueryParams(): URLSearchParams {
+    return new URLSearchParams(window.location.search);
+  }
+
+  private handleUrlChange() {
+    const params = this.getQueryParams();
+    this._isEditing = params.get('is_editing') === 'true';
+    this._isPasswordChange = params.get('is_password_change') === 'true';
+    this.forceUpdate();
   }
 
   public render(): string {
@@ -79,5 +79,10 @@ export class ProfilePage extends Block {
         </main>
       </div>
     `;
+  }
+
+  public destroy() {
+    window.removeEventListener('popstate', this.handleUrlChange.bind(this));
+    super.destroy();
   }
 }

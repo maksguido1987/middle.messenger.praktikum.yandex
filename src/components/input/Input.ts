@@ -32,10 +32,7 @@ export class Input extends Block {
       null;
   }
 
-  /** Валидация в некоторых случаях работает на событие focus. Не хватило времени, чтобы найти причину
-   * @return {boolean}
-   */
-  private validate(): boolean {
+  public validate(): boolean {
     if (!this.validationConfig) return true;
 
     const input = this.element as HTMLInputElement;
@@ -80,7 +77,7 @@ export class Input extends Block {
     return isValid;
   }
 
-  private updateFieldUI(input: HTMLInputElement, isValid: boolean, errorMessage: string): void {
+  updateFieldUI(input: HTMLInputElement, isValid: boolean, errorMessage: string): void {
     const formGroup = input.closest('.form-group');
     if (!formGroup) return;
 

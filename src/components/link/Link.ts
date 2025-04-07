@@ -1,5 +1,5 @@
 import {Block} from '../../core/Block';
-import {BlockProps} from '../../global-types';
+import {BlockProps, EmitEvents} from '../../global-types';
 import './style.scss';
 
 export class Link extends Block {
@@ -7,7 +7,7 @@ export class Link extends Block {
     super({
       ...props,
       events: {
-        click: (e: Event) => {
+        click: (e: MouseEvent) => {
           e.preventDefault();
 
           const href = (e.target as HTMLAnchorElement).getAttribute('href');
@@ -15,6 +15,7 @@ export class Link extends Block {
           if (href) {
             window.history.pushState({}, '', href);
             window.dispatchEvent(new PopStateEvent('popstate'));
+            this.eventBus().emit(EmitEvents.FLOW_RENDER);
           }
         },
       },

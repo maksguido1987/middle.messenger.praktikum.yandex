@@ -16,6 +16,11 @@ type HTTPOptions = {
   tries?: number;
 };
 
+type HTTPMethodType = (
+  url: string,
+  options?: Omit<HTTPOptions, 'method'>,
+) => Promise<XMLHttpRequest>;
+
 export class HTTPClient {
   private static transformDataToQueryString(data: HTTPData): string {
     if (!data) return '';
@@ -88,23 +93,14 @@ export class HTTPClient {
     throw new Error(`Failed after ${tries} attempts. Last error: ${lastError?.message}`);
   }
 
-  public static get(url: string, options?: HTTPOptions): Promise<XMLHttpRequest> {
-    return this.fetchWithRetry(url, options);
+  private static createMethod(method: HTTPMethod): HTTPMethodType {
+    return (url: string, options?: Omit<HTTPOptions, 'method'>) =>
+      this.fetchWithRetry(url, {...options, method});
   }
 
-  public static post(url: string, options?: HTTPOptions): Promise<XMLHttpRequest> {
-    return this.fetchWithRetry(url, options);
-  }
-
-  public static put(url: string, options?: HTTPOptions): Promise<XMLHttpRequest> {
-    return this.fetchWithRetry(url, options);
-  }
-
-  public static delete(url: string, options?: HTTPOptions): Promise<XMLHttpRequest> {
-    return this.fetchWithRetry(url, options);
-  }
-
-  public static patch(url: string, options?: HTTPOptions): Promise<XMLHttpRequest> {
-    return this.fetchWithRetry(url, options);
-  }
+  public static get = this.createMethod(HTTPMethod.GET);
+  public static post = this.createMethod(HTTPMethod.POST);
+  public static put = this.createMethod(HTTPMethod.PUT);
+  public static delete = this.createMethod(HTTPMethod.DELETE);
+  public static patch = this.createMethod(HTTPMethod.PATCH);
 }
