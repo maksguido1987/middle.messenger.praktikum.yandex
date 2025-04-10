@@ -5,16 +5,15 @@ function isEqual(lhs: string, rhs: string) {
   return lhs === rhs;
 }
 
-function render(query: string, block: Block) {
-  const root = document.querySelector(query);
-  if (root) {
+function render(rootElement: HTMLElement, block: Block) {
+  if (rootElement) {
     const content = block.getContent();
     if (content instanceof HTMLElement) {
-      root.innerHTML = content.outerHTML;
+      rootElement.innerHTML = content.outerHTML;
     } else {
-      root.innerHTML = content;
+      rootElement.innerHTML = content;
     }
-    return root;
+    return rootElement;
   }
   return null;
 }
@@ -23,12 +22,12 @@ export class Route {
   private _pathname: string;
   private _blockClass: new (props: BlockProps) => Block;
   private _block: Block | null;
-  private _props: {rootQuery: string};
+  private _props: {rootQuery: HTMLElement};
 
   constructor(
     pathname: string,
     view: new (props: BlockProps) => Block,
-    props: {rootQuery: string},
+    props: {rootQuery: HTMLElement},
   ) {
     this._pathname = pathname;
     this._blockClass = view;

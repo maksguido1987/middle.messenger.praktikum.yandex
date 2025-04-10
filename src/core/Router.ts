@@ -7,9 +7,9 @@ export class Router {
   private routes: Route[] = [];
   private history: History = window.history;
   private _currentRoute: Route | null = null;
-  private _rootQuery: string = '';
+  private _rootQuery: HTMLElement | null = null;
 
-  constructor(rootQuery: string) {
+  constructor(rootQuery: HTMLElement) {
     if (Router.__instance) {
       return Router.__instance;
     }
@@ -19,7 +19,12 @@ export class Router {
   }
 
   use(pathname: string, block: new (props: BlockProps) => Block<BlockProps>) {
+    // console.log('use', pathname, block);
+    if (!this._rootQuery) {
+      throw new Error('Root query is not set');
+    }
     const route = new Route(pathname, block, {rootQuery: this._rootQuery});
+    // console.log('route', route);
     this.routes.push(route);
     return this;
   }
@@ -28,6 +33,8 @@ export class Router {
     window.onpopstate = (event: PopStateEvent) => {
       this._onRoute((event.currentTarget as Window).location.pathname);
     };
+
+    // Вызываем _onRoute для текущего пути при инициализации
     this._onRoute(window.location.pathname);
   }
 
