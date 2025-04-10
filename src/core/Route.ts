@@ -6,15 +6,16 @@ function isEqual(lhs: string, rhs: string) {
 }
 
 function render<T extends BlockProps>(rootElement: HTMLElement, block: Block<T>) {
-  if (rootElement) {
-    const content = block.getContent();
-    if (content instanceof HTMLElement) {
-      rootElement.innerHTML = content.outerHTML;
-    } else {
-      rootElement.innerHTML = content;
-    }
-    return rootElement;
+  if (!rootElement) {
+    return null;
   }
+
+  const content = block.getContent();
+  if (!content) {
+    return null;
+  }
+
+  rootElement.appendChild(content);
   return null;
 }
 
