@@ -5,7 +5,7 @@ function isEqual(lhs: string, rhs: string) {
   return lhs === rhs;
 }
 
-function render(rootElement: HTMLElement, block: Block) {
+function render<T extends BlockProps>(rootElement: HTMLElement, block: Block<T>) {
   if (rootElement) {
     const content = block.getContent();
     if (content instanceof HTMLElement) {
@@ -18,21 +18,24 @@ function render(rootElement: HTMLElement, block: Block) {
   return null;
 }
 
-export class Route {
+export class Route<T extends BlockProps = BlockProps> {
   private _pathname: string;
-  private _blockClass: new (props: BlockProps) => Block;
-  private _block: Block | null;
+  private _blockClass: new (props: T) => Block<T>;
+  private _block: Block<T> | null;
   private _props: {rootQuery: HTMLElement};
+  private _componentProps: T;
 
   constructor(
     pathname: string,
-    view: new (props: BlockProps) => Block,
+    view: new (props: T) => Block<T>,
     props: {rootQuery: HTMLElement},
+    componentProps: T,
   ) {
     this._pathname = pathname;
     this._blockClass = view;
     this._block = null;
     this._props = props;
+    this._componentProps = componentProps;
   }
 
   navigate(pathname: string) {
@@ -53,7 +56,7 @@ export class Route {
 
   render() {
     if (!this._block) {
-      this._block = new this._blockClass({});
+      this._block = new this._blockClass(this._componentProps);
       render(this._props.rootQuery, this._block);
       return;
     }

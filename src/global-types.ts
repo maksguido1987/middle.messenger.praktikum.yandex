@@ -11,9 +11,7 @@ export type Events = Partial<{
   [K in keyof HTMLElementEventMap]: (event: HTMLElementEventMap[K]) => void;
 }>;
 export type Children = Record<string, Block>;
-export type Attributes = {
-  [K in keyof HTMLElement]?: HTMLElement[K] extends string ? string : never;
-} & Record<string, unknown>;
+export type Attributes = Record<string, unknown>;
 export type Lists = Record<string, (Block | string)[]>;
 
 export interface BlockProps {
