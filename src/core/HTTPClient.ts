@@ -6,12 +6,10 @@ export enum HTTPMethod {
   PATCH = 'PATCH',
 }
 
-type HTTPData = Record<string, string | number | boolean | null | undefined>;
-
 type HTTPOptions = {
   method: HTTPMethod;
   timeout?: number;
-  data?: HTTPData;
+  data?: unknown;
   headers?: Record<string, string>;
   tries?: number;
 };
@@ -22,7 +20,7 @@ type HTTPMethodType = (
 ) => Promise<XMLHttpRequest>;
 
 export class HTTPClient {
-  private static transformDataToQueryString(data: HTTPData): string {
+  private static transformDataToQueryString(data: unknown): string {
     if (!data) return '';
 
     return Object.entries(data)
@@ -42,6 +40,7 @@ export class HTTPClient {
       const queryString =
         method === HTTPMethod.GET && data ? `?${this.transformDataToQueryString(data)}` : '';
       xhr.open(method, url + queryString, true);
+      xhr.withCredentials = true;
 
       // Устанавливаем таймаут
       xhr.timeout = timeout;

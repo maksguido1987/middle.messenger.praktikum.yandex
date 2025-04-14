@@ -304,11 +304,11 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     });
   }
 
-  protected getFormData(e: Event): Record<string, {value: string}> {
+  protected getFormData<T>(e: Event): T {
     e.preventDefault();
 
     if (!(e.target instanceof HTMLFormElement)) {
-      return {};
+      return {} as T;
     }
 
     return Array.from(e.target.elements)
@@ -320,13 +320,10 @@ export abstract class Block<T extends BlockProps = BlockProps> {
           item.type !== 'button'
         );
       })
-      .reduce(
-        (acc, element) => {
-          acc[element.name] = {value: element.value};
-          return acc;
-        },
-        {} as Record<string, {value: string}>,
-      );
+      .reduce((acc, element) => {
+        acc[element.name as keyof T] = element.value as T[keyof T];
+        return acc;
+      }, {} as T);
   }
 
   protected validateForm(e: Event): boolean {

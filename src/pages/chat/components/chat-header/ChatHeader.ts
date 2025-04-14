@@ -1,7 +1,8 @@
 import {Block} from '../../../../core/Block';
 import {Link} from '../../../../components/link/Link';
-import './style.scss';
 import {Avatar} from '../../../../components/avatar/Avatar';
+import {AuthController} from '../../../../controllers/authController';
+import './style.scss';
 
 interface ChatHeaderProps {
   attributes: {
@@ -14,6 +15,8 @@ interface ChatHeaderProps {
  * Класс компонента заголовка чата
  */
 export class ChatHeader extends Block {
+  private authController: AuthController;
+
   constructor(props: ChatHeaderProps) {
     super({
       ...props,
@@ -26,40 +29,52 @@ export class ChatHeader extends Block {
         LoginLink: new Link({
           attributes: {
             text: 'Логин',
-            href: '/login',
+            href: '/',
             class: 'chat-header__link',
           },
         }),
         SigninLink: new Link({
           attributes: {
             text: 'Регистрация',
-            href: '/signin',
+            href: '/sign-up',
             class: 'chat-header__link',
           },
         }),
         ProfileLink: new Link({
           attributes: {
             text: 'Профиль',
-            href: '/profile',
+            href: '/settings',
             class: 'chat-header__link',
+          },
+        }),
+        LogoutLink: new Link({
+          attributes: {
+            text: 'Выйти',
+            href: '/',
+            class: 'chat-header__link',
+          },
+          onClick: () => {
+            this.authController.logout();
           },
         }),
         NotFoundLink: new Link({
           attributes: {
             text: '404',
-            href: '/404',
+            href: '/error',
             class: 'chat-header__link',
           },
         }),
         ServerErrorLink: new Link({
           attributes: {
             text: '500',
-            href: '/500',
+            href: '/nothing',
             class: 'chat-header__link',
           },
         }),
       },
     });
+
+    this.authController = new AuthController();
   }
 
   render(): string {
@@ -73,6 +88,7 @@ export class ChatHeader extends Block {
           {{{ LoginLink }}}
           {{{ SigninLink }}}
           {{{ ProfileLink }}}
+          {{{ LogoutLink }}}
           {{{ NotFoundLink }}}
           {{{ ServerErrorLink }}}
         </div>

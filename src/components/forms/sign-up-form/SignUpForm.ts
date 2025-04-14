@@ -1,10 +1,13 @@
+import {AuthController} from '../../../controllers/authController';
 import {Block} from '../../../core/Block';
+import {SignUpData} from '../../../services/auth';
 import {Button} from '../../button/Button';
 import {Input} from '../../input/Input';
 import {Link} from '../../link/Link';
 import '../style.scss';
 
-export class SigninForm extends Block {
+export class SignUpForm extends Block {
+  private authController: AuthController;
   constructor() {
     super({
       events: {
@@ -56,14 +59,6 @@ export class SigninForm extends Block {
             id: 'password',
           },
         }),
-        InputPasswordConfirm: new Input({
-          attributes: {
-            type: 'password',
-            placeholder: 'Пароль (еще раз)',
-            name: 'confirm_password',
-            id: 'confirm_password',
-          },
-        }),
         Button: new Button({
           attributes: {
             type: 'submit',
@@ -72,22 +67,23 @@ export class SigninForm extends Block {
         }),
         Link: new Link({
           attributes: {
-            href: '/login',
+            href: '/',
             text: 'Уже есть аккаунт? Войти',
           },
         }),
       },
     });
+
+    this.authController = new AuthController();
   }
 
   private fetchFormData(e: SubmitEvent) {
-    const formData = this.getFormData(e);
+    const formData = this.getFormData<SignUpData>(e);
 
     if (!this.validateForm(e)) {
       return;
     }
-    console.log(formData);
-    return formData;
+    this.authController.signUp(formData);
   }
 
   render() {
@@ -110,9 +106,6 @@ export class SigninForm extends Block {
         </div>
         <div class="form-group">
           {{{ InputPassword }}}
-        </div>
-        <div class="form-group">
-          {{{ InputPasswordConfirm }}}
         </div>
         <div class="form-actions">
           {{{ Button }}}

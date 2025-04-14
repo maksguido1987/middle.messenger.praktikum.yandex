@@ -1,10 +1,11 @@
+import { SignUpForm } from '../../components/forms/sign-up-form/SignUpForm';
 import {Block} from '../../core/Block';
-import {SigninForm} from '../../components/forms/signin-form/SigninForm';
-export class SigninPage extends Block {
+
+export class SignUpPage extends Block {
   constructor() {
     super({
       children: {
-        SigninForm: new SigninForm(),
+        SignUpForm: new SignUpForm(),
       },
     });
   }
@@ -15,7 +16,7 @@ export class SigninPage extends Block {
         <main class="signin-container">
           <div class="form-container">
             <h1>Регистрация</h1>
-            {{{ SigninForm }}}
+            {{{ SignUpForm }}}
           </div>
         </main>
       </div>

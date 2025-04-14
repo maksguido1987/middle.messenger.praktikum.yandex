@@ -3,8 +3,8 @@ import {Chat} from './pages/chat/Chat';
 import {ErrorPage, ErrorPageProps} from './pages/errors/Error';
 import {LoginPage} from './pages/login/LoginPage';
 import {ProfilePage} from './pages/profile/ProfilePage';
-import {SigninPage} from './pages/signin/SigninPage';
 import {BlockProps} from './global-types';
+import {SignUpPage} from './pages/sign-up/SignUpPage';
 
 export class App {
   private rootElement: HTMLElement;
@@ -31,18 +31,18 @@ export class App {
    */
   private render() {
     this.router
-      .use('/', Chat, {} as BlockProps)
-      .use('/login', LoginPage, {} as BlockProps)
-      .use('/signin', SigninPage, {} as BlockProps)
-      .use('/profile', ProfilePage, {} as BlockProps)
-      .use<ErrorPageProps>('/404', ErrorPage, {
+      .use('/', LoginPage, {} as BlockProps)
+      .use('/messenger', Chat, {} as BlockProps)
+      .use('/sign-up', SignUpPage, {} as BlockProps)
+      .use('/settings', ProfilePage, {} as BlockProps)
+      .use<ErrorPageProps>('/error', ErrorPage, {
         attributes: {
           title: 'Страница не найдена',
           code: '404',
           description: 'Извините, запрашиваемая страница не существует',
         },
       })
-      .use<ErrorPageProps>('/500', ErrorPage, {
+      .use<ErrorPageProps>('/nothing', ErrorPage, {
         attributes: {
           title: 'Ошибка сервера',
           code: '500',
