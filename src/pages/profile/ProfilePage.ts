@@ -3,10 +3,12 @@ import {Link} from '../../components/link/Link';
 import {ProfileForm} from '../../components/forms/profile-form/ProfileForm';
 import {PasswordForm} from '../../components/forms/password-form/PasswordForm';
 import {LoadAvatar} from './components/load-avatar/LoadAvatar';
+import {AuthController} from '../../controllers/authController';
 
 export class ProfilePage extends Block {
   protected _isEditing = false;
   protected _isPasswordChange = false;
+  private authController: AuthController;
 
   constructor() {
     super({
@@ -25,37 +27,38 @@ export class ProfilePage extends Block {
         EditLink: new Link({
           attributes: {
             text: 'Изменить данные',
-            href: '/profile?is_editing=true',
+            href: '/settings',
           },
         }),
         PasswordLink: new Link({
           attributes: {
             text: 'Изменить пароль',
-            href: '/profile?is_password_change=true',
+            href: '/settings?is_password_change=true',
           },
         }),
         LogoutLink: new Link({
           attributes: {
             text: 'Выйти',
-            href: '/logout',
+            href: '/',
+          },
+          onClick: () => {
+            this.authController.logout();
           },
         }),
       },
     });
 
-    // Добавляем обработчик изменения URL
+    this.authController = new AuthController();
+
+    // Добавляем обработчики изменений URL
     window.addEventListener('popstate', this.handleUrlChange.bind(this));
     // Инициализируем начальное состояние
     this.handleUrlChange();
   }
 
-  private getQueryParams(): URLSearchParams {
-    return new URLSearchParams(window.location.search);
-  }
-
   private handleUrlChange() {
-    const params = this.getQueryParams();
-    this._isEditing = params.get('is_editing') === 'true';
+    console.log('handleUrlChange');
+    const params = new URLSearchParams(window.location.search);
     this._isPasswordChange = params.get('is_password_change') === 'true';
     this.forceUpdate();
   }

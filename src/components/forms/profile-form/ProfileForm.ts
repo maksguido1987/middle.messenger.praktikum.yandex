@@ -17,7 +17,7 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'email',
             name: 'email',
-            placeholder: 'test@test.com',
+            placeholder: 'Почта',
           },
         }),
         LoginInput: new Input({
@@ -31,28 +31,28 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'first_name',
             name: 'first_name',
-            placeholder: 'Максим',
+            placeholder: 'Имя',
           },
         }),
         LastNameInput: new Input({
           attributes: {
             id: 'second_name',
             name: 'second_name',
-            placeholder: 'Иванов',
+            placeholder: 'Фамилия',
           },
         }),
         DisplayNameInput: new Input({
           attributes: {
             id: 'display_name',
             name: 'display_name',
-            placeholder: 'Максим Иванов',
+            placeholder: 'Псевдоним',
           },
         }),
         PhoneInput: new Input({
           attributes: {
             id: 'phone',
             name: 'phone',
-            placeholder: '+7 (909) 967 30 30',
+            placeholder: 'Телефон',
           },
         }),
         SaveButton: new Button({

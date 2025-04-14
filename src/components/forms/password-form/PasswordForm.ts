@@ -2,6 +2,12 @@ import {Block} from '../../../core/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
 
+interface FormData {
+  old_password: {value: string};
+  new_password: {value: string};
+  confirm_password: {value: string};
+}
+
 export class PasswordForm extends Block {
   constructor() {
     super({
@@ -48,7 +54,7 @@ export class PasswordForm extends Block {
 
   private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
-    const formData = this.getFormData(e);
+    const formData = this.getFormData<FormData>(e);
 
     if (!this.validateForm(e)) {
       return;
@@ -60,7 +66,6 @@ export class PasswordForm extends Block {
     }
 
     document.querySelector('.form-error')?.remove();
-    console.log(formData);
   }
 
   private showError(message: string) {
