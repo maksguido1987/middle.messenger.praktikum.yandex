@@ -1,4 +1,3 @@
-
 export const trim = (str: string, chars?: string) => {
   if (!chars) {
     return str.trim();
