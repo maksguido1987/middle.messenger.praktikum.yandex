@@ -1,5 +1,5 @@
 import {Router} from '../core/Router';
-import {AuthService, SignUpData, SignInData} from '../services/auth';
+import {AuthService, SignUpData, SignInData, UserData} from '../services/auth';
 
 export class AuthController {
   private authService: AuthService;
@@ -46,13 +46,12 @@ export class AuthController {
     }
   }
 
-  async getUser(): Promise<void> {
+  async getUser(): Promise<UserData> {
     try {
-      await this.authService.getUser().then((user) => {
-        console.log(user);
-      });
+      return await this.authService.getUser();
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

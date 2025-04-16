@@ -58,6 +58,7 @@ export class Router {
 
   go(pathname: string) {
     this.history.pushState({}, '', pathname);
+    window.dispatchEvent(new PopStateEvent('popstate'));
     this._onRoute(pathname);
   }
 

@@ -1,14 +1,17 @@
 import {Block} from '../../../core/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
+import {UserController} from '../../../controllers/userController';
 
 interface FormData {
-  old_password: {value: string};
-  new_password: {value: string};
-  confirm_password: {value: string};
+  old_password: string;
+  new_password: string;
+  confirm_password: string;
 }
 
 export class PasswordForm extends Block {
+  private userController: UserController;
+
   constructor() {
     super({
       events: {
@@ -50,6 +53,8 @@ export class PasswordForm extends Block {
         }),
       },
     });
+
+    this.userController = new UserController();
   }
 
   private fetchFormData(e: SubmitEvent) {
@@ -60,12 +65,16 @@ export class PasswordForm extends Block {
       return;
     }
 
-    if (formData.new_password.value !== formData.confirm_password.value) {
+    if (formData.new_password !== formData.confirm_password) {
       this.showError('Новые пароли не совпадают');
       return;
     }
 
     document.querySelector('.form-error')?.remove();
+    this.userController.updatePassword({
+      oldPassword: formData.old_password,
+      newPassword: formData.new_password,
+    });
   }
 
   private showError(message: string) {

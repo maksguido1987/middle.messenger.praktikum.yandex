@@ -6,7 +6,6 @@ import {LoadAvatar} from './components/load-avatar/LoadAvatar';
 import {AuthController} from '../../controllers/authController';
 
 export class ProfilePage extends Block {
-  protected _isEditing = false;
   protected _isPasswordChange = false;
   private authController: AuthController;
 
