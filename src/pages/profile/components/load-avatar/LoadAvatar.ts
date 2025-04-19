@@ -1,5 +1,6 @@
 import {Block} from '../../../../core/Block';
 import {BlockProps} from '../../../../global-types';
+import {UserController} from '../../../../controllers/userController';
 import './style.scss';
 
 interface LoadAvatarProps extends BlockProps {
@@ -9,6 +10,8 @@ interface LoadAvatarProps extends BlockProps {
 }
 
 export class LoadAvatar extends Block {
+  private userController: UserController;
+
   constructor(props: LoadAvatarProps = {attributes: {}}) {
     super({
       ...props,
@@ -16,6 +19,7 @@ export class LoadAvatar extends Block {
         change: (e: Event) => this._handleFileUpload(e),
       },
     });
+    this.userController = new UserController();
   }
 
   private _handleFileUpload(event: Event) {
@@ -23,26 +27,25 @@ export class LoadAvatar extends Block {
     const file = input.files?.[0];
 
     if (file) {
-      // Здесь можно добавить реальную логику загрузки файла на сервер
-      // Сейчас используем моковые данные
-      console.log('Загружен файл:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      });
+      const formData = new FormData();
+      formData.append('avatar', file);
 
-      // Создаем превью изображения
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        console.log('Превью изображения:', result.slice(0, 100) + '...');
-
-        // В реальном приложении здесь можно обновить аватар через API
-        this.setProps({
-          avatar: result,
+      this.userController
+        .updateAvatar(formData)
+        .then(() => {
+          // Создаем превью изображения для отображения
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const result = e.target?.result as string;
+            this.setProps({
+              avatar: result,
+            });
+          };
+          reader.readAsDataURL(file);
+        })
+        .catch((error) => {
+          console.error('Ошибка при загрузке аватара:', error);
         });
-      };
-      reader.readAsDataURL(file);
     }
   }
 

@@ -1,15 +1,16 @@
 import {Block} from '../../../core/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
-import {AuthController} from '../../../controllers/authController';
 import {UserData} from '../../../services/auth';
 import '../style.scss';
 import {UserController} from '../../../controllers/userController';
 import {UserProfileData} from '../../../services/user';
+import {store} from '../../../store/store';
+import {EmitEvents} from '../../../global-types';
 
 export class ProfileForm extends Block {
-  private authController: AuthController;
   private userController: UserController;
+  private userData: UserData | null = null;
 
   constructor() {
     super({
@@ -71,32 +72,25 @@ export class ProfileForm extends Block {
       },
     });
 
-    this.authController = new AuthController();
     this.userController = new UserController();
-    this.getUserData();
+
+    store.on(EmitEvents.STORE_UPDATE, this.getUserData.bind(this));
   }
 
   private async getUserData() {
-    try {
-      const userData = await this.authController.getUser();
-      this.fillFormWithUserData(userData);
-    } catch (error) {
-      console.error('Ошибка при получении данных пользователя:', error);
+    this.userData = store.state.user as UserData;
+    if (this.userData) {
+      const {email, login, first_name, second_name, display_name, phone} = this.userData;
+
+      this.setChildrenProps({
+        EmailInput: {value: email},
+        LoginInput: {value: login},
+        FirstNameInput: {value: first_name},
+        LastNameInput: {value: second_name},
+        DisplayNameInput: {value: display_name},
+        PhoneInput: {value: phone},
+      });
     }
-  }
-
-  private fillFormWithUserData(userData: UserData) {
-    const form = this.element as HTMLFormElement;
-    if (!form) return;
-
-    const inputs = form.querySelectorAll('input');
-    inputs.forEach((input) => {
-      const fieldName = input.name;
-      const value = userData[fieldName as keyof UserData];
-      if (value) {
-        input.value = String(value);
-      }
-    });
   }
 
   private fetchFormData(e: SubmitEvent) {

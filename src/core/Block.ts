@@ -94,11 +94,26 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     if (!nextAttributes) {
       return;
     }
-
     Object.assign(this.attributes, nextAttributes);
+    this.eventBus().emit(EmitEvents.FLOW_RENDER);
+  };
+
+  setChildrenProps = (childrenProps: Record<string, Record<string, unknown>>): void => {
+    if (!childrenProps) {
+      return;
+    }
+
+    Object.entries(childrenProps).forEach(([childName, props]) => {
+      const child = this.children[childName];
+      if (child instanceof Block) {
+        child.setProps(props);
+      }
+    });
   };
 
   setState = (nextState: Record<string, unknown>) => {
+    console.log('this.state', this.state);
+    console.log('nextState', nextState);
     if (!nextState) {
       return;
     }
@@ -111,10 +126,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     return this._element ?? '';
   }
 
-  /**
-   * Выполняет рендеринг компонента
-   * @private
-   */
   private _render() {
     const block = this.render();
 

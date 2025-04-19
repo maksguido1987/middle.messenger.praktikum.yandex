@@ -4,15 +4,19 @@ import {ProfileForm} from '../../components/forms/profile-form/ProfileForm';
 import {PasswordForm} from '../../components/forms/password-form/PasswordForm';
 import {LoadAvatar} from './components/load-avatar/LoadAvatar';
 import {AuthController} from '../../controllers/authController';
+import {store} from '../../store/store';
+import {UserData} from '../../services/auth';
+import {EmitEvents} from '../../global-types';
 
 export class ProfilePage extends Block {
   protected _isPasswordChange = false;
   private authController: AuthController;
+  private userData: UserData;
 
   constructor() {
     super({
       state: {
-        profileName: 'Максим Петров',
+        profileName: 'Псевдоним',
       },
       children: {
         Avatar: new LoadAvatar({
@@ -48,15 +52,24 @@ export class ProfilePage extends Block {
     });
 
     this.authController = new AuthController();
+    this.authController.getUser();
+    this.userData = store.state.user as UserData;
+
+    // Подписываемся на изменения store
+    store.on(EmitEvents.STORE_UPDATE, this.updateUserData.bind(this));
 
     // Добавляем обработчики изменений URL
     window.addEventListener('popstate', this.handleUrlChange.bind(this));
-    // Инициализируем начальное состояние
-    this.handleUrlChange();
+  }
+
+  private updateUserData() {
+    this.userData = store.state.user as UserData;
+    if (this.userData) {
+      this.setState({profileName: this.userData.display_name || this.userData.login});
+    }
   }
 
   private handleUrlChange() {
-    console.log('handleUrlChange');
     const params = new URLSearchParams(window.location.search);
     this._isPasswordChange = params.get('is_password_change') === 'true';
     this.forceUpdate();

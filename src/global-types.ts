@@ -5,6 +5,8 @@ export const enum EmitEvents {
   FLOW_CDM = 'flow:component-did-mount',
   FLOW_RENDER = 'flow:render',
   FLOW_CDU = 'flow:component-did-update',
+  STORE_UPDATE = 'store:update',
+  MODAL_EVENTS = 'modal:events',
 }
 
 export type Events = Partial<{

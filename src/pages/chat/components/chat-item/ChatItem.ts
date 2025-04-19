@@ -18,12 +18,11 @@ interface ChatItemProps {
 export class ChatItem extends Block {
   constructor(props: ChatItemProps) {
     super(props);
+
+    // this.setState({...props.state});
   }
 
   render(): string {
-    const name = this.state.name;
-    const lastMessage = this.state.lastMessage;
-    const time = this.state.time;
     const unread = (this.state.unread as number) || 0;
 
     return `
@@ -32,11 +31,11 @@ export class ChatItem extends Block {
           <div class="avatar avatar--medium"></div>
         </div>
         <div class="chat-item__info">
-          <div class="chat-item__name">${name}</div>
-          <div class="chat-item__last-message">${lastMessage}</div>
+          <div class="chat-item__name">{{name}}</div>
+          <div class="chat-item__last-message">{{lastMessage}}</div>
         </div>
         <div class="chat-item__meta">
-          <div class="chat-item__time">${time}</div>
+          <div class="chat-item__time">{{time}}</div>
           ${unread > 0 ? `<div class="chat-item__unread">${unread}</div>` : ''}
         </div>
       </li>

@@ -1,14 +1,32 @@
+import {EventBus} from '../core/EventBus';
+import {EmitEvents} from '../global-types';
+import {Chat} from '../pages/chat/Chat';
+import {UserData} from '../services/auth';
+import {set} from '../utils/set';
 
+interface ModalsState {
+  createChat: boolean;
+}
 
-type StoreState = Record<string, unknown>;
-type Listener = () => void;
+interface StoreState {
+  modals: ModalsState;
+  user: UserData | null;
+  chats: Chat[];
+}
 
-class Store {
+class Store extends EventBus {
   private static instance: Store;
-  private _state: StoreState = {};
-  private listeners: Set<Listener> = new Set();
+  private _state: StoreState = {
+    modals: {
+      createChat: false,
+    },
+    user: null,
+    chats: [],
+  };
 
-  private constructor() {}
+  private constructor() {
+    super();
+  }
 
   public static getInstance(): Store {
     if (!Store.instance) {
@@ -21,24 +39,10 @@ class Store {
     return this._state;
   }
 
-  public setState(key: string, value: unknown): void {
-    this._state[key] = value;
-    this.notifyListeners();
-  }
-
-  public subscribe(listener: Listener): () => void {
-    this.listeners.add(listener);
-    return () => {
-      this.listeners.delete(listener);
-    };
-  }
-
-  private notifyListeners(): void {
-    this.listeners.forEach((listener) => listener());
+  public setState<T extends string>(path: T, value: unknown): void {
+    set(this._state, path, value);
+    this.emit(EmitEvents.STORE_UPDATE);
   }
 }
 
 export const store = Store.getInstance();
-
-export const useStore = () => {
-};

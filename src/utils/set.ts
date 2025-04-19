@@ -19,7 +19,6 @@ export const set = (object: Indexed | unknown, path: string, value: unknown): In
     const key = keys[i];
     if (!(key in currentObj) || typeof currentObj[key] !== 'object' || currentObj[key] === null) {
       currentObj[key] = {};
-      console.log(currentObj[key]);
     }
     stack.push({obj: currentObj, key});
     currentObj = currentObj[key] as Indexed;

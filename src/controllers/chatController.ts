@@ -1,13 +1,11 @@
-import {Router} from '../core/Router';
-import {ChatService, ChatData, ChatUserData} from '../services/chat';
+import {ChatService, CreateChatData, ChatUserData} from '../services/chat';
+import {store} from '../store/store';
 
 export class ChatController {
   private chatService: ChatService;
-  private router: Router;
 
   constructor() {
     this.chatService = new ChatService();
-    this.router = new Router();
   }
 
   async getChats(): Promise<void> {
@@ -20,9 +18,10 @@ export class ChatController {
     }
   }
 
-  async createChat(data: ChatData): Promise<void> {
+  async createChat(data: CreateChatData): Promise<void> {
     try {
-      await this.chatService.createChat(data).then(() => {
+      await this.chatService.createChat(data).then((response) => {
+        store.setState('chats', response);
         this.getChats();
       });
     } catch (error) {

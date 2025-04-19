@@ -1,5 +1,6 @@
 import {Router} from '../core/Router';
 import {AuthService, SignUpData, SignInData, UserData} from '../services/auth';
+import {store} from '../store/store';
 
 export class AuthController {
   private authService: AuthService;
@@ -13,6 +14,7 @@ export class AuthController {
   async signUp(data: SignUpData): Promise<void> {
     try {
       await this.authService.signUp(data).then(() => {
+        store.setState('user', data);
         this.router.go('/messenger');
       });
     } catch (error) {
@@ -48,7 +50,10 @@ export class AuthController {
 
   async getUser(): Promise<UserData> {
     try {
-      return await this.authService.getUser();
+      return await this.authService.getUser().then((user) => {
+        store.setState('user', user);
+        return user;
+      });
     } catch (error) {
       console.error(error);
       throw error;

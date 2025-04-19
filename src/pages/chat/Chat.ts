@@ -1,4 +1,8 @@
+import {AuthController} from '../../controllers/authController';
 import {Block} from '../../core/Block';
+import {EmitEvents} from '../../global-types';
+import {UserData} from '../../services/auth';
+import {store} from '../../store/store';
 import {ChatHeader} from './components/chat-header/ChatHeader';
 import {ChatInput} from './components/chat-input/ChatInput';
 import {ChatList} from './components/chat-list/ChatList';
@@ -6,6 +10,7 @@ import {mockChats} from './components/chat-list/mockData';
 import {ChatSearch} from './components/chat-search/ChatSearch';
 
 export class Chat extends Block {
+
   constructor() {
     super({
       attributes: {
@@ -13,14 +18,14 @@ export class Chat extends Block {
         currentChat: mockChats[0],
       },
       children: {
-        chatList: new ChatList(),
-        chatHeader: new ChatHeader({
+        ChatList: new ChatList(),
+        ChatHeader: new ChatHeader({
           attributes: {
             avatar: 'https://via.placeholder.com/150',
-            name: 'Иван Иванов',
+            name: 'И И',
           },
         }),
-        chatInput: new ChatInput({
+        ChatInput: new ChatInput({
           value: '',
           events: {
             submit: (e: SubmitEvent) => {
@@ -29,7 +34,7 @@ export class Chat extends Block {
             },
           },
         }),
-        chatSearch: new ChatSearch({
+        ChatSearch: new ChatSearch({
           events: {
             submit: (e: SubmitEvent) => {
               e.preventDefault();
@@ -39,6 +44,23 @@ export class Chat extends Block {
         }),
       },
     });
+
+    new AuthController().getUser();
+
+    // Подписываемся на изменения store
+    store.on(EmitEvents.STORE_UPDATE, this.updateUserData.bind(this));
+  }
+
+  private updateUserData() {
+    const userData = store.state.user as UserData;
+    if (userData) {
+      this.setChildrenProps({
+        ChatHeader: {
+          name: userData.display_name || userData.login,
+          avatar: userData.avatar || 'https://via.placeholder.com/150',
+        },
+      });
+    }
   }
 
   render(): string {
@@ -46,13 +68,13 @@ export class Chat extends Block {
     <div id="app">
       <main class="chat-page">
         <div class="chat-sidebar">
-          {{{ chatSearch }}}
-          {{{ chatList }}}
+          {{{ ChatSearch }}}
+          {{{ ChatList }}}
         </div>
         <div class="chat-content">
-        {{{ chatHeader }}}
+        {{{ ChatHeader }}}
         <section class="chat-messages">
-          <!-- Здесь будут отображаться сообщения -->
+
           <div class="message message--incoming">
             <div class="message__content">Привет, как дела?</div>
             <div class="message__time">10:30</div>
@@ -62,7 +84,7 @@ export class Chat extends Block {
             <div class="message__time">10:32</div>
           </div>
         </section>
-        {{{ chatInput }}}
+        {{{ ChatInput }}}
         </div>
 
       </main>

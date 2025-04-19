@@ -1,7 +1,7 @@
 import {HTTPClient} from '../core/HTTPClient';
 import {UserProfileData} from './user';
 
-export interface ChatData {
+export interface CreateChatData {
   title: string;
 }
 
@@ -48,7 +48,7 @@ export class ChatService {
     return JSON.parse(response.responseText);
   }
 
-  async createChat(data: ChatData): Promise<{id: number}> {
+  async createChat(data: CreateChatData): Promise<{id: number}> {
     const response = await HTTPClient.post(`${this.apiUrl}/chats`, {
       data,
     });
