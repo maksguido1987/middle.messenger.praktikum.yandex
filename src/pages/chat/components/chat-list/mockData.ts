@@ -6,12 +6,12 @@ export const mockChats = [
     time: '10:30',
     unread: 2,
   },
-  // {
-  //   id: 2,
-  //   name: 'Петр Петров',
-  //   lastMessage: 'Когда встречаемся?',
-  //   time: '09:15',
-  // },
+  {
+    id: 2,
+    name: 'Петр Петров',
+    lastMessage: 'Когда встречаемся?',
+    time: '09:15',
+  },
   // {
   //   id: 3,
   //   name: 'Анна Сидорова',

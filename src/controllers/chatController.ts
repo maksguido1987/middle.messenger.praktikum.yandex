@@ -11,7 +11,7 @@ export class ChatController {
   async getChats(): Promise<void> {
     try {
       await this.chatService.getChats().then((chats) => {
-        console.log(chats);
+        store.setState('chats', chats);
       });
     } catch (error) {
       console.error(error);
@@ -22,6 +22,7 @@ export class ChatController {
     try {
       await this.chatService.createChat(data).then((response) => {
         store.setState('chats', response);
+        store.setState('modals.createChat', false);
         this.getChats();
       });
     } catch (error) {

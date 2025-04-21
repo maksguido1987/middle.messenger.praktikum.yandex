@@ -2,27 +2,17 @@ import {Block} from '../../../../core/Block';
 import {BlockProps} from '../../../../global-types';
 import './style.scss';
 
-interface ChatItemProps {
-  state: {
-    id: number;
-    name: string;
-    lastMessage: string;
-    time: string;
-    unread?: number;
-  } & BlockProps['state'];
-}
-
 /**
  * Класс компонента элемента списка чатов
  */
 export class ChatItem extends Block {
-  constructor(props: ChatItemProps) {
-    super(props);
-
-    // this.setState({...props.state});
+  constructor(props: BlockProps) {
+    super({
+      ...props,
+    });
   }
 
-  render(): string {
+  render() {
     const unread = (this.state.unread as number) || 0;
 
     return `

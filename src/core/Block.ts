@@ -3,9 +3,10 @@ import {EventBus} from './EventBus';
 import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
 import {defaultValidationConfig} from './validation';
+import isEqual from '../utils/isEqual';
 
 export abstract class Block<T extends BlockProps = BlockProps> {
-  protected eventBus: () => EventBus;
+  private eventBus: () => EventBus;
   protected children: Children = {};
   protected events: Events = {};
   protected attributes: NonNullable<T['attributes']> = {} as NonNullable<T['attributes']>;
@@ -14,8 +15,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
   private _element: HTMLElement | null = null;
   private _placeholder?: string = `child_${uuidv4()}`;
-  private _isMounted: boolean = false;
-  private _renderTimeout: number | null = null;
 
   constructor(props: T = {} as T) {
     const eventBus = new EventBus();
@@ -32,12 +31,12 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
   private _registerEvents(eventBus: EventBus) {
     eventBus.on(EmitEvents.INIT, this.init.bind(this));
-    eventBus.on(EmitEvents.FLOW_CDM, this._componentDidMount.bind(this));
-    eventBus.on(EmitEvents.FLOW_CDU, this._componentDidUpdate.bind(this));
     eventBus.on(EmitEvents.FLOW_RENDER, this._render.bind(this));
+    // eventBus.on(EmitEvents.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(EmitEvents.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
-  private _addEvents() {
+  private addEvents() {
     if (!this.events) {
       return;
     }
@@ -51,27 +50,25 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
-  private _componentDidMount() {
-    this.componentDidMount(this.attributes as T);
-    Object.values(this.children).forEach((child) => {
-      if (child instanceof Block) {
-        child.dispatchComponentDidMount();
-      }
-    });
-  }
+  // private _componentDidMount() {
+  //   this.componentDidMount(this.attributes as T);
+  //   Object.values(this.children).forEach((child) => {
+  //     if (child instanceof Block) {
+  //       child.dispatchComponentDidMount();
+  //     }
+  //   });
+  // }
 
-  componentDidMount(oldProps: T): boolean {
-    console.log('Component mounted with props:', oldProps);
-    return true;
-  }
+  // componentDidMount(oldProps: T): boolean {
+  //   return true;
+  // }
 
   dispatchComponentDidMount() {
-    this._isMounted = true;
     this.eventBus().emit(EmitEvents.FLOW_CDM);
   }
 
   private _componentDidUpdate(...args: unknown[]) {
-    const [oldProps, newProps] = args as [T, T];
+    const [oldProps, newProps] = args as [Record<string, unknown>, Record<string, unknown>];
     const response = this.componentDidUpdate(oldProps, newProps);
     if (!response) {
       return;
@@ -79,15 +76,11 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this._render();
   }
 
-  componentDidUpdate(oldProps: T, newProps: T): boolean {
-    const isPropsChanged = !this._isEqual(oldProps, newProps);
-
-    if (isPropsChanged) {
-      console.log('Props changed from', oldProps, 'to', newProps);
-      return true;
-    }
-
-    return false;
+  componentDidUpdate(
+    oldProps: Record<string, unknown>,
+    newProps: Record<string, unknown>,
+  ): boolean {
+    return !isEqual(oldProps, newProps);
   }
 
   setProps = (nextAttributes: NonNullable<T['attributes']>): void => {
@@ -95,7 +88,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
       return;
     }
     Object.assign(this.attributes, nextAttributes);
-    this.eventBus().emit(EmitEvents.FLOW_RENDER);
   };
 
   setChildrenProps = (childrenProps: Record<string, Record<string, unknown>>): void => {
@@ -112,14 +104,13 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   };
 
   setState = (nextState: Record<string, unknown>) => {
-    console.log('this.state', this.state);
-    console.log('nextState', nextState);
     if (!nextState) {
       return;
     }
 
-    Object.assign(this.state, nextState);
-    this.eventBus().emit(EmitEvents.FLOW_RENDER);
+    const proxyNewState = this._makePropsProxy(nextState);
+
+    Object.assign(this.state, proxyNewState);
   };
 
   get element() {
@@ -128,8 +119,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
   private _render() {
     const block = this.render();
-
-    this._unmount();
 
     const listId = uuidv4();
 
@@ -184,8 +173,9 @@ export abstract class Block<T extends BlockProps = BlockProps> {
       }
     });
 
-    this._addEvents();
+    this.addEvents();
     this.addAttributes(this.attributes);
+    this.setState(this.state);
   }
 
   render(): string {
@@ -210,8 +200,8 @@ export abstract class Block<T extends BlockProps = BlockProps> {
           throw new Error('Нет прав');
         }
         const oldProps = {...target};
-        target[prop] = String(value);
-        this.eventBus().emit(EmitEvents.FLOW_RENDER, oldProps, target);
+        target[prop] = value;
+        this.eventBus().emit(EmitEvents.FLOW_CDU, oldProps, target);
         return true;
       },
 
@@ -229,12 +219,19 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     if (!attributes) {
       return;
     }
-
     Object.entries(attributes).forEach(([key, value]) => {
       this._element?.setAttribute(key, String(value));
     });
   }
 
+  removeAttributes(attributes?: Attributes) {
+    if (!attributes) {
+      return;
+    }
+    Object.entries(attributes).forEach(([key]) => {
+      this._element?.removeAttribute(key);
+    });
+  }
   show() {
     if (!this._element) {
       return;
@@ -249,70 +246,12 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this._element.style.display = 'none';
   }
 
-  private _isEqual(obj1: unknown, obj2: unknown): boolean {
-    if (obj1 === obj2) {
-      return true;
-    }
-
-    if (typeof obj1 !== 'object' || typeof obj2 !== 'object' || !obj1 || !obj2) {
-      return false;
-    }
-
-    const keys1 = Object.keys(obj1 as object);
-    const keys2 = Object.keys(obj2 as object);
-
-    if (keys1.length !== keys2.length) {
-      return false;
-    }
-
-    return keys1.every((key) =>
-      this._isEqual((obj1 as Record<string, unknown>)[key], (obj2 as Record<string, unknown>)[key]),
-    );
-  }
-
-  protected deferredUpdate() {
-    if (this._renderTimeout !== null) {
-      window.clearTimeout(this._renderTimeout);
-    }
-
-    this._renderTimeout = window.setTimeout(() => {
-      this.eventBus().emit(EmitEvents.FLOW_RENDER);
-    }, 0);
-  }
-
-  public forceUpdate() {
-    this.eventBus().emit(EmitEvents.FLOW_RENDER);
-  }
-
-  protected createRef<T extends HTMLElement>(): {current: T | null} {
-    return {
-      current: null,
-    };
-  }
+  // public forceUpdate() {
+  //   this.eventBus().emit(EmitEvents.FLOW_RENDER);
+  // }
 
   public componentWillUnmount() {
     // Хук жизненного цикла перед удалением компонента
-  }
-
-  private _unmount() {
-    if (!this._isMounted) {
-      return;
-    }
-
-    this.componentWillUnmount();
-    this._removeEvents();
-    this._element?.remove();
-    this._isMounted = false;
-  }
-
-  private _removeEvents() {
-    if (!this.events || !this._element) {
-      return;
-    }
-
-    Object.entries(this.events).forEach(([event, callback]) => {
-      this._element?.removeEventListener(event, callback as EventListener);
-    });
   }
 
   protected getFormData<T>(e: Event): T {
@@ -417,10 +356,5 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
     input.classList.toggle('error', !isValid);
     errorElement.textContent = isValid ? '' : errorMessage;
-  }
-
-  public destroy() {
-    this._unmount();
-    this.eventBus = () => new EventBus();
   }
 }

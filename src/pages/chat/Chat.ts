@@ -10,7 +10,6 @@ import {mockChats} from './components/chat-list/mockData';
 import {ChatSearch} from './components/chat-search/ChatSearch';
 
 export class Chat extends Block {
-
   constructor() {
     super({
       attributes: {
@@ -65,7 +64,6 @@ export class Chat extends Block {
 
   render(): string {
     return `
-    <div id="app">
       <main class="chat-page">
         <div class="chat-sidebar">
           {{{ ChatSearch }}}
@@ -74,7 +72,6 @@ export class Chat extends Block {
         <div class="chat-content">
         {{{ ChatHeader }}}
         <section class="chat-messages">
-
           <div class="message message--incoming">
             <div class="message__content">Привет, как дела?</div>
             <div class="message__time">10:30</div>
@@ -86,9 +83,7 @@ export class Chat extends Block {
         </section>
         {{{ ChatInput }}}
         </div>
-
       </main>
-    </div>
     `;
   }
 }

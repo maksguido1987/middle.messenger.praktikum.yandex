@@ -4,7 +4,6 @@ import {mockChats} from './mockData';
 import {Button} from '../../../../components/button/Button';
 import {CreateChatModal} from '../../../../components/modal/CreateChatModal';
 import {store} from '../../../../store/store';
-import {EmitEvents} from '../../../../global-types';
 
 export class ChatList extends Block {
   constructor() {
@@ -18,15 +17,13 @@ export class ChatList extends Block {
             text: 'Создать чат',
           },
           events: {
-            click: () => store.setState('modals.createChat', true),
+            click: () => {
+              store.setState('modals.createChat', true);
+            },
           },
         }),
         CreateModal: new CreateChatModal(),
       },
-    });
-
-    store.on(EmitEvents.STORE_UPDATE, () => {
-      this.forceUpdate();
     });
   }
 
@@ -34,10 +31,10 @@ export class ChatList extends Block {
     return `
       <div class="chat-list-container">
         {{{CreateButton}}}
-          <ul class="chat-list">
-            {{{items}}}
-          </ul>
-          ${store.state.modals.createChat ? '{{{CreateModal}}}' : ''}
+        <ul class="chat-list">
+          {{{items}}}
+        </ul>
+        {{{CreateModal}}}
       </div>
     `;
   }

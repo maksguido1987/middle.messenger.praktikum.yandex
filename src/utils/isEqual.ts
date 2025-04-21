@@ -41,7 +41,3 @@ function isEqual(a: object, b: object): boolean {
 }
 
 export default isEqual;
-
-const a = {a: 1};
-const b = {a: 1};
-console.log(isEqual(a, b)); // true
