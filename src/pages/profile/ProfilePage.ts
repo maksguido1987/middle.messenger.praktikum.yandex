@@ -77,27 +77,25 @@ export class ProfilePage extends Block {
 
   public render(): string {
     return `
-      <div id="app">
-        <main class="profile-page">
-          <div class="profile-page__container">
-            <div class="profile-avatar-container">
-              {{{ Avatar }}}
-              <div class="profile-name">{{profileName}}</div>
-            </div>
-            ${this._isPasswordChange ? '{{{ PasswordForm }}}' : '{{{ ProfileForm }}}'}
-            <div class="profile-links">
-              <div class="profile-links__item">{{{ EditLink }}}</div>
-              <div class="profile-links__item">{{{ PasswordLink }}}</div>
-              <div class="profile-links__item">{{{ LogoutLink }}}</div>
-            </div>
+      <main class="profile-page">
+        <div class="profile-page__container">
+          <div class="profile-avatar-container">
+            {{{ Avatar }}}
+            <div class="profile-name">{{profileName}}</div>
           </div>
-        </main>
-      </div>
+          ${this._isPasswordChange ? '{{{ PasswordForm }}}' : '{{{ ProfileForm }}}'}
+          <div class="profile-links">
+            <div class="profile-links__item">{{{ EditLink }}}</div>
+            <div class="profile-links__item">{{{ PasswordLink }}}</div>
+            <div class="profile-links__item">{{{ LogoutLink }}}</div>
+          </div>
+        </div>
+      </main>
     `;
   }
 
-  public destroy() {
-    window.removeEventListener('popstate', this.handleUrlChange.bind(this));
-    super.destroy();
-  }
+  // public destroy() {
+  //   window.removeEventListener('popstate', this.handleUrlChange.bind(this));
+  //   super.destroy();
+  // }
 }

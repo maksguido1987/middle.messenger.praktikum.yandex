@@ -11,14 +11,12 @@ export class LoginPage extends Block {
 
   render() {
     return `
-      <div id="app">
-        <main class="login-container">
-          <div class="form-container">
-            <h1>Вход</h1>
-            {{{ LoginForm }}}
-          </div>
-        </main>
-      </div>
+      <main class="login-container">
+        <div class="form-container">
+          <h1>Вход</h1>
+          {{{ LoginForm }}}
+        </div>
+      </main>
     `;
   }
 }

@@ -246,9 +246,9 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this._element.style.display = 'none';
   }
 
-  // public forceUpdate() {
-  //   this.eventBus().emit(EmitEvents.FLOW_RENDER);
-  // }
+  public forceUpdate() {
+    this.eventBus().emit(EmitEvents.FLOW_RENDER);
+  }
 
   public componentWillUnmount() {
     // Хук жизненного цикла перед удалением компонента
