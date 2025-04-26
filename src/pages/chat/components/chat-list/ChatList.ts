@@ -35,7 +35,7 @@ export class ChatList extends Block {
       this.addToListItem(
         'Chats',
         new ChatItem({
-          state: {...chat},
+          state: chat,
         }),
       );
     });

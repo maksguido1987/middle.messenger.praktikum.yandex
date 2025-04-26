@@ -1,14 +1,37 @@
 import {Block} from '../../../../core/Block';
 import {BlockProps} from '../../../../global-types';
+import {ChatInfo, ChatService} from '../../../../services/chat';
+import {store} from '../../../../store/store';
 import './style.scss';
 
-/**
- * Класс компонента элемента списка чатов
- */
+interface ChatItemProps extends Omit<BlockProps, 'state'> {
+  state: ChatInfo;
+}
+
 export class ChatItem extends Block {
-  constructor(props: BlockProps) {
+  private chatService: ChatService;
+  private chatId: number;
+
+  constructor(props: ChatItemProps) {
     super({
       ...props,
+      state: {
+        ...props.state,
+      },
+      events: {
+        click: () => this.deleteChat(),
+      },
+    });
+    this.chatService = new ChatService();
+    this.chatId = props.state.id;
+  }
+
+  private deleteChat() {
+    this.chatService.deleteChat(this.chatId).then(() => {
+      store.setState(
+        'chats',
+        store.state.chats.filter((chat) => chat.id !== this.chatId),
+      );
     });
   }
 

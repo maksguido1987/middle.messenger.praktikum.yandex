@@ -1,5 +1,5 @@
 import {EventBus} from '../core/EventBus';
-import {Chat} from '../pages/chat/Chat';
+import {ChatInfo} from '../services/chat';
 import {UserData} from '../services/auth';
 import {set} from '../utils/set';
 
@@ -10,7 +10,7 @@ interface ModalsState {
 interface StoreState {
   modals: ModalsState;
   user: UserData | null;
-  chats: Chat[];
+  chats: ChatInfo[];
 }
 
 export const enum StoreEvents {

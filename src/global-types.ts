@@ -13,12 +13,13 @@ export type Events = Partial<{
 }>;
 export type Children = Record<string, Block>;
 export type Attributes = Record<string, unknown>;
+export type State = Record<string, unknown>;
 export type List = Record<string, (Block | string)[]>;
 
 export interface BlockProps {
   children?: Children;
   events?: Events;
   attributes?: Attributes;
-  state?: Record<string, unknown>;
+  state?: State;
   list?: List;
 }

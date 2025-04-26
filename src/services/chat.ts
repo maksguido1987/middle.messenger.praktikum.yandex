@@ -14,6 +14,16 @@ export interface ChatTokenData {
   token: string;
 }
 
+export interface DeleteChatResponse {
+  userId: number;
+  result: {
+    id: number;
+    title: string;
+    avatar: string;
+    created_by: number;
+  };
+}
+
 export interface ChatMessage {
   id: number;
   user_id: number;
@@ -38,6 +48,7 @@ export interface ChatInfo {
   avatar: string;
   unread_count: number;
   last_message: ChatMessage | null;
+  created_by: number;
 }
 
 export class ChatService {
@@ -55,10 +66,11 @@ export class ChatService {
     return JSON.parse(response.responseText);
   }
 
-  async deleteChat(chatId: number): Promise<void> {
-    await HTTPClient.delete(`${this.apiUrl}/chats`, {
+  async deleteChat(chatId: number): Promise<DeleteChatResponse> {
+    const response = await HTTPClient.delete(`${this.apiUrl}/chats`, {
       data: {chatId},
     });
+    return JSON.parse(response.responseText);
   }
 
   async addUsers(data: ChatUserData): Promise<void> {

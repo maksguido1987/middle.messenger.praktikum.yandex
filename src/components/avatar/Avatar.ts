@@ -6,7 +6,7 @@ interface AvatarProps extends BlockProps {
   attributes: {
     src?: string;
     size?: 'small' | 'medium' | 'large';
-  } & BlockProps['attributes'];
+  }
 }
 
 export class Avatar extends Block {
