@@ -1,9 +1,9 @@
 import {Block} from '../../core/Block';
 import {Button} from '../button/Button';
-import {store} from '../../store/store';
+import {store, StoreEvents} from '../../store/store';
 import './style.scss';
-import {EmitEvents} from '../../global-types';
 import {CreateChatForm} from '../forms/create-chat-form/CreateChatForm';
+
 export class CreateChatModal extends Block {
   constructor() {
     super({
@@ -23,7 +23,7 @@ export class CreateChatModal extends Block {
       },
     });
 
-    store.on(EmitEvents.STORE_UPDATE, this.updateModalClass.bind(this));
+    store.on(StoreEvents.MODALS_UPDATE, this.updateModalClass.bind(this));
   }
 
   private updateModalClass() {

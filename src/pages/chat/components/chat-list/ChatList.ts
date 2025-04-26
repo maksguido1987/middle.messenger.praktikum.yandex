@@ -2,12 +2,10 @@ import {Block} from '../../../../core/Block';
 import {ChatItem} from '../chat-item/ChatItem';
 import {Button} from '../../../../components/button/Button';
 import {CreateChatModal} from '../../../../components/modal/CreateChatModal';
-import {store} from '../../../../store/store';
+import {store, StoreEvents} from '../../../../store/store';
 import {ChatController} from '../../../../controllers/chatController';
-import {EmitEvents} from '../../../../global-types';
-export class ChatList extends Block {
-  private chatController: ChatController;
 
+export class ChatList extends Block {
   constructor() {
     super({
       list: {
@@ -27,17 +25,19 @@ export class ChatList extends Block {
         CreateModal: new CreateChatModal(),
       },
     });
-
-    this.chatController = new ChatController();
-    store.on(EmitEvents.FLOW_RENDER, this.onGetChats.bind(this));
-    // this.onGetChats();
+    store.on(StoreEvents.CHATS_UPDATE, this.onGetChats.bind(this));
+    new ChatController().getChats();
   }
 
   onGetChats() {
-    this.chatController.getChats().then((chats) => {
-      chats.forEach((chat) => {
-        this.addToList('Chats', new ChatItem({state: {...chat}}));
-      });
+    this.list.Chats = [];
+    store.state.chats.forEach((chat) => {
+      this.addToListItem(
+        'Chats',
+        new ChatItem({
+          state: {...chat},
+        }),
+      );
     });
   }
 

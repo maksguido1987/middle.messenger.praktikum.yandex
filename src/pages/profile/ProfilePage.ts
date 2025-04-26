@@ -4,9 +4,8 @@ import {ProfileForm} from '../../components/forms/profile-form/ProfileForm';
 import {PasswordForm} from '../../components/forms/password-form/PasswordForm';
 import {LoadAvatar} from './components/load-avatar/LoadAvatar';
 import {AuthController} from '../../controllers/authController';
-import {store} from '../../store/store';
+import {store, StoreEvents} from '../../store/store';
 import {UserData} from '../../services/auth';
-import {EmitEvents} from '../../global-types';
 
 export class ProfilePage extends Block {
   protected _isPasswordChange = false;
@@ -56,7 +55,7 @@ export class ProfilePage extends Block {
     this.userData = store.state.user as UserData;
 
     // Подписываемся на изменения store
-    store.on(EmitEvents.STORE_UPDATE, this.updateUserData.bind(this));
+    store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
 
     // Добавляем обработчики изменений URL
     // window.addEventListener('popstate', this.handleUrlChange.bind(this));

@@ -5,8 +5,7 @@ import {UserData} from '../../../services/auth';
 import '../style.scss';
 import {UserController} from '../../../controllers/userController';
 import {UserProfileData} from '../../../services/user';
-import {store} from '../../../store/store';
-import {EmitEvents} from '../../../global-types';
+import {store, StoreEvents} from '../../../store/store';
 
 export class ProfileForm extends Block {
   private userController: UserController;
@@ -74,7 +73,7 @@ export class ProfileForm extends Block {
 
     this.userController = new UserController();
 
-    store.on(EmitEvents.STORE_UPDATE, this.getUserData.bind(this));
+    store.on(StoreEvents.USER_UPDATE, this.getUserData.bind(this));
   }
 
   private async getUserData() {

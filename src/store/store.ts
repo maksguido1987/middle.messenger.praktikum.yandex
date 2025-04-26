@@ -1,5 +1,4 @@
 import {EventBus} from '../core/EventBus';
-import {EmitEvents} from '../global-types';
 import {Chat} from '../pages/chat/Chat';
 import {UserData} from '../services/auth';
 import {set} from '../utils/set';
@@ -12,6 +11,13 @@ interface StoreState {
   modals: ModalsState;
   user: UserData | null;
   chats: Chat[];
+}
+
+export const enum StoreEvents {
+  STORE_UPDATE = 'store:update',
+  USER_UPDATE = 'store:user:update',
+  CHATS_UPDATE = 'store:chats:update',
+  MODALS_UPDATE = 'store:modals:update',
 }
 
 class Store extends EventBus {
@@ -39,9 +45,24 @@ class Store extends EventBus {
     return this._state;
   }
 
-  public setState<T extends string>(path: T, value: unknown): void {
+  public setState(path: string, value: unknown): void {
     set(this._state, path, value);
-    this.emit(EmitEvents.STORE_UPDATE);
+
+    // Получаем корневой путь до первой точки
+    const rootPath = path.split('.')[0] as keyof StoreState;
+
+    // Эмитим специфичное событие в зависимости от корневого пути
+    switch (rootPath) {
+      case 'user':
+        this.emit(StoreEvents.USER_UPDATE);
+        break;
+      case 'chats':
+        this.emit(StoreEvents.CHATS_UPDATE);
+        break;
+      case 'modals':
+        this.emit(StoreEvents.MODALS_UPDATE);
+        break;
+    }
   }
 }
 

@@ -22,8 +22,7 @@ export class ChatController {
 
   async createChat(data: CreateChatData): Promise<void> {
     try {
-      await this.chatService.createChat(data).then((response) => {
-        store.setState('chats', response);
+      await this.chatService.createChat(data).then(() => {
         store.setState('modals.createChat', false);
         this.getChats();
       });

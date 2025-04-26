@@ -1,5 +1,5 @@
 import {BlockProps, Children, Attributes, EmitEvents, Events, List} from '../global-types';
-import {EventBus} from './EventBus';
+import {EventBus, EventHandler} from './EventBus';
 import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
 import {defaultValidationConfig} from './validation';
@@ -34,6 +34,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     eventBus.on(EmitEvents.FLOW_RENDER, this._render.bind(this));
     eventBus.on(EmitEvents.FLOW_CWU, this.componentWillUnmount.bind(this));
     eventBus.on(EmitEvents.FLOW_CDU, this._componentDidUpdate.bind(this));
+    eventBus.on(EmitEvents.FLOW_CDM, this._componentDidMount.bind(this));
   }
 
   private addEvents() {
@@ -50,18 +51,18 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
-  // private _componentDidMount() {
-  //   this.componentDidMount(this.attributes as T);
-  //   Object.values(this.children).forEach((child) => {
-  //     if (child instanceof Block) {
-  //       child.dispatchComponentDidMount();
-  //     }
-  //   });
-  // }
+  private _componentDidMount() {
+    this.componentDidMount(this.attributes as T);
+    Object.values(this.children).forEach((child) => {
+      if (child instanceof Block) {
+        child.dispatchComponentDidMount();
+      }
+    });
+  }
 
-  // componentDidMount(oldProps: T): boolean {
-  //   return true;
-  // }
+  componentDidMount(oldProps: T): boolean {
+    return true;
+  }
 
   dispatchComponentDidMount() {
     this.eventBus().emit(EmitEvents.FLOW_CDM);
@@ -113,7 +114,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     Object.assign(this.state, proxyNewState);
   };
 
-  addToList = (listName: string, item: Block | string) => {
+  addToListItem = (listName: string, item: Block | string) => {
     if (!this.list[listName]) {
       this.list[listName] = [];
     }
@@ -262,7 +263,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     //     this._element?.removeEventListener(event, callback as EventListener);
     //   });
     // }
-
     // // Вызываем componentWillUnmount у всех дочерних компонентов
     // Object.values(this.children).forEach((child) => {
     //   if (child instanceof Block) {
@@ -272,10 +272,8 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     // if (this._element) {
     //   this._element.remove();
     // }
-
     // // Очищаем eventBus
     // this.eventBus().clear();
-
     // // Очищаем ссылки
     // this._element = null;
     // this.children = {};
@@ -388,5 +386,9 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
     input.classList.toggle('error', !isValid);
     errorElement.textContent = isValid ? '' : errorMessage;
+  }
+
+  public subscribe(event: string, callback: EventHandler): void {
+    this.eventBus().on(event, callback);
   }
 }

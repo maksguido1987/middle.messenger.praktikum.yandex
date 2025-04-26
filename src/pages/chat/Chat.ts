@@ -1,8 +1,7 @@
 import {AuthController} from '../../controllers/authController';
 import {Block} from '../../core/Block';
-import {EmitEvents} from '../../global-types';
 import {UserData} from '../../services/auth';
-import {store} from '../../store/store';
+import {store, StoreEvents} from '../../store/store';
 import {ChatHeader} from './components/chat-header/ChatHeader';
 import {ChatInput} from './components/chat-input/ChatInput';
 import {ChatList} from './components/chat-list/ChatList';
@@ -42,7 +41,7 @@ export class Chat extends Block {
     new AuthController().getUser();
 
     // Подписываемся на изменения store
-    store.on(EmitEvents.STORE_UPDATE, this.updateUserData.bind(this));
+    store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
   }
 
   private updateUserData() {
@@ -57,7 +56,7 @@ export class Chat extends Block {
     }
   }
 
-  render(): string {
+  render() {
     return `
       <main class="chat-page">
         <div class="chat-sidebar">
