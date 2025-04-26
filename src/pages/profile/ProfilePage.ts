@@ -59,7 +59,7 @@ export class ProfilePage extends Block {
     store.on(EmitEvents.STORE_UPDATE, this.updateUserData.bind(this));
 
     // Добавляем обработчики изменений URL
-    window.addEventListener('popstate', this.handleUrlChange.bind(this));
+    // window.addEventListener('popstate', this.handleUrlChange.bind(this));
   }
 
   private updateUserData() {
@@ -69,11 +69,11 @@ export class ProfilePage extends Block {
     }
   }
 
-  private handleUrlChange() {
-    const params = new URLSearchParams(window.location.search);
-    this._isPasswordChange = params.get('is_password_change') === 'true';
-    this.forceUpdate();
-  }
+  // private handleUrlChange() {
+  //   const params = new URLSearchParams(window.location.search);
+  //   this._isPasswordChange = params.get('is_password_change') === 'true';
+  //   this.forceUpdate();
+  // }
 
   public render(): string {
     return `

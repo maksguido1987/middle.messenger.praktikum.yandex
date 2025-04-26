@@ -6,16 +6,11 @@ import {store} from '../../store/store';
 import {ChatHeader} from './components/chat-header/ChatHeader';
 import {ChatInput} from './components/chat-input/ChatInput';
 import {ChatList} from './components/chat-list/ChatList';
-import {mockChats} from './components/chat-list/mockData';
 import {ChatSearch} from './components/chat-search/ChatSearch';
 
 export class Chat extends Block {
   constructor() {
     super({
-      attributes: {
-        chats: mockChats,
-        currentChat: mockChats[0],
-      },
       children: {
         ChatList: new ChatList(),
         ChatHeader: new ChatHeader({

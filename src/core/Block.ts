@@ -1,4 +1,4 @@
-import {BlockProps, Children, Attributes, EmitEvents, Events, Lists} from '../global-types';
+import {BlockProps, Children, Attributes, EmitEvents, Events, List} from '../global-types';
 import {EventBus} from './EventBus';
 import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
@@ -11,7 +11,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   protected events: Events = {};
   protected attributes: NonNullable<T['attributes']> = {} as NonNullable<T['attributes']>;
   protected state: NonNullable<T['state']> = {} as NonNullable<T['state']>;
-  protected lists: Lists = {};
+  protected list: List = {};
 
   private _element: HTMLElement | null = null;
   private _placeholder?: string = `child_${uuidv4()}`;
@@ -23,7 +23,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     this.state = this._makePropsProxy(props.state || {}) as NonNullable<T['state']>;
     this.children = props.children || {};
     this.events = props.events || {};
-    this.lists = this._makePropsProxy(props.lists || {}) as Lists;
+    this.list = this._makePropsProxy(props.list || {}) as List;
     this.eventBus = () => eventBus;
     this._registerEvents(eventBus);
     eventBus.emit(EmitEvents.INIT);
@@ -32,7 +32,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   private _registerEvents(eventBus: EventBus) {
     eventBus.on(EmitEvents.INIT, this.init.bind(this));
     eventBus.on(EmitEvents.FLOW_RENDER, this._render.bind(this));
-    // eventBus.on(EmitEvents.FLOW_CDM, this._componentDidMount.bind(this));
+    eventBus.on(EmitEvents.FLOW_CWU, this.componentWillUnmount.bind(this));
     eventBus.on(EmitEvents.FLOW_CDU, this._componentDidUpdate.bind(this));
   }
 
@@ -113,6 +113,26 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     Object.assign(this.state, proxyNewState);
   };
 
+  addToList = (listName: string, item: Block | string) => {
+    if (!this.list[listName]) {
+      this.list[listName] = [];
+    }
+    this.list[listName].push(item);
+
+    // Находим контейнер списка и добавляем элемент
+    const listContainer = this._element?.querySelector(`[data-id="__l_${listName}"]`);
+    if (listContainer) {
+      const listCont = this._createDocumentElement('template') as HTMLTemplateElement;
+      if (item instanceof Block) {
+        listCont.content.append(item.getContent());
+      } else {
+        listCont.content.append(`${item}`);
+      }
+      listContainer.appendChild(listCont.content);
+    }
+    this.forceUpdate();
+  };
+
   get element() {
     return this._element ?? '';
   }
@@ -120,13 +140,11 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   private _render() {
     const block = this.render();
 
-    const listId = uuidv4();
-
     const template = Handlebars.compile(block);
     const propsAndChildren = {
       ...(this.attributes as Record<string, unknown>),
       ...(this.state as Record<string, unknown>),
-      ...(this.lists as Record<string, (Block | string)[]>),
+      ...(this.list as Record<string, (Block | string)[]>),
       ...this.children,
     };
 
@@ -136,8 +154,8 @@ export abstract class Block<T extends BlockProps = BlockProps> {
       }
     });
 
-    Object.entries(this.lists).forEach(([key]) => {
-      propsAndChildren[key] = `<div data-id="__l_${listId}"></div>`;
+    Object.entries(this.list).forEach(([key]) => {
+      propsAndChildren[key] = `<div data-id="__l_${key}"></div>`;
     });
 
     const html = template(propsAndChildren);
@@ -158,16 +176,16 @@ export abstract class Block<T extends BlockProps = BlockProps> {
       }
     });
 
-    Object.entries(this.lists).forEach(([, child]) => {
+    Object.entries(this.list).forEach(([key, items]) => {
       const listCont = this._createDocumentElement('template') as HTMLTemplateElement;
-      child.forEach((item) => {
+      items.forEach((item) => {
         if (item instanceof Block) {
           listCont.content.append(item.getContent());
         } else {
           listCont.content.append(`${item}`);
         }
       });
-      const stub = fragment.content.querySelector(`[data-id="__l_${listId}"]`);
+      const stub = newElement?.querySelector(`[data-id="__l_${key}"]`);
       if (stub) {
         stub.replaceWith(listCont.content);
       }
@@ -232,26 +250,40 @@ export abstract class Block<T extends BlockProps = BlockProps> {
       this._element?.removeAttribute(key);
     });
   }
-  show() {
-    if (!this._element) {
-      return;
-    }
-    this._element.style.display = 'block';
-  }
-
-  hide() {
-    if (!this._element) {
-      return;
-    }
-    this._element.style.display = 'none';
-  }
 
   public forceUpdate() {
     this.eventBus().emit(EmitEvents.FLOW_RENDER);
   }
 
   public componentWillUnmount() {
-    // Хук жизненного цикла перед удалением компонента
+    // Удаляем все обработчики событий
+    // if (this.events) {
+    //   Object.entries(this.events).forEach(([event, callback]) => {
+    //     this._element?.removeEventListener(event, callback as EventListener);
+    //   });
+    // }
+
+    // // Вызываем componentWillUnmount у всех дочерних компонентов
+    // Object.values(this.children).forEach((child) => {
+    //   if (child instanceof Block) {
+    //     child.componentWillUnmount();
+    //   }
+    // });
+    // if (this._element) {
+    //   this._element.remove();
+    // }
+
+    // // Очищаем eventBus
+    // this.eventBus().clear();
+
+    // // Очищаем ссылки
+    // this._element = null;
+    // this.children = {};
+    // this.events = {};
+    // this.attributes = {} as NonNullable<T['attributes']>;
+    // this.state = {} as NonNullable<T['state']>;
+    // this.list = {};
+    // this.eventBus().emit(EmitEvents.FLOW_CWU);
   }
 
   protected getFormData<T>(e: Event): T {

@@ -5,7 +5,7 @@ function isEqual(lhs: string, rhs: string) {
   return lhs === rhs;
 }
 
-function render<T extends BlockProps>(rootElement: HTMLElement, block: Block<T>) {
+function routerRender<T extends BlockProps>(rootElement: HTMLElement, block: Block<T>) {
   if (!rootElement) {
     return null;
   }
@@ -15,8 +15,8 @@ function render<T extends BlockProps>(rootElement: HTMLElement, block: Block<T>)
     return null;
   }
 
-  rootElement.appendChild(content);
-  return null;
+  rootElement.replaceChildren(content);
+  return rootElement;
 }
 
 export class Route<T extends BlockProps = BlockProps> {
@@ -41,13 +41,13 @@ export class Route<T extends BlockProps = BlockProps> {
 
   navigate(pathname: string) {
     if (this.match(pathname)) {
-      this.render();
+      this._pathname = pathname;
     }
   }
 
   leave() {
     if (this._block) {
-      this._block.hide();
+      this._block.componentWillUnmount();
     }
   }
 
@@ -58,9 +58,10 @@ export class Route<T extends BlockProps = BlockProps> {
   render() {
     if (!this._block) {
       this._block = new this._blockClass(this._componentProps);
-      render(this._props.rootQuery, this._block);
+      routerRender(this._props.rootQuery, this._block);
       return;
     }
-    this._block.show();
+
+    routerRender(this._props.rootQuery, this._block);
   }
 }

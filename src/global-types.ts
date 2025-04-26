@@ -5,6 +5,7 @@ export const enum EmitEvents {
   FLOW_CDM = 'flow:component-did-mount',
   FLOW_RENDER = 'flow:render',
   FLOW_CDU = 'flow:component-did-update',
+  FLOW_CWU = 'flow:component-will-unmount',
   STORE_UPDATE = 'store:update',
   MODAL_EVENTS = 'modal:events',
 }
@@ -14,12 +15,12 @@ export type Events = Partial<{
 }>;
 export type Children = Record<string, Block>;
 export type Attributes = Record<string, unknown>;
-export type Lists = Record<string, (Block | string)[]>;
+export type List = Record<string, (Block | string)[]>;
 
 export interface BlockProps {
   children?: Children;
   events?: Events;
   attributes?: Attributes;
   state?: Record<string, unknown>;
-  lists?: Lists;
+  list?: List;
 }

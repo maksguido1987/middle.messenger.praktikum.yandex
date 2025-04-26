@@ -19,17 +19,10 @@ export class App {
 
     this.rootElement = root;
     this.router = new Router(this.rootElement);
-
-    // Инициализация роутера
-    window.addEventListener('popstate', () => {
-      this.render();
-    });
   }
 
-  /**
-   * Рендерит компоненты в зависимости от текущего маршрута
-   */
   private render() {
+
     this.router
       .use('/', LoginPage, {} as BlockProps)
       .use('/messenger', Chat, {} as BlockProps)
@@ -52,9 +45,6 @@ export class App {
       .start();
   }
 
-  /**
-   * Инициализирует приложение
-   */
   public init() {
     this.render();
   }

@@ -1,4 +1,4 @@
-import {ChatService, CreateChatData, ChatUserData} from '../services/chat';
+import {ChatService, CreateChatData, ChatUserData, ChatInfo} from '../services/chat';
 import {store} from '../store/store';
 
 export class ChatController {
@@ -8,13 +8,15 @@ export class ChatController {
     this.chatService = new ChatService();
   }
 
-  async getChats(): Promise<void> {
+  async getChats(): Promise<ChatInfo[]> {
     try {
-      await this.chatService.getChats().then((chats) => {
+      return await this.chatService.getChats().then((chats) => {
         store.setState('chats', chats);
+        return chats;
       });
     } catch (error) {
       console.error(error);
+      return [];
     }
   }
 

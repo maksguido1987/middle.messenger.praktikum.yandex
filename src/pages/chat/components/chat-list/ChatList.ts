@@ -1,15 +1,17 @@
 import {Block} from '../../../../core/Block';
 import {ChatItem} from '../chat-item/ChatItem';
-import {mockChats} from './mockData';
 import {Button} from '../../../../components/button/Button';
 import {CreateChatModal} from '../../../../components/modal/CreateChatModal';
 import {store} from '../../../../store/store';
-
+import {ChatController} from '../../../../controllers/chatController';
+import {EmitEvents} from '../../../../global-types';
 export class ChatList extends Block {
+  private chatController: ChatController;
+
   constructor() {
     super({
-      lists: {
-        items: mockChats.map((chat) => new ChatItem({state: {...chat}})),
+      list: {
+        Chats: [],
       },
       children: {
         CreateButton: new Button({
@@ -25,6 +27,18 @@ export class ChatList extends Block {
         CreateModal: new CreateChatModal(),
       },
     });
+
+    this.chatController = new ChatController();
+    store.on(EmitEvents.FLOW_RENDER, this.onGetChats.bind(this));
+    // this.onGetChats();
+  }
+
+  onGetChats() {
+    this.chatController.getChats().then((chats) => {
+      chats.forEach((chat) => {
+        this.addToList('Chats', new ChatItem({state: {...chat}}));
+      });
+    });
   }
 
   public render() {
@@ -32,7 +46,7 @@ export class ChatList extends Block {
       <div class="chat-list-container">
         {{{CreateButton}}}
         <ul class="chat-list">
-          {{{items}}}
+          {{{Chats}}}
         </ul>
         {{{CreateModal}}}
       </div>
