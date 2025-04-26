@@ -52,7 +52,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   }
 
   private _componentDidMount() {
-    this.componentDidMount(this.attributes as T);
+    // this.componentDidMount(this.attributes as T);
     Object.values(this.children).forEach((child) => {
       if (child instanceof Block) {
         child.dispatchComponentDidMount();
@@ -60,9 +60,9 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     });
   }
 
-  componentDidMount(oldProps: T): boolean {
-    return true;
-  }
+  // componentDidMount(oldProps: T): boolean {
+  //   return true;
+  // }
 
   dispatchComponentDidMount() {
     this.eventBus().emit(EmitEvents.FLOW_CDM);

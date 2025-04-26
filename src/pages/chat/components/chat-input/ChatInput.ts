@@ -31,6 +31,7 @@ export class ChatInput extends Block {
   private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
     const formData = this.getFormData(e);
+    console.log('formData', formData);
   }
 
   render(): string {
