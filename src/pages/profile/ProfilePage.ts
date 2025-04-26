@@ -16,6 +16,7 @@ export class ProfilePage extends Block {
     super({
       state: {
         profileName: 'Псевдоним',
+        isPasswordChange: false,
       },
       children: {
         Avatar: new LoadAvatar({
@@ -26,16 +27,22 @@ export class ProfilePage extends Block {
         }),
         ProfileForm: new ProfileForm(),
         PasswordForm: new PasswordForm(),
-        EditLink: new Link({
-          attributes: {
-            text: 'Изменить данные',
-            href: '/settings',
-          },
-        }),
         PasswordLink: new Link({
           attributes: {
             text: 'Изменить пароль',
-            href: '/settings?is_password_change=true',
+            href: '#',
+          },
+          onClick: () => {
+            this.setState({isPasswordChange: true});
+          },
+        }),
+        BackLink: new Link({
+          attributes: {
+            text: 'Назад',
+            href: '#',
+          },
+          onClick: () => {
+            this.setState({isPasswordChange: false});
           },
         }),
         LogoutLink: new Link({
@@ -54,11 +61,7 @@ export class ProfilePage extends Block {
     this.authController.getUser();
     this.userData = store.state.user as UserData;
 
-    // Подписываемся на изменения store
     store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
-
-    // Добавляем обработчики изменений URL
-    // window.addEventListener('popstate', this.handleUrlChange.bind(this));
   }
 
   private updateUserData() {
@@ -68,12 +71,6 @@ export class ProfilePage extends Block {
     }
   }
 
-  // private handleUrlChange() {
-  //   const params = new URLSearchParams(window.location.search);
-  //   this._isPasswordChange = params.get('is_password_change') === 'true';
-  //   this.forceUpdate();
-  // }
-
   public render(): string {
     return `
       <main class="profile-page">
@@ -82,19 +79,14 @@ export class ProfilePage extends Block {
             {{{ Avatar }}}
             <div class="profile-name">{{profileName}}</div>
           </div>
-          ${this._isPasswordChange ? '{{{ PasswordForm }}}' : '{{{ ProfileForm }}}'}
+          ${this.state.isPasswordChange ? '{{{ PasswordForm }}}' : '{{{ ProfileForm }}}'}
           <div class="profile-links">
-            <div class="profile-links__item">{{{ EditLink }}}</div>
-            <div class="profile-links__item">{{{ PasswordLink }}}</div>
+            ${this.state.isPasswordChange ? '{{{ BackLink }}}' : ''}
+            ${!this.state.isPasswordChange ? '{{{ PasswordLink }}}' : ''}
             <div class="profile-links__item">{{{ LogoutLink }}}</div>
           </div>
         </div>
       </main>
     `;
   }
-
-  // public destroy() {
-  //   window.removeEventListener('popstate', this.handleUrlChange.bind(this));
-  //   super.destroy();
-  // }
 }

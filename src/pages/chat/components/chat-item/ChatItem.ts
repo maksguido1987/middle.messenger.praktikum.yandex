@@ -29,8 +29,8 @@ export class ChatItem extends Block {
   private deleteChat() {
     this.chatService.deleteChat(this.chatId).then(() => {
       store.setState(
-        'chats',
-        store.state.chats.filter((chat) => chat.id !== this.chatId),
+        'chats.filtered',
+        store.state.chats.filtered.filter((chat) => chat.id !== this.chatId),
       );
     });
   }

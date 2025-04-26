@@ -4,6 +4,7 @@ import './style.scss';
 
 interface AvatarProps extends BlockProps {
   attributes: {
+    avatar?: string;
     src?: string;
     size?: 'small' | 'medium' | 'large';
   }

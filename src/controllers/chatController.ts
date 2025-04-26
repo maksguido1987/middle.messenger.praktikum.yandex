@@ -11,7 +11,8 @@ export class ChatController {
   async getChats(): Promise<ChatInfo[]> {
     try {
       return await this.chatService.getChats().then((chats) => {
-        store.setState('chats', chats);
+        store.setState('chats.original', chats);
+        store.setState('chats.filtered', chats);
         return chats;
       });
     } catch (error) {
