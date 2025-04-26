@@ -7,11 +7,11 @@ interface AvatarProps extends BlockProps {
     avatar?: string;
     src?: string;
     size?: 'small' | 'medium' | 'large';
-  }
+  };
 }
 
 export class Avatar extends Block {
-  constructor(props: AvatarProps = {attributes: {}}) {
+  constructor(props: AvatarProps) {
     super({
       ...props,
       attributes: {

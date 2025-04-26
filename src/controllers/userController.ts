@@ -1,6 +1,6 @@
 import {Router} from '../core/Router';
 import {UserPasswordData, UserProfileData, UserService} from '../services/user';
-import { store } from '../store/store';
+import {store} from '../store/store';
 
 export class UserController {
   private userService: UserService;
@@ -14,7 +14,8 @@ export class UserController {
   async updateProfile(data: UserProfileData): Promise<void> {
     try {
       await this.userService.updateProfile(data).then(() => {
-        this.router.go('/settings');
+        store.setState('user', data);
+        this.router.go('/messenger');
       });
     } catch (error) {
       console.error(error);
@@ -23,9 +24,8 @@ export class UserController {
 
   async updateAvatar(data: FormData): Promise<void> {
     try {
-      await this.userService.updateAvatar(data).then(() => {
-        store.setState('user.avatar', data.get('avatar'));
-        this.router.go('/settings');
+      await this.userService.updateAvatar(data).then((data) => {
+        store.setState('user', data);
       });
     } catch (error) {
       console.error(error);

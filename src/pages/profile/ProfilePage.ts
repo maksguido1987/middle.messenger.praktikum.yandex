@@ -20,8 +20,7 @@ export class ProfilePage extends Block {
       },
       children: {
         Avatar: new LoadAvatar({
-          attributes: {
-            name: 'avatar',
+          state: {
             avatar: 'https://placehold.co/400',
           },
         }),
@@ -30,7 +29,7 @@ export class ProfilePage extends Block {
         PasswordLink: new Link({
           attributes: {
             text: 'Изменить пароль',
-            href: '#',
+            href: '/settings?edit=password',
           },
           onClick: () => {
             this.setState({isPasswordChange: true});
@@ -39,7 +38,7 @@ export class ProfilePage extends Block {
         BackLink: new Link({
           attributes: {
             text: 'Назад',
-            href: '#',
+            href: '/settings',
           },
           onClick: () => {
             this.setState({isPasswordChange: false});
@@ -68,6 +67,9 @@ export class ProfilePage extends Block {
     this.userData = store.state.user as UserData;
     if (this.userData) {
       this.setState({profileName: this.userData.display_name || this.userData.login});
+      this.children.Avatar.setProps({
+        avatar: this.userData.avatar,
+      });
     }
   }
 

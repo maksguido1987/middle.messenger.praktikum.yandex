@@ -4,15 +4,15 @@ import {UserController} from '../../../../controllers/userController';
 import './style.scss';
 
 interface LoadAvatarProps extends BlockProps {
-  attributes: {
+  state: {
     avatar?: string;
-  } & BlockProps['attributes'];
+  } & BlockProps['state'];
 }
 
 export class LoadAvatar extends Block {
   private userController: UserController;
 
-  constructor(props: LoadAvatarProps = {attributes: {}}) {
+  constructor(props: LoadAvatarProps) {
     super({
       ...props,
       events: {
@@ -22,7 +22,7 @@ export class LoadAvatar extends Block {
     this.userController = new UserController();
   }
 
-  private _handleFileUpload(event: Event) {
+  private async _handleFileUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
@@ -30,22 +30,11 @@ export class LoadAvatar extends Block {
       const formData = new FormData();
       formData.append('avatar', file);
 
-      this.userController
-        .updateAvatar(formData)
-        .then(() => {
-          // Создаем превью изображения для отображения
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            const result = e.target?.result as string;
-            this.setProps({
-              avatar: result,
-            });
-          };
-          reader.readAsDataURL(file);
-        })
-        .catch((error) => {
-          console.error('Ошибка при загрузке аватара:', error);
-        });
+      try {
+        await this.userController.updateAvatar(formData);
+      } catch (error) {
+        console.error('Ошибка при загрузке аватара:', error);
+      }
     }
   }
 
@@ -55,7 +44,7 @@ export class LoadAvatar extends Block {
     return `
       <div class="profile-avatar">
         <div class="avatar avatar--large profile-avatar__image"
-             style="${avatar ? `background-image: url('${avatar}');` : ''}">
+          style="${avatar ? `background-image: url('https://ya-praktikum.tech/api/v2/resources/${avatar}');` : ''}">
         </div>
         <div class="profile-avatar__overlay">
           <span class="profile-avatar__text">Поменять аватар</span>

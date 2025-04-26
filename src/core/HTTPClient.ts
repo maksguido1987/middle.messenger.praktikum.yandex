@@ -66,8 +66,12 @@ export class HTTPClient {
       if (method === HTTPMethod.GET) {
         xhr.send();
       } else {
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(data ? JSON.stringify(data) : null);
+        if (!(data instanceof FormData)) {
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(data ? JSON.stringify(data) : null);
+        } else {
+          xhr.send(data);
+        }
       }
     });
   }
