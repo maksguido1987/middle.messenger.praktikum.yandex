@@ -99,7 +99,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     Object.entries(childrenProps).forEach(([childName, props]) => {
       const child = this.children[childName];
       if (child instanceof Block) {
-        child.setProps(props);
+        child.setState(props);
       }
     });
   };

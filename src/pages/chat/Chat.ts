@@ -13,9 +13,9 @@ export class Chat extends Block {
       children: {
         ChatList: new ChatList(),
         ChatHeader: new ChatHeader({
-          attributes: {
-            avatar: 'https://via.placeholder.com/150',
-            name: 'И И',
+          state: {
+            src: 'https://via.placeholder.com/150',
+            name: 'Иванов Иван Иванович',
           },
         }),
         ChatInput: new ChatInput({
@@ -46,11 +46,12 @@ export class Chat extends Block {
 
   private updateUserData() {
     const userData = store.state.user as UserData;
+
     if (userData) {
       this.setChildrenProps({
         ChatHeader: {
           name: userData.display_name || userData.login,
-          avatar: userData.avatar || 'https://via.placeholder.com/150',
+          src: userData.avatar || 'https://via.placeholder.com/150',
         },
       });
     }

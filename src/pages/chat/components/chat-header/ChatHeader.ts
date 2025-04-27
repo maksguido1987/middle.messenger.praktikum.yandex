@@ -3,17 +3,17 @@ import {Link} from '../../../../components/link/Link';
 import {Avatar} from '../../../../components/avatar/Avatar';
 import {AuthController} from '../../../../controllers/authController';
 import './style.scss';
+import {store} from '../../../../store/store';
+import {StoreEvents} from '../../../../store/store';
+import {UserData} from '../../../../services/auth';
 
 interface ChatHeaderProps {
-  attributes: {
-    avatar: string;
+  state: {
+    src: string;
     name: string;
   };
 }
 
-/**
- * Класс компонента заголовка чата
- */
 export class ChatHeader extends Block {
   private authController: AuthController;
 
@@ -22,8 +22,8 @@ export class ChatHeader extends Block {
       ...props,
       children: {
         Avatar: new Avatar({
-          attributes: {
-            avatar: props.attributes.avatar,
+          state: {
+            src: props.state.src,
           },
         }),
         LoginLink: new Link({
@@ -75,14 +75,24 @@ export class ChatHeader extends Block {
     });
 
     this.authController = new AuthController();
+
+    store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
   }
 
-  render(): string {
+  private updateUserData() {
+    const userData = store.state.user as UserData;
+
+    this.children.Avatar.setState({
+      src: userData.avatar,
+    });
+  }
+
+  render() {
     return `
       <header class="chat-header">
         <div class="chat-header__profile">
           {{{ Avatar }}}
-          <div class="chat-header__name">${this.attributes.name}</div>
+          <div class="chat-header__name">${this.state.name}</div>
         </div>
         <div>
           {{{ LoginLink }}}
