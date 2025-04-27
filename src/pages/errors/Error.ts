@@ -17,7 +17,7 @@ export class ErrorPage extends Block<ErrorPageProps> {
       children: {
         Link: new Link({
           attributes: {
-            href: '/',
+            href: '/messenger',
             text: 'Вернуться на главную',
           },
         }),
@@ -30,7 +30,7 @@ export class ErrorPage extends Block<ErrorPageProps> {
     });
   }
 
-  public render(): string {
+  public render() {
     return `
       <main class="error-page">
         <div class="error-container">

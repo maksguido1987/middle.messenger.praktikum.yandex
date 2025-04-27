@@ -6,6 +6,7 @@ import {debounce} from '../utils/debounce';
 
 interface ModalsState {
   createChat: boolean;
+  addUser: boolean;
 }
 
 interface StoreState {
@@ -14,6 +15,7 @@ interface StoreState {
   chats: {
     original: ChatInfo[];
     filtered: ChatInfo[];
+    currentChat: ChatInfo | null;
   };
   searchChat: string;
 }
@@ -31,11 +33,13 @@ class Store extends EventBus {
   private _state: StoreState = {
     modals: {
       createChat: false,
+      addUser: false,
     },
     user: null,
     chats: {
       original: [],
       filtered: [],
+      currentChat: null,
     },
     searchChat: '',
   };

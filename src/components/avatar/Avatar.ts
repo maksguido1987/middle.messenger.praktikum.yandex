@@ -22,7 +22,6 @@ export class Avatar extends Block {
 
   render() {
     const { src, size } = this.state;
-    console.log(src);
 
     return `
       <div class="avatar avatar--${size}" style="${src ? `background-image: url('https://ya-praktikum.tech/api/v2/resources/${src}');` : ''}">

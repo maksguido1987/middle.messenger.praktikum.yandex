@@ -19,9 +19,6 @@ export class ChatSearch extends Block {
             class: 'chat-search__input reset-input',
           },
           events: {
-            blur: (e: FocusEvent) => {
-              console.log('blur', e);
-            },
             input: (e: Event) => {
               this.searchChat((e.target as HTMLInputElement).value);
             },

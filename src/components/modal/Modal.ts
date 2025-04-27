@@ -3,10 +3,16 @@ import {Button} from '../button/Button';
 import {store, StoreEvents} from '../../store/store';
 import './style.scss';
 import {CreateChatForm} from '../forms/create-chat-form/CreateChatForm';
+import {BlockProps} from '../../global-types';
 
-export class CreateChatModal extends Block {
-  constructor() {
+export class Modal extends Block {
+  constructor(props: BlockProps) {
     super({
+      ...props,
+      state: {
+        title: props?.state?.title || '',
+        modalKeyStore: props?.state?.modalKeyStore || '',
+      },
       children: {
         CloseButton: new Button({
           state: {
@@ -19,7 +25,7 @@ export class CreateChatModal extends Block {
             click: () => store.setState('modals.createChat', false),
           },
         }),
-        CreateChatForm: new CreateChatForm(),
+        Form: props?.children?.Form || new CreateChatForm(),
       },
     });
 
@@ -30,7 +36,7 @@ export class CreateChatModal extends Block {
     const element = this.getContent();
     const currentClass = element instanceof HTMLElement ? element.getAttribute('class') : null;
 
-    if (store.state.modals.createChat) {
+    if (store.state.modals[this.state.modalKeyStore as keyof typeof store.state.modals]) {
       this.addAttributes({
         class: `${currentClass} active`,
       });
@@ -46,10 +52,10 @@ export class CreateChatModal extends Block {
       <div class="modal-overlay">
         <div class="modal">
           <div class="modal-header">
-            <h3>Создать чат</h3>
+            <h3>${this.state.title}</h3>
             {{{CloseButton}}}
           </div>
-          {{{CreateChatForm}}}
+          {{{Form}}}
         </div>
       </div>
     `;

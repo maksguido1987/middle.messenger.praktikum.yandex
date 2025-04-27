@@ -1,10 +1,10 @@
 import {Block} from '../../../../core/Block';
 import {ChatItem} from '../chat-item/ChatItem';
 import {Button} from '../../../../components/button/Button';
-import {CreateChatModal} from '../../../../components/modal/CreateChatModal';
 import {store, StoreEvents} from '../../../../store/store';
 import {ChatController} from '../../../../controllers/chatController';
-
+import {Modal} from '../../../../components/modal/Modal';
+import {CreateChatForm} from '../../../../components/forms/create-chat-form/CreateChatForm';
 export class ChatList extends Block {
   constructor() {
     super({
@@ -22,7 +22,15 @@ export class ChatList extends Block {
             },
           },
         }),
-        CreateModal: new CreateChatModal(),
+        CreateModal: new Modal({
+          state: {
+            title: 'Создать чат',
+            modalKeyStore: 'createChat',
+          },
+          children: {
+            CreateChatForm: new CreateChatForm(),
+          },
+        }),
       },
     });
     store.on(StoreEvents.CHATS_UPDATE, this.onGetChats.bind(this));

@@ -13,6 +13,7 @@ export class ChatController {
       return await this.chatService.getChats().then((chats) => {
         store.setState('chats.original', chats);
         store.setState('chats.filtered', chats);
+        store.setState('chats.currentChat', chats[0]);
         return chats;
       });
     } catch (error) {

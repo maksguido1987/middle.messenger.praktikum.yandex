@@ -2,10 +2,13 @@ import {Block} from '../../../../core/Block';
 import {Link} from '../../../../components/link/Link';
 import {Avatar} from '../../../../components/avatar/Avatar';
 import {AuthController} from '../../../../controllers/authController';
-import './style.scss';
 import {store} from '../../../../store/store';
 import {StoreEvents} from '../../../../store/store';
 import {UserData} from '../../../../services/auth';
+import './style.scss';
+import {UserActions} from '../user-actions/UserActions';
+import {Modal} from '../../../../components/modal/Modal';
+import {AddUserForm} from '../../../../components/forms/add-user-form/AddUserForm';
 
 interface ChatHeaderProps {
   state: {
@@ -71,6 +74,16 @@ export class ChatHeader extends Block {
             class: 'chat-header__link',
           },
         }),
+        UserActions: new UserActions(),
+        AddUserModal: new Modal({
+          state: {
+            title: 'Добавить пользователя',
+            modalKeyStore: 'addUser',
+          },
+          children: {
+            Form: new AddUserForm(),
+          },
+        }),
       },
     });
 
@@ -103,14 +116,9 @@ export class ChatHeader extends Block {
           {{{ ServerErrorLink }}}
         </div>
         <div class="chat-header__actions">
-          <button class="chat-header__menu-button">
-            <div class="dots-menu">
-              <span class="dots-menu__dot"></span>
-              <span class="dots-menu__dot"></span>
-              <span class="dots-menu__dot"></span>
-            </div>
-          </button>
+          {{{ UserActions }}}
         </div>
+        {{{ AddUserModal }}}
       </header>
     `;
   }
