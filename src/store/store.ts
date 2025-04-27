@@ -7,6 +7,7 @@ import {debounce} from '../utils/debounce';
 interface ModalsState {
   createChat: boolean;
   addUser: boolean;
+  deleteUser: boolean;
 }
 
 interface StoreState {
@@ -34,6 +35,7 @@ class Store extends EventBus {
     modals: {
       createChat: false,
       addUser: false,
+      deleteUser: false,
     },
     user: null,
     chats: {

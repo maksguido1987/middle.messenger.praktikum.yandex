@@ -22,7 +22,7 @@ export class Modal extends Block {
             class: 'modal-close',
           },
           events: {
-            click: () => store.setState('modals.createChat', false),
+            click: () => store.setState(`modals.${this.state.modalKeyStore}`, false),
           },
         }),
         Form: props?.children?.Form || new CreateChatForm(),

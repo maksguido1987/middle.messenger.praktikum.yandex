@@ -27,9 +27,8 @@ export class UserActions extends Block {
           },
           events: {
             click: () => {
-              console.log('add user');
-              store.setState('modals.addUser', true);
               this.onOpenClose();
+              store.setState('modals.addUser', true);
             },
           },
         }),
@@ -42,8 +41,8 @@ export class UserActions extends Block {
           },
           events: {
             click: () => {
-              console.log('remove user');
               this.onOpenClose();
+              store.setState('modals.deleteUser', true);
             },
           },
         }),
@@ -54,6 +53,7 @@ export class UserActions extends Block {
   }
 
   onOpenClose() {
+    console.log(store.state.modals);
     this.setState({
       isOpen: !this.state.isOpen,
     });

@@ -9,6 +9,7 @@ import './style.scss';
 import {UserActions} from '../user-actions/UserActions';
 import {Modal} from '../../../../components/modal/Modal';
 import {AddUserForm} from '../../../../components/forms/add-user-form/AddUserForm';
+import {DeleteUserForm} from '../../../../components/forms/delete-user-form/DeleteUserForm';
 
 interface ChatHeaderProps {
   state: {
@@ -84,6 +85,15 @@ export class ChatHeader extends Block {
             Form: new AddUserForm(),
           },
         }),
+        DeleteUserModal: new Modal({
+          state: {
+            title: 'Удалить пользователя',
+            modalKeyStore: 'deleteUser',
+          },
+          children: {
+            Form: new DeleteUserForm(),
+          },
+        }),
       },
     });
 
@@ -119,6 +129,7 @@ export class ChatHeader extends Block {
           {{{ UserActions }}}
         </div>
         {{{ AddUserModal }}}
+        {{{ DeleteUserModal }}}
       </header>
     `;
   }
