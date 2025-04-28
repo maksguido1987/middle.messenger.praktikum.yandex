@@ -53,7 +53,6 @@ export class UserActions extends Block {
   }
 
   onOpenClose() {
-    console.log(store.state.modals);
     this.setState({
       isOpen: !this.state.isOpen,
     });

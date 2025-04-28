@@ -67,7 +67,7 @@ export class ProfilePage extends Block {
     this.userData = store.state.user as UserData;
     if (this.userData) {
       this.setState({profileName: this.userData.display_name || this.userData.login});
-      this.children.Avatar.setProps({
+      this.children.Avatar.setState({
         avatar: this.userData.avatar,
       });
     }

@@ -1,5 +1,5 @@
 import {Router} from './core/Router';
-import {Chat} from './pages/chat/Chat';
+import {ChatPage} from './pages/chat/ChatPage';
 import {ErrorPage, ErrorPageProps} from './pages/errors/Error';
 import {LoginPage} from './pages/login/LoginPage';
 import {ProfilePage} from './pages/profile/ProfilePage';
@@ -25,7 +25,7 @@ export class App {
 
     this.router
       .use('/', LoginPage, {} as BlockProps)
-      .use('/messenger', Chat, {} as BlockProps)
+      .use('/messenger', ChatPage, {} as BlockProps)
       .use('/sign-up', SignUpPage, {} as BlockProps)
       .use('/settings', ProfilePage, {} as BlockProps)
       .use<ErrorPageProps>('/error', ErrorPage, {

@@ -84,10 +84,11 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     return !isEqual(oldProps, newProps);
   }
 
-  setProps = (nextAttributes: NonNullable<T['attributes']>): void => {
+  setAttributes = (nextAttributes: NonNullable<T['attributes']>): void => {
     if (!nextAttributes) {
       return;
     }
+
     Object.assign(this.attributes, nextAttributes);
   };
 
@@ -238,17 +239,9 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     if (!attributes) {
       return;
     }
+
     Object.entries(attributes).forEach(([key, value]) => {
       this._element?.setAttribute(key, String(value));
-    });
-  }
-
-  removeAttributes(attributes?: Attributes) {
-    if (!attributes) {
-      return;
-    }
-    Object.entries(attributes).forEach(([key]) => {
-      this._element?.removeAttribute(key);
     });
   }
 

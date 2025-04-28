@@ -39,11 +39,17 @@ export class ChatList extends Block {
 
   onGetChats() {
     this.list.Chats = [];
+    const currentChat = store.state.chats.currentChat;
     store.state.chats.filtered.forEach((chat) => {
       this.addToListItem(
         'Chats',
         new ChatItem({
-          state: chat,
+          state: {
+            ...chat,
+          },
+          attributes: {
+            class: currentChat?.id === chat.id ? 'chat-item chat-item--selected' : 'chat-item',
+          },
         }),
       );
     });

@@ -4,7 +4,6 @@ import {Avatar} from '../../../../components/avatar/Avatar';
 import {AuthController} from '../../../../controllers/authController';
 import {store} from '../../../../store/store';
 import {StoreEvents} from '../../../../store/store';
-import {UserData} from '../../../../services/auth';
 import './style.scss';
 import {UserActions} from '../user-actions/UserActions';
 import {Modal} from '../../../../components/modal/Modal';
@@ -103,10 +102,10 @@ export class ChatHeader extends Block {
   }
 
   private updateUserData() {
-    const userData = store.state.user as UserData;
+    const currentUser = store.state.chats.currentChat;
 
     this.children.Avatar.setState({
-      src: userData.avatar,
+      src: currentUser?.avatar,
     });
   }
 

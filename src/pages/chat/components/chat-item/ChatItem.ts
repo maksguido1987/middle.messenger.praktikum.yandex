@@ -5,7 +5,9 @@ import {store} from '../../../../store/store';
 import './style.scss';
 
 interface ChatItemProps extends Omit<BlockProps, 'state'> {
-  state: ChatInfo;
+  state: ChatInfo & {
+    isSelected?: boolean;
+  };
 }
 
 export class ChatItem extends Block {
@@ -19,11 +21,15 @@ export class ChatItem extends Block {
         ...props.state,
       },
       events: {
-        click: () => this.deleteChat(),
+        click: () => {
+          this.onSetCurrentChat();
+        },
       },
     });
     this.chatService = new ChatService();
     this.chatId = props.state.id;
+
+    // store.on(StoreEvents.CHATS_UPDATE, this.updateChatActiveClass.bind(this));
   }
 
   private deleteChat() {
@@ -35,9 +41,17 @@ export class ChatItem extends Block {
     });
   }
 
+  private onSetCurrentChat() {
+    const currentChat = store.state.chats.original.find((chat) => chat.id === this.chatId);
+
+    this.chatService.getChatToken(this.chatId);
+
+    store.setState('chats.currentChat', currentChat || null);
+  }
+
   render() {
     return `
-      <li class="chat-item">
+      <li class="chat-item {{class}}">
         <div class="chat-item__avatar">
           <div class="avatar avatar--medium">{{avatar}}</div>
         </div>
