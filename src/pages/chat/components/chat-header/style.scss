@@ -22,22 +22,4 @@
   &__menu-button {
     padding: 5px;
   }
-
-  &__link {
-    color: $text-primary;
-    text-decoration: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-    margin: 0 5px;
-    font-size: 14px;
-
-    &:hover {
-      background-color: $bg-secondary;
-    }
-
-    &:active {
-      transform: scale(0.98);
-    }
-  }
 }

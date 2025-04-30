@@ -1,7 +1,5 @@
 import {Block} from '../../../../core/Block';
-import {Link} from '../../../../components/link/Link';
 import {Avatar} from '../../../../components/avatar/Avatar';
-import {AuthController} from '../../../../controllers/authController';
 import {store} from '../../../../store/store';
 import {StoreEvents} from '../../../../store/store';
 import './style.scss';
@@ -18,7 +16,6 @@ interface ChatHeaderProps {
 }
 
 export class ChatHeader extends Block {
-  private authController: AuthController;
 
   constructor(props: ChatHeaderProps) {
     super({
@@ -27,51 +24,6 @@ export class ChatHeader extends Block {
         Avatar: new Avatar({
           state: {
             src: props.state.src,
-          },
-        }),
-        LoginLink: new Link({
-          attributes: {
-            text: 'Логин',
-            href: '/',
-            class: 'chat-header__link',
-          },
-        }),
-        SigninLink: new Link({
-          attributes: {
-            text: 'Регистрация',
-            href: '/sign-up',
-            class: 'chat-header__link',
-          },
-        }),
-        ProfileLink: new Link({
-          attributes: {
-            text: 'Профиль',
-            href: '/settings',
-            class: 'chat-header__link',
-          },
-        }),
-        LogoutLink: new Link({
-          attributes: {
-            text: 'Выйти',
-            href: '/',
-            class: 'chat-header__link',
-          },
-          onClick: () => {
-            this.authController.logout();
-          },
-        }),
-        NotFoundLink: new Link({
-          attributes: {
-            text: '404',
-            href: '/error',
-            class: 'chat-header__link',
-          },
-        }),
-        ServerErrorLink: new Link({
-          attributes: {
-            text: '500',
-            href: '/nothing',
-            class: 'chat-header__link',
           },
         }),
         UserActions: new UserActions(),
@@ -96,16 +48,23 @@ export class ChatHeader extends Block {
       },
     });
 
-    this.authController = new AuthController();
-
-    store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
+    store.on(StoreEvents.USER_UPDATE, this.updateAvatar.bind(this));
+    store.on(StoreEvents.CHATS_UPDATE, this.updateTitle.bind(this));
   }
 
-  private updateUserData() {
+  private updateAvatar() {
     const currentUser = store.state.chats.currentChat;
 
     this.children.Avatar.setState({
       src: currentUser?.avatar,
+    });
+  }
+
+  private updateTitle() {
+    const currentUser = store.state.chats.currentChat;
+
+    this.setState({
+      name: currentUser?.title,
     });
   }
 
@@ -115,14 +74,6 @@ export class ChatHeader extends Block {
         <div class="chat-header__profile">
           {{{ Avatar }}}
           <div class="chat-header__name">${this.state.name}</div>
-        </div>
-        <div>
-          {{{ LoginLink }}}
-          {{{ SigninLink }}}
-          {{{ ProfileLink }}}
-          {{{ LogoutLink }}}
-          {{{ NotFoundLink }}}
-          {{{ ServerErrorLink }}}
         </div>
         <div class="chat-header__actions">
           {{{ UserActions }}}
