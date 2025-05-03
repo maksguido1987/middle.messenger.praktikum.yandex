@@ -4,7 +4,7 @@ import {Button} from '../../../../components/button/Button';
 import {store, StoreEvents} from '../../../../store/store';
 import {ChatController} from '../../../../controllers/chatController';
 import {Modal} from '../../../../components/modal/Modal';
-import { CreateChatForm } from '../../../../components/forms/create-chat-form/CreateChatForm';
+import {CreateChatForm} from '../../../../components/forms/create-chat-form/CreateChatForm';
 
 export class ChatList extends Block {
   constructor() {
@@ -41,6 +41,8 @@ export class ChatList extends Block {
   onGetChats() {
     this.list.Chats = [];
     const currentChat = store.state.chats.currentChat;
+    console.log('currentChat', currentChat);
+    console.log('store.state.chats.filtered', store.state.chats.filtered);
     store.state.chats.filtered.forEach((chat) => {
       this.addToListItem(
         'Chats',

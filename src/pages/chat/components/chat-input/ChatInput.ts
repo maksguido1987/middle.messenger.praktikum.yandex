@@ -32,6 +32,7 @@ export class ChatInput extends Block {
     e.preventDefault();
     const formData = this.getFormData<{message: string}>(e);
     webSocketController.send({type: 'message', content: formData['message']});
+    this.setState({value: ''});
   }
 
   render() {

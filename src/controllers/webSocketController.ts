@@ -1,26 +1,37 @@
 import {EventBus} from '../core/EventBus';
+import {store} from '../store/store';
 
 type WebSocketMessage = {
   type: string;
   [key: string]: unknown;
 };
 
-type NewMessages = {
-  chat_id: number;
-  time: string;
-  type: 'message' | 'file';
-  user_id: string;
-  content: string;
-  file?: {
-    id: number;
-    user_id: number;
-    path: string;
-    filename: string;
-    content_type: string;
-    content_size: number;
-    upload_date: string;
-  };
-}[];
+// type NewMessages = {
+//   chat_id: number;
+//   id: number;
+//   time: string;
+//   type: 'message' | 'file';
+//   user_id: string;
+//   content: string;
+//   is_read: boolean;
+//   file?: {
+//     id: number;
+//     user_id: number;
+//     path: string;
+//     filename: string;
+//     content_type: string;
+//     content_size: number;
+//     upload_date: string;
+//   };
+// }[];
+
+// type Messages = {
+//   id: number;
+//   time: string;
+//   user_id: number;
+//   content: string;
+//   type: 'message';
+// };
 
 type ConnectionParams = {
   userId: string;
@@ -72,7 +83,7 @@ export class WebSocketController extends EventBus {
 
     this.socket.addEventListener('open', () => {
       this.startPing();
-      this.send({ type: 'get old', content: '0' });
+      this.send({type: 'get old', content: '0'});
       this.emit('connected');
     });
 
@@ -84,7 +95,35 @@ export class WebSocketController extends EventBus {
     this.socket.addEventListener('message', (event) => {
       try {
         const data = JSON.parse(event.data);
-        this.emit('message', data);
+
+        if (data.type === 'message') {
+          const currentChat = store.state.chats.currentChat;
+          store.setState('chats.currentChat', {
+            ...currentChat,
+            last_message: {
+              ...currentChat?.last_message,
+              content: data.content,
+            },
+          });
+          store.setState('chats.filtered', store.state.chats.filtered.map((chat) => {
+            if (chat.id === currentChat?.id) {
+              return {
+                ...chat,
+                last_message: {
+                  ...chat.last_message,
+                  content: data.content,
+                },
+              };
+            }
+            return chat;
+          }));
+
+          this.emit('message', data);
+        }
+
+        // if (data.type === 'get old') {
+        //   this.emit('old messages', data);
+        // }
       } catch (error) {
         console.error('Ошибка при обработке сообщения:', error);
       }

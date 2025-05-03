@@ -13,7 +13,7 @@ interface ChatItemProps extends Omit<BlockProps, 'state'> {
 
 export class ChatItem extends Block {
   private chatService: ChatService;
-  private chatId: number;
+  public chatId: number;
 
   constructor(props: ChatItemProps) {
     super({
