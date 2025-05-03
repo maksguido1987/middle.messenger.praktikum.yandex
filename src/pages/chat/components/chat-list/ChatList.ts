@@ -4,7 +4,8 @@ import {Button} from '../../../../components/button/Button';
 import {store, StoreEvents} from '../../../../store/store';
 import {ChatController} from '../../../../controllers/chatController';
 import {Modal} from '../../../../components/modal/Modal';
-import {CreateChatForm} from '../../../../components/forms/create-chat-form/CreateChatForm';
+import { CreateChatForm } from '../../../../components/forms/create-chat-form/CreateChatForm';
+
 export class ChatList extends Block {
   constructor() {
     super({

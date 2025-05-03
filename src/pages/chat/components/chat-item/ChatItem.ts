@@ -1,3 +1,4 @@
+import {webSocketController} from '../../../../controllers/webSocketController';
 import {Block} from '../../../../core/Block';
 import {BlockProps} from '../../../../global-types';
 import {ChatInfo, ChatService} from '../../../../services/chat';
@@ -28,8 +29,6 @@ export class ChatItem extends Block {
     });
     this.chatService = new ChatService();
     this.chatId = props.state.id;
-
-    // store.on(StoreEvents.CHATS_UPDATE, this.updateChatActiveClass.bind(this));
   }
 
   private deleteChat() {
@@ -43,10 +42,15 @@ export class ChatItem extends Block {
 
   private onSetCurrentChat() {
     const currentChat = store.state.chats.original.find((chat) => chat.id === this.chatId);
-
-    this.chatService.getChatToken(this.chatId);
-
     store.setState('chats.currentChat', currentChat || null);
+
+    this.chatService.getChatToken(this.chatId).then((token) => {
+      webSocketController.connect({
+        userId: String(store.state.user?.id),
+        chatId: String(this.chatId),
+        token: token.token,
+      });
+    });
   }
 
   render() {
@@ -57,7 +61,7 @@ export class ChatItem extends Block {
         </div>
         <div class="chat-item__info">
           <div class="chat-item__name">{{title}}</div>
-          <div class="chat-item__last-message">{{lastMessage}}</div>
+          <div class="chat-item__last-message">{{last_message.content}}</div>
         </div>
         <div class="chat-item__meta">
           <div class="chat-item__time">{{time}}</div>

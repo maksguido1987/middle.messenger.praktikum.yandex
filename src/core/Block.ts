@@ -250,6 +250,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   }
 
   public componentWillUnmount() {
+    console.log('componentWillUnmount');
     // Удаляем все обработчики событий
     // if (this.events) {
     //   Object.entries(this.events).forEach(([event, callback]) => {

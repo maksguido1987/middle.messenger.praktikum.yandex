@@ -1,4 +1,5 @@
 import {HTTPClient} from '../core/HTTPClient';
+import {UserData} from './auth';
 import {UserProfileData} from './user';
 
 export interface CreateChatData {
@@ -25,21 +26,9 @@ export interface DeleteChatResponse {
 }
 
 export interface ChatMessage {
-  id: number;
-  user_id: number;
-  chat_id: number;
+  user: UserData;
   time: string;
-  type: string;
   content: string;
-  file?: {
-    id: number;
-    user_id: number;
-    path: string;
-    filename: string;
-    content_type: string;
-    content_size: number;
-    upload_date: string;
-  };
 }
 
 export interface ChatInfo {
@@ -47,8 +36,8 @@ export interface ChatInfo {
   title: string;
   avatar: string;
   unread_count: number;
-  last_message: ChatMessage | null;
   created_by: number;
+  last_message: ChatMessage | null;
 }
 
 export class ChatService {
