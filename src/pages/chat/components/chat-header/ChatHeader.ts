@@ -1,90 +1,85 @@
 import {Block} from '../../../../core/Block';
-import {Link} from '../../../../components/link/Link';
-import './style.scss';
 import {Avatar} from '../../../../components/avatar/Avatar';
+import {store} from '../../../../store/store';
+import {StoreEvents} from '../../../../store/store';
+import './style.scss';
+import {UserActions} from '../user-actions/UserActions';
+import {Modal} from '../../../../components/modal/Modal';
+import {AddUserForm} from '../../../../components/forms/add-user-form/AddUserForm';
+import {DeleteUserForm} from '../../../../components/forms/delete-user-form/DeleteUserForm';
 
 interface ChatHeaderProps {
-  attributes: {
-    avatar: string;
+  state: {
+    src: string;
     name: string;
   };
 }
 
-/**
- * Класс компонента заголовка чата
- */
 export class ChatHeader extends Block {
+
   constructor(props: ChatHeaderProps) {
     super({
       ...props,
       children: {
         Avatar: new Avatar({
-          attributes: {
-            avatar: props.attributes.avatar,
+          state: {
+            src: props.state.src,
           },
         }),
-        LoginLink: new Link({
-          attributes: {
-            text: 'Логин',
-            href: '/login',
-            class: 'chat-header__link',
+        UserActions: new UserActions(),
+        AddUserModal: new Modal({
+          state: {
+            title: 'Добавить пользователя',
+            modalKeyStore: 'addUser',
+          },
+          children: {
+            Form: new AddUserForm(),
           },
         }),
-        SigninLink: new Link({
-          attributes: {
-            text: 'Регистрация',
-            href: '/signin',
-            class: 'chat-header__link',
+        DeleteUserModal: new Modal({
+          state: {
+            title: 'Удалить пользователя',
+            modalKeyStore: 'deleteUser',
           },
-        }),
-        ProfileLink: new Link({
-          attributes: {
-            text: 'Профиль',
-            href: '/profile',
-            class: 'chat-header__link',
-          },
-        }),
-        NotFoundLink: new Link({
-          attributes: {
-            text: '404',
-            href: '/404',
-            class: 'chat-header__link',
-          },
-        }),
-        ServerErrorLink: new Link({
-          attributes: {
-            text: '500',
-            href: '/500',
-            class: 'chat-header__link',
+          children: {
+            Form: new DeleteUserForm(),
           },
         }),
       },
     });
+
+    store.on(StoreEvents.USER_UPDATE, this.updateAvatar.bind(this));
+    store.on(StoreEvents.CHATS_UPDATE, this.updateTitle.bind(this));
   }
 
-  render(): string {
+  private updateAvatar() {
+    const currentUser = store.state.chats.currentChat;
+
+    this.children.Avatar.setState({
+      src: currentUser?.avatar,
+    });
+  }
+
+  private updateTitle() {
+    const currentUser = store.state.chats.currentChat;
+
+    this.setState({
+      name: currentUser?.title,
+    });
+  }
+
+  render() {
     return `
       <header class="chat-header">
         <div class="chat-header__profile">
           {{{ Avatar }}}
-          <div class="chat-header__name">${this.attributes.name}</div>
-        </div>
-        <div>
-          {{{ LoginLink }}}
-          {{{ SigninLink }}}
-          {{{ ProfileLink }}}
-          {{{ NotFoundLink }}}
-          {{{ ServerErrorLink }}}
+          <div class="chat-header__name">${this.state.name}</div>
         </div>
         <div class="chat-header__actions">
-          <button class="chat-header__menu-button">
-            <div class="dots-menu">
-              <span class="dots-menu__dot"></span>
-              <span class="dots-menu__dot"></span>
-              <span class="dots-menu__dot"></span>
-            </div>
-          </button>
+          {{{ UserActions }}}
         </div>
+        {{{ AddUserModal }}}
+        {{{ DeleteUserModal }}}
       </header>
     `;
   }

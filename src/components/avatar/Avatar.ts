@@ -3,28 +3,28 @@ import {BlockProps} from '../../global-types';
 import './style.scss';
 
 interface AvatarProps extends BlockProps {
-  attributes: {
+  state: {
     src?: string;
     size?: 'small' | 'medium' | 'large';
-  } & BlockProps['attributes'];
+  };
 }
 
 export class Avatar extends Block {
-  constructor(props: AvatarProps = {attributes: {}}) {
+  constructor(props: AvatarProps) {
     super({
       ...props,
-      attributes: {
+      state: {
         size: 'medium',
-        ...props.attributes,
+        ...props.state,
       },
     });
   }
 
   render() {
-    const {src, size} = this.attributes;
+    const { src, size } = this.state;
 
     return `
-      <div class="avatar avatar--${size}" style="${src ? `background-image: url('${src}');` : ''}">
+      <div class="avatar avatar--${size}" style="${src ? `background-image: url('https://ya-praktikum.tech/api/v2/resources/${src}');` : ''}">
       </div>
     `;
   }

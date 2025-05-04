@@ -1,9 +1,16 @@
 import {Block} from '../../../core/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
+import {UserData} from '../../../services/auth';
 import '../style.scss';
+import {UserController} from '../../../controllers/userController';
+import {UserProfileData} from '../../../services/user';
+import {store, StoreEvents} from '../../../store/store';
 
 export class ProfileForm extends Block {
+  private userController: UserController;
+  private userData: UserData | null = null;
+
   constructor() {
     super({
       events: {
@@ -17,7 +24,7 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'email',
             name: 'email',
-            placeholder: 'test@test.com',
+            placeholder: 'Почта',
           },
         }),
         LoginInput: new Input({
@@ -31,28 +38,28 @@ export class ProfileForm extends Block {
           attributes: {
             id: 'first_name',
             name: 'first_name',
-            placeholder: 'Максим',
+            placeholder: 'Имя',
           },
         }),
         LastNameInput: new Input({
           attributes: {
             id: 'second_name',
             name: 'second_name',
-            placeholder: 'Иванов',
+            placeholder: 'Фамилия',
           },
         }),
         DisplayNameInput: new Input({
           attributes: {
             id: 'display_name',
             name: 'display_name',
-            placeholder: 'Максим Иванов',
+            placeholder: 'Псевдоним',
           },
         }),
         PhoneInput: new Input({
           attributes: {
             id: 'phone',
             name: 'phone',
-            placeholder: '+7 (909) 967 30 30',
+            placeholder: 'Телефон',
           },
         }),
         SaveButton: new Button({
@@ -63,6 +70,26 @@ export class ProfileForm extends Block {
         }),
       },
     });
+
+    this.userController = new UserController();
+
+    store.on(StoreEvents.USER_UPDATE, this.getUserData.bind(this));
+  }
+
+  private async getUserData() {
+    this.userData = store.state.user as UserData;
+    if (this.userData) {
+      const {email, login, first_name, second_name, display_name, phone} = this.userData;
+
+      this.setChildrenProps({
+        EmailInput: {value: email},
+        LoginInput: {value: login},
+        FirstNameInput: {value: first_name},
+        LastNameInput: {value: second_name},
+        DisplayNameInput: {value: display_name},
+        PhoneInput: {value: phone},
+      });
+    }
   }
 
   private fetchFormData(e: SubmitEvent) {
@@ -72,8 +99,8 @@ export class ProfileForm extends Block {
       return;
     }
 
-    const formData = this.getFormData(e);
-    console.log(formData);
+    const formData = this.getFormData<UserProfileData>(e);
+    this.userController.updateProfile(formData).then(() => this.getUserData());
   }
 
   render() {

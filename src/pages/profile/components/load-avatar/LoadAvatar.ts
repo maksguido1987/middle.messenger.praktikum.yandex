@@ -1,48 +1,40 @@
 import {Block} from '../../../../core/Block';
 import {BlockProps} from '../../../../global-types';
+import {UserController} from '../../../../controllers/userController';
 import './style.scss';
 
 interface LoadAvatarProps extends BlockProps {
-  attributes: {
+  state: {
     avatar?: string;
-  } & BlockProps['attributes'];
+  } & BlockProps['state'];
 }
 
 export class LoadAvatar extends Block {
-  constructor(props: LoadAvatarProps = {attributes: {}}) {
+  private userController: UserController;
+
+  constructor(props: LoadAvatarProps) {
     super({
       ...props,
       events: {
         change: (e: Event) => this._handleFileUpload(e),
       },
     });
+    this.userController = new UserController();
   }
 
-  private _handleFileUpload(event: Event) {
+  private async _handleFileUpload(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
     if (file) {
-      // Здесь можно добавить реальную логику загрузки файла на сервер
-      // Сейчас используем моковые данные
-      console.log('Загружен файл:', {
-        name: file.name,
-        type: file.type,
-        size: file.size,
-      });
+      const formData = new FormData();
+      formData.append('avatar', file);
 
-      // Создаем превью изображения
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        console.log('Превью изображения:', result.slice(0, 100) + '...');
-
-        // В реальном приложении здесь можно обновить аватар через API
-        this.setProps({
-          avatar: result,
-        });
-      };
-      reader.readAsDataURL(file);
+      try {
+        await this.userController.updateAvatar(formData);
+      } catch (error) {
+        console.error('Ошибка при загрузке аватара:', error);
+      }
     }
   }
 
@@ -52,7 +44,7 @@ export class LoadAvatar extends Block {
     return `
       <div class="profile-avatar">
         <div class="avatar avatar--large profile-avatar__image"
-             style="${avatar ? `background-image: url('${avatar}');` : ''}">
+          style="${avatar ? `background-image: url('https://ya-praktikum.tech/api/v2/resources/${avatar}');` : ''}">
         </div>
         <div class="profile-avatar__overlay">
           <span class="profile-avatar__text">Поменять аватар</span>

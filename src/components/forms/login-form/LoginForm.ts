@@ -3,8 +3,11 @@ import {Button} from '../../button/Button';
 import {Input} from '../../input/Input';
 import {Link} from '../../link/Link';
 import '../style.scss';
-
+import { AuthController } from '../../../controllers/authController';
+import { SignInData } from '../../../services/auth';
 export class LoginForm extends Block {
+  private authController: AuthController;
+
   constructor() {
     super({
       events: {
@@ -34,22 +37,23 @@ export class LoginForm extends Block {
         }),
         Link: new Link({
           attributes: {
-            href: '/signin',
+            href: '/sign-up',
             text: 'Ещё не зарегистрированы?',
           },
         }),
       },
     });
+    this.authController = new AuthController();
   }
 
   private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
-    const formData = this.getFormData(e);
+    const formData = this.getFormData<SignInData>(e);
 
     if (!this.validateForm(e)) {
       return;
     }
-    console.log(formData);
+    this.authController.signIn(formData);
   }
 
   render() {

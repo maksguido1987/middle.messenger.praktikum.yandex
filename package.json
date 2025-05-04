@@ -11,9 +11,9 @@
     "build": "tsc && vite build",
     "start": "vite build && node server.cjs",
     "preview": "vite preview",
-    "lint": "eslint . --ext .js,.ts",
+    "lint": "eslint src --ext .js,.ts",
     "lint:style": "stylelint \"**/*.scss\"",
-    "lint:fix": "eslint . --ext .js,.ts --fix",
+    "lint:fix": "eslint src --ext .js,.ts --fix",
     "lint:style:fix": "stylelint \"**/*.scss\" --fix"
   },
   "dependencies": {

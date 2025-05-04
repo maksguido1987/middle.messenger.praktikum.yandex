@@ -1,27 +1,36 @@
 import {Link} from '../../components/link/Link';
 import {Block} from '../../core/Block';
+import {BlockProps} from '../../global-types';
 
-export class ErrorPage extends Block {
-  constructor(props: {title: string; code: string; description: string}) {
+export interface ErrorPageProps extends BlockProps {
+  attributes: {
+    title: string;
+    code: string;
+    description: string;
+  };
+}
+
+export class ErrorPage extends Block<ErrorPageProps> {
+  constructor(props: ErrorPageProps) {
     super({
       ...props,
       children: {
         Link: new Link({
           attributes: {
-            href: '/',
+            href: '/messenger',
             text: 'Вернуться на главную',
           },
         }),
       },
       attributes: {
-        title: props.title,
-        code: props.code,
-        description: props.description,
+        title: props.attributes.title,
+        code: props.attributes.code,
+        description: props.attributes.description,
       },
     });
   }
 
-  public render(): string {
+  public render() {
     return `
       <main class="error-page">
         <div class="error-container">

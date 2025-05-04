@@ -1,4 +1,4 @@
-@use "../../../../vars.scss" as *;
+@use '../../../../vars.scss' as *;
 
 .chat-header {
   height: 55px;
@@ -21,21 +21,5 @@
 
   &__menu-button {
     padding: 5px;
-  }
-}
-
-.dots-menu {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 16px;
-
-  &__dot {
-    width: 3px;
-    height: 3px;
-    background-color: $text-primary;
-    border-radius: 50%;
-    margin: 1px 0;
   }
 }
