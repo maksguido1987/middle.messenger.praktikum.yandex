@@ -6,26 +6,26 @@ type WebSocketMessage = {
   [key: string]: unknown;
 };
 
-// type NewMessages = {
-//   chat_id: number;
-//   id: number;
-//   time: string;
-//   type: 'message' | 'file';
-//   user_id: string;
-//   content: string;
-//   is_read: boolean;
-//   file?: {
-//     id: number;
-//     user_id: number;
-//     path: string;
-//     filename: string;
-//     content_type: string;
-//     content_size: number;
-//     upload_date: string;
-//   };
-// }[];
+export type Messages = {
+  chat_id: number;
+  id: number;
+  time: string;
+  type: 'message' | 'file';
+  user_id: string;
+  content: string;
+  is_read: boolean;
+  file?: {
+    id: number;
+    user_id: number;
+    path: string;
+    filename: string;
+    content_type: string;
+    content_size: number;
+    upload_date: string;
+  };
+}[];
 
-// type Messages = {
+// type Message = {
 //   id: number;
 //   time: string;
 //   user_id: number;
@@ -87,7 +87,14 @@ export class WebSocketController extends EventBus {
       this.emit('connected');
     });
 
-    this.socket.addEventListener('close', () => {
+    this.socket.addEventListener('close', (event) => {
+      if (event?.wasClean) {
+        console.log('Соединение закрыто чисто');
+      } else {
+        console.log('Обрыв соединения');
+      }
+
+      console.log(`Код: ${event?.code} | Причина: ${event?.reason}`);
       this.stopPing();
       this.emit('closed');
     });
@@ -95,6 +102,10 @@ export class WebSocketController extends EventBus {
     this.socket.addEventListener('message', (event) => {
       try {
         const data = JSON.parse(event.data);
+
+        if (Array.isArray(data)) {
+          store.setState('chats.messages', data.reverse());
+        }
 
         if (data.type === 'message') {
           const currentChat = store.state.chats.currentChat;
@@ -105,6 +116,10 @@ export class WebSocketController extends EventBus {
               content: data.content,
             },
           });
+          store.setState('chats.messages', [
+            ...store.state.chats.messages,
+            data,
+          ]);
           store.setState('chats.filtered', store.state.chats.filtered.map((chat) => {
             if (chat.id === currentChat?.id) {
               return {

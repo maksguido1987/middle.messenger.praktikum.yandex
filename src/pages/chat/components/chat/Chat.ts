@@ -1,6 +1,8 @@
 import {Block} from '../../../../core/Block';
+import {store, StoreEvents} from '../../../../store/store';
 import {ChatHeader} from '../chat-header/ChatHeader';
 import {ChatInput} from '../chat-input/ChatInput';
+import {Message} from '../message/Message';
 import './style.scss';
 
 interface ChatProps {
@@ -13,6 +15,9 @@ export class Chat extends Block {
   constructor(props: ChatProps = {}) {
     super({
       ...props,
+      list: {
+        Messages: [],
+      },
       children: {
         ChatHeader: new ChatHeader({
           state: {
@@ -31,6 +36,26 @@ export class Chat extends Block {
         }),
       },
     });
+
+    store.on(StoreEvents.CHATS_UPDATE, this.onGetMessages.bind(this));
+  }
+
+  onGetMessages() {
+    this.list.Messages = [];
+    const messages = store.state.chats.messages;
+    messages.forEach((message) => {
+      this.addToListItem(
+        'Messages',
+        new Message({
+          state: {
+            isCurrentUser: Number(message.user_id) === store.state.user?.id,
+            text: message.content,
+            time: message.time,
+            isRead: message.is_read,
+          },
+        }),
+      );
+    });
   }
 
   render() {
@@ -38,7 +63,7 @@ export class Chat extends Block {
       <div class="chat-content">
         {{{ ChatHeader }}}
         <section class="chat-messages">
-
+          {{{ Messages }}}
         </section>
         {{{ ChatInput }}}
       </div>

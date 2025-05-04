@@ -3,6 +3,7 @@ import {ChatInfo} from '../services/chat';
 import {UserData} from '../services/auth';
 import {set} from '../utils/set';
 import {debounce} from '../utils/debounce';
+import {Messages} from '../controllers/webSocketController';
 
 interface ModalsState {
   createChat: boolean;
@@ -17,6 +18,7 @@ interface StoreState {
     original: ChatInfo[];
     filtered: ChatInfo[];
     currentChat: ChatInfo | null;
+    messages: Messages;
   };
   searchChat: string;
 }
@@ -42,6 +44,7 @@ class Store extends EventBus {
       original: [],
       filtered: [],
       currentChat: null,
+      messages: [],
     },
     searchChat: '',
   };

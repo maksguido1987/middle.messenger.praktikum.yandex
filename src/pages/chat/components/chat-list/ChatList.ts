@@ -41,8 +41,6 @@ export class ChatList extends Block {
   onGetChats() {
     this.list.Chats = [];
     const currentChat = store.state.chats.currentChat;
-    console.log('currentChat', currentChat);
-    console.log('store.state.chats.filtered', store.state.chats.filtered);
     store.state.chats.filtered.forEach((chat) => {
       this.addToListItem(
         'Chats',

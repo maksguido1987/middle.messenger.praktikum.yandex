@@ -9,7 +9,7 @@ export class EmptyChat extends Block {
   render() {
     return `
       <div class="empty-chat">
-        <p class="empty-chat__message">Выберите чат чтобы отправить сообщение</p>
+        <p class="empty-chat__message">Выберите чат, чтобы отправить сообщение</p>
       </div>
     `;
   }

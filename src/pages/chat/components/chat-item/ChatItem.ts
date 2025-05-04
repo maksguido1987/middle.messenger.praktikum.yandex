@@ -31,15 +31,6 @@ export class ChatItem extends Block {
     this.chatId = props.state.id;
   }
 
-  private deleteChat() {
-    this.chatService.deleteChat(this.chatId).then(() => {
-      store.setState(
-        'chats.filtered',
-        store.state.chats.filtered.filter((chat) => chat.id !== this.chatId),
-      );
-    });
-  }
-
   private onSetCurrentChat() {
     const currentChat = store.state.chats.original.find((chat) => chat.id === this.chatId);
     store.setState('chats.currentChat', currentChat || null);
