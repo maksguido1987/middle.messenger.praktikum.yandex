@@ -1,25 +1,17 @@
 import {Block} from '../../../../core/Block';
 import './style.scss';
 
-interface AttachButtonProps {
-  events?: {
-    click: () => void;
-  };
-}
-
 /**
  * Класс компонента кнопки прикрепления файлов
  */
 export class AttachButton extends Block {
-  constructor(props: AttachButtonProps) {
-    super({
-      ...props,
-    });
+  constructor() {
+    super();
   }
 
-  render(): string {
+  render() {
     return `
-      <button class="chat-form__attach-button">
+      <button class="chat-form__attach-button" type="submit">
         <img
           src="../../../images/attach.svg"
           alt="attach"

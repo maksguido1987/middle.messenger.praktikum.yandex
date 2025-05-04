@@ -1,18 +1,12 @@
 import {Input} from '../../../../components/input/Input';
 import {Block} from '../../../../core/Block';
+import {BlockProps} from '../../../../global-types';
+import {store, StoreEvents} from '../../../../store/store';
 import './style.scss';
 
-interface ChatSearchProps {
-  events?: {
-    submit: (e: SubmitEvent) => void;
-  };
-}
-
-/**
- * Класс компонента поиска в чате
- */
 export class ChatSearch extends Block {
-  constructor(props: ChatSearchProps) {
+
+  constructor(props: BlockProps) {
     super({
       ...props,
       children: {
@@ -25,19 +19,37 @@ export class ChatSearch extends Block {
             class: 'chat-search__input reset-input',
           },
           events: {
-            blur: (e: FocusEvent) => {
-              console.log('blur', e);
-            },
             input: (e: Event) => {
-              console.log('input', e);
+              this.searchChat((e.target as HTMLInputElement).value);
             },
           },
         }),
       },
     });
+
+    store.on(StoreEvents.SEARCH_CHAT_UPDATE, () => {
+      const value = store.state.searchChat;
+
+      if (!value) {
+        // Если поиск пустой, возвращаем все чаты
+        store.setState('chats.filtered', store.state.chats.original);
+        return;
+      }
+
+      // Фильтруем из оригинального списка
+      const filteredChats = store.state.chats.original.filter((chat) =>
+        chat.title.toLowerCase().includes(value.toLowerCase()),
+      );
+
+      store.setState('chats.filtered', filteredChats);
+    });
   }
 
-  render(): string {
+  private searchChat(value: string) {
+    store.setState('searchChat', value);
+  }
+
+  render() {
     return `
       <form class="chat-search">
         {{{ SearchInput }}}

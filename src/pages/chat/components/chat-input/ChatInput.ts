@@ -1,7 +1,7 @@
 import {Block} from '../../../../core/Block';
 import {AttachButton} from './AttachButton';
 import './style.scss';
-
+import {webSocketController} from '../../../../controllers/webSocketController';
 interface ChatInputProps {
   value: string;
   events?: {
@@ -23,21 +23,21 @@ export class ChatInput extends Block {
         },
       },
       children: {
-        AttachButton: new AttachButton({}),
+        AttachButton: new AttachButton(),
       },
     });
   }
 
   private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
-    const formData = this.getFormData(e);
-    console.log(formData);
+    const formData = this.getFormData<{message: string}>(e);
+    webSocketController.send({type: 'message', content: formData['message']});
+    this.setState({value: ''});
   }
 
-  render(): string {
+  render() {
     return `
       <form class="chat-form">
-        {{{ AttachButton }}}
         <input
           placeholder="Сообщение"
           class="chat-form__field"

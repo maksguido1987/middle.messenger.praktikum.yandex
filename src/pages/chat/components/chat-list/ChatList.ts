@@ -1,21 +1,70 @@
 import {Block} from '../../../../core/Block';
 import {ChatItem} from '../chat-item/ChatItem';
-import {mockChats} from './mockData';
+import {Button} from '../../../../components/button/Button';
+import {store, StoreEvents} from '../../../../store/store';
+import {ChatController} from '../../../../controllers/chatController';
+import {Modal} from '../../../../components/modal/Modal';
+import {CreateChatForm} from '../../../../components/forms/create-chat-form/CreateChatForm';
 
 export class ChatList extends Block {
   constructor() {
     super({
-      lists: {
-        items: mockChats.map((chat) => new ChatItem({state: {...chat}})),
+      list: {
+        Chats: [],
       },
+      children: {
+        CreateButton: new Button({
+          state: {
+            text: 'Создать чат',
+          },
+          events: {
+            click: () => {
+              store.setState('modals.createChat', true);
+            },
+          },
+        }),
+        CreateModal: new Modal({
+          state: {
+            title: 'Создать чат',
+            modalKeyStore: 'createChat',
+          },
+          children: {
+            CreateChatForm: new CreateChatForm(),
+          },
+        }),
+      },
+    });
+    store.on(StoreEvents.CHATS_UPDATE, this.onGetChats.bind(this));
+    new ChatController().getChats();
+  }
+
+  onGetChats() {
+    this.list.Chats = [];
+    const currentChat = store.state.chats.currentChat;
+    store.state.chats.filtered.forEach((chat) => {
+      this.addToListItem(
+        'Chats',
+        new ChatItem({
+          state: {
+            ...chat,
+          },
+          attributes: {
+            class: currentChat?.id === chat.id ? 'chat-item chat-item--selected' : 'chat-item',
+          },
+        }),
+      );
     });
   }
 
-  public render(): string {
+  public render() {
     return `
-      <ul class="chat-list">
-        {{{items}}}
-      </ul>
+      <div class="chat-list-container">
+        {{{CreateButton}}}
+        <ul class="chat-list">
+          {{{Chats}}}
+        </ul>
+        {{{CreateModal}}}
+      </div>
     `;
   }
 }

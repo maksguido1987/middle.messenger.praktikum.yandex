@@ -1,9 +1,16 @@
 import {Block} from '../../core/Block';
-import {BlockProps, EmitEvents} from '../../global-types';
+import {Router} from '../../core/Router';
+import {BlockProps} from '../../global-types';
 import './style.scss';
 
+interface LinkProps extends BlockProps {
+  onClick?: () => void;
+}
+
 export class Link extends Block {
-  constructor(props: BlockProps) {
+  constructor(props: LinkProps) {
+    const router = new Router();
+
     super({
       ...props,
       events: {
@@ -12,10 +19,12 @@ export class Link extends Block {
 
           const href = (e.target as HTMLAnchorElement).getAttribute('href');
 
+          if (props.onClick) {
+            props.onClick();
+          }
+
           if (href) {
-            window.history.pushState({}, '', href);
-            window.dispatchEvent(new PopStateEvent('popstate'));
-            this.eventBus().emit(EmitEvents.FLOW_RENDER);
+            router.go(href);
           }
         },
       },

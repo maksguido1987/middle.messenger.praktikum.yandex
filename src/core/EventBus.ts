@@ -1,6 +1,4 @@
-import {EmitEvents} from '../global-types';
-
-type EventHandler = (...args: unknown[]) => void;
+export type EventHandler = (...args: unknown[]) => void;
 
 /**
  * Класс для управления событиями
@@ -36,14 +34,20 @@ export class EventBus {
     }
   }
 
-  emit(event: EmitEvents, ...args: unknown[]): void {
+  emit<T extends string>(event: T, ...args: unknown[]): void {
     if (!this.events.has(event)) {
       throw new Error(`Нет события: ${event}`);
     }
 
     const handlers = this.events.get(event);
     if (handlers) {
-      handlers.forEach((handler) => handler(...args));
+      handlers.forEach((handler) => {
+        handler(...args);
+      });
     }
+  }
+
+  clear(): void {
+    this.events.clear();
   }
 }

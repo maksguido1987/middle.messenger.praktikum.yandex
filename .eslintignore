@@ -8,3 +8,7 @@ server.cjs
 .eslintrc.json
 .gitignore
 vite-env.d.ts
+dist
+public
+.github
+*.d.ts

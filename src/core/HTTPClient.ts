@@ -1,3 +1,5 @@
+import {Router} from './Router';
+
 export enum HTTPMethod {
   GET = 'GET',
   POST = 'POST',
@@ -6,12 +8,10 @@ export enum HTTPMethod {
   PATCH = 'PATCH',
 }
 
-type HTTPData = Record<string, string | number | boolean | null | undefined>;
-
 type HTTPOptions = {
   method: HTTPMethod;
   timeout?: number;
-  data?: HTTPData;
+  data?: unknown;
   headers?: Record<string, string>;
   tries?: number;
 };
@@ -22,7 +22,7 @@ type HTTPMethodType = (
 ) => Promise<XMLHttpRequest>;
 
 export class HTTPClient {
-  private static transformDataToQueryString(data: HTTPData): string {
+  private static transformDataToQueryString(data: unknown): string {
     if (!data) return '';
 
     return Object.entries(data)
@@ -42,6 +42,7 @@ export class HTTPClient {
       const queryString =
         method === HTTPMethod.GET && data ? `?${this.transformDataToQueryString(data)}` : '';
       xhr.open(method, url + queryString, true);
+      xhr.withCredentials = true;
 
       // Устанавливаем таймаут
       xhr.timeout = timeout;
@@ -56,6 +57,10 @@ export class HTTPClient {
         if (xhr.status >= 200 && xhr.status < 300) {
           resolve(xhr);
         } else {
+          if (xhr.status === 401) {
+            const router = new Router();
+            router.go('/');
+          }
           reject(new Error(`HTTP Error: ${xhr.status}`));
         }
       };
@@ -67,8 +72,12 @@ export class HTTPClient {
       if (method === HTTPMethod.GET) {
         xhr.send();
       } else {
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(data ? JSON.stringify(data) : null);
+        if (!(data instanceof FormData)) {
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(data ? JSON.stringify(data) : null);
+        } else {
+          xhr.send(data);
+        }
       }
     });
   }
