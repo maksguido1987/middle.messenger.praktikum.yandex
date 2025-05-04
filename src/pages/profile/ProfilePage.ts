@@ -5,12 +5,10 @@ import {PasswordForm} from '../../components/forms/password-form/PasswordForm';
 import {LoadAvatar} from './components/load-avatar/LoadAvatar';
 import {AuthController} from '../../controllers/authController';
 import {store, StoreEvents} from '../../store/store';
-import {UserData} from '../../services/auth';
 
 export class ProfilePage extends Block {
   protected _isPasswordChange = false;
   private authController: AuthController;
-  private userData: UserData;
 
   constructor() {
     super({
@@ -58,22 +56,21 @@ export class ProfilePage extends Block {
 
     this.authController = new AuthController();
     this.authController.getUser();
-    this.userData = store.state.user as UserData;
 
     store.on(StoreEvents.USER_UPDATE, this.updateUserData.bind(this));
   }
 
   private updateUserData() {
-    this.userData = store.state.user as UserData;
-    if (this.userData) {
-      this.setState({profileName: this.userData.display_name || this.userData.login});
+    const userData = store.state.user;
+    if (userData) {
+      this.setState({profileName: userData.display_name || userData.login});
       this.children.Avatar.setState({
-        avatar: this.userData.avatar,
+        avatar: userData.avatar,
       });
     }
   }
 
-  public render(): string {
+  public render() {
     return `
       <main class="profile-page">
         <div class="profile-page__container">

@@ -14,7 +14,7 @@ export class UserController {
   async updateProfile(data: UserProfileData): Promise<void> {
     try {
       await this.userService.updateProfile(data).then(() => {
-        store.setState('user', data);
+        // store.setState('user', data);
         this.router.go('/messenger');
       });
     } catch (error) {

@@ -39,7 +39,7 @@ export class LoadAvatar extends Block {
   }
 
   render() {
-    const {avatar} = this.attributes;
+    const {avatar} = this.state;
 
     return `
       <div class="profile-avatar">

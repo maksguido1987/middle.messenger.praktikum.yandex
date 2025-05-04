@@ -44,7 +44,9 @@ export class Router {
   }
 
   _onRoute(pathname: string) {
-    const route = this.getRoute(pathname);
+    // Очищаем pathname от query-параметров
+    const cleanPathname = pathname.split('?')[0];
+    const route = this.getRoute(cleanPathname);
     if (!route) {
       if (this.notFoundRoute) {
         if (this._currentRoute) {
