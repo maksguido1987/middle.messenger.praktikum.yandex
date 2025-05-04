@@ -3,10 +3,13 @@ import {Button} from '../../button/Button';
 import {Input} from '../../input/Input';
 import {Link} from '../../link/Link';
 import '../style.scss';
-import { AuthController } from '../../../controllers/authController';
-import { SignInData } from '../../../services/auth';
+import {AuthController} from '../../../controllers/authController';
+import {SignInData} from '../../../services/auth';
+import {Router} from '../../../core/Router';
+import {store, StoreEvents} from '../../../store/store';
 export class LoginForm extends Block {
   private authController: AuthController;
+  private router: Router;
 
   constructor() {
     super({
@@ -44,6 +47,18 @@ export class LoginForm extends Block {
       },
     });
     this.authController = new AuthController();
+    this.router = new Router();
+
+    this.authController.getUser();
+
+    store.on(StoreEvents.USER_UPDATE, this.checkUser.bind(this));
+  }
+
+  private checkUser() {
+    const user = store.state.user;
+    if (user) {
+      this.router.go('/messenger');
+    }
   }
 
   private fetchFormData(e: SubmitEvent) {

@@ -46,6 +46,7 @@ export class AuthController {
   async logout(): Promise<void> {
     try {
       await this.authService.logout().then(() => {
+        store.setState('user', null);
         this.router.go('/');
       });
     } catch (error) {
