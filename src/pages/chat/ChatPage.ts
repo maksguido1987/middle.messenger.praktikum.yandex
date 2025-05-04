@@ -47,20 +47,6 @@ export class ChatPage extends Block {
             this.authController.logout();
           },
         }),
-        NotFoundLink: new Link({
-          attributes: {
-            text: '404',
-            href: '/error',
-            class: 'navbar__link',
-          },
-        }),
-        ServerErrorLink: new Link({
-          attributes: {
-            text: '500',
-            href: '/nothing',
-            class: 'navbar__link',
-          },
-        }),
         ChatList: new ChatList(),
         Chat: new Chat({}),
         EmptyChat: new EmptyChat(),
@@ -101,8 +87,6 @@ export class ChatPage extends Block {
           {{{ SigninLink }}}
           {{{ ProfileLink }}}
           {{{ LogoutLink }}}
-          {{{ NotFoundLink }}}
-          {{{ ServerErrorLink }}}
         </div>
         <div class="chat-page__content">
           <div class="chat-sidebar">

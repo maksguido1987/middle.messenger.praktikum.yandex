@@ -8,6 +8,7 @@ export class Router {
   private history: History = window.history;
   private _currentRoute: Route<BlockProps> | null = null;
   private _rootQuery: HTMLElement | null = null;
+  private notFoundRoute: Route<BlockProps> | null = null;
 
   constructor(rootQuery?: HTMLElement) {
     if (Router.__instance) {
@@ -45,6 +46,13 @@ export class Router {
   _onRoute(pathname: string) {
     const route = this.getRoute(pathname);
     if (!route) {
+      if (this.notFoundRoute) {
+        if (this._currentRoute) {
+          this._currentRoute.leave();
+        }
+        this._currentRoute = this.notFoundRoute;
+        this.notFoundRoute.render();
+      }
       return;
     }
 
@@ -72,5 +80,18 @@ export class Router {
 
   getRoute(pathname: string) {
     return this.routes.find((route) => route.match(pathname));
+  }
+
+  setNotFound<T extends BlockProps>(block: new (props: T) => Block<T>, componentProps: T) {
+    if (!this._rootQuery) {
+      throw new Error('Root query is not set');
+    }
+    this.notFoundRoute = new Route<T>(
+      '*',
+      block,
+      {rootQuery: this._rootQuery},
+      componentProps,
+    ) as unknown as Route<BlockProps>;
+    return this;
   }
 }

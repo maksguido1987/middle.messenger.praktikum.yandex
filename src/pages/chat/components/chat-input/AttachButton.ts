@@ -9,7 +9,7 @@ export class AttachButton extends Block {
     super();
   }
 
-  render(): string {
+  render() {
     return `
       <button class="chat-form__attach-button" type="submit">
         <img

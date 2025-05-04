@@ -38,7 +38,6 @@ export class ChatInput extends Block {
   render() {
     return `
       <form class="chat-form">
-        {{{ AttachButton }}}
         <input
           placeholder="Сообщение"
           class="chat-form__field"
