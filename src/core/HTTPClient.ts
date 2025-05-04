@@ -1,3 +1,5 @@
+import {Router} from './Router';
+
 export enum HTTPMethod {
   GET = 'GET',
   POST = 'POST',
@@ -55,6 +57,10 @@ export class HTTPClient {
         if (xhr.status >= 200 && xhr.status < 300) {
           resolve(xhr);
         } else {
+          if (xhr.status === 401) {
+            const router = new Router();
+            router.go('/');
+          }
           reject(new Error(`HTTP Error: ${xhr.status}`));
         }
       };

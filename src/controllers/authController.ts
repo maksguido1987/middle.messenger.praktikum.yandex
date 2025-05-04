@@ -55,6 +55,9 @@ export class AuthController {
         return user;
       });
     } catch (error) {
+      if (error instanceof Error && error.message.includes('401')) {
+        this.router.go('/');
+      }
       console.error(error);
       throw error;
     }
