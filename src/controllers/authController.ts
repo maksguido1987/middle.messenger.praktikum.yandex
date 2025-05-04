@@ -13,10 +13,14 @@ export class AuthController {
 
   async signUp(data: SignUpData): Promise<void> {
     try {
-      await this.authService.signUp(data).then(() => {
-        store.setState('user', data);
-        this.router.go('/messenger');
-      });
+      await this.authService
+        .signUp(data)
+        .then(() => {
+          this.router.go('/messenger');
+        })
+        .then(() => {
+          store.setState('user', data);
+        });
     } catch (error) {
       console.error(error);
     }
@@ -24,15 +28,16 @@ export class AuthController {
 
   async signIn(data: SignInData): Promise<void> {
     try {
-      await this.authService.signIn(data).then(() => {
-        this.getUser()
-          .then(() => {
-            this.router.go('/messenger');
-          })
-          .catch((error) => {
+      await this.authService
+        .signIn(data)
+        .then(() => {
+          this.getUser().catch((error) => {
             console.error(error);
           });
-      });
+        })
+        .then(() => {
+          this.router.go('/messenger');
+        });
     } catch (error) {
       console.error(error);
     }
