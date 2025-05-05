@@ -3,13 +3,16 @@ import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
 import {ChatController} from '../../../controllers/chatController';
 import './style.scss';
-import {store} from '../../../store/store';
+import {store, StoreEvents} from '../../../store/store';
 
 export class DeleteUserForm extends Block {
   private chatController: ChatController;
 
   constructor() {
     super({
+      state: {
+        users: [],
+      },
       events: {
         submit: (e: SubmitEvent) => {
           this.fetchFormData(e);
@@ -34,6 +37,15 @@ export class DeleteUserForm extends Block {
       },
     });
     this.chatController = new ChatController();
+
+    store.on(StoreEvents.CHATS_UPDATE, this.componentDidMount.bind(this));
+  }
+
+  async componentDidMount() {
+    const chatId = store.state.chats.currentChat?.id;
+    if (!chatId) return;
+    const users = await this.chatController.getChatUsers(chatId);
+    this.setState({users});
   }
 
   private fetchFormData(e: SubmitEvent) {
@@ -53,8 +65,16 @@ export class DeleteUserForm extends Block {
   }
 
   render() {
+    const users = this.state.users as {id: number; first_name: string; second_name: string}[];
     return `
       <form class="modal-form" id="delete-user-form">
+        <div class="chat-users-list">
+          ${
+  users && users.length
+    ? users.map((u) => `<div>${u.first_name} ${u.second_name} (${u.id})</div>`).join('')
+    : '<div>Нет пользователей</div>'
+}
+        </div>
         {{{Input}}}
         {{{SubmitButton}}}
       </form>
