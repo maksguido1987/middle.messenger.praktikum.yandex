@@ -25,14 +25,6 @@ export type Messages = {
   };
 }[];
 
-// type Message = {
-//   id: number;
-//   time: string;
-//   user_id: number;
-//   content: string;
-//   type: 'message';
-// };
-
 type ConnectionParams = {
   userId: string;
   chatId: string;
@@ -96,7 +88,6 @@ export class WebSocketController extends EventBus {
 
       console.log(`Код: ${event?.code} | Причина: ${event?.reason}`);
       this.stopPing();
-      this.emit('closed');
     });
 
     this.socket.addEventListener('message', (event) => {
@@ -133,19 +124,15 @@ export class WebSocketController extends EventBus {
             return chat;
           }));
 
-          this.emit('message', data);
         }
 
-        // if (data.type === 'get old') {
-        //   this.emit('old messages', data);
-        // }
       } catch (error) {
         console.error('Ошибка при обработке сообщения:', error);
       }
     });
 
     this.socket.addEventListener('error', (error) => {
-      this.emit('error', error);
+      console.error('Ошибка при соединении:', error);
     });
   }
 

@@ -64,9 +64,7 @@ export class ChatController {
 
   async getChatUsers(chatId: number): Promise<void> {
     try {
-      await this.chatService.getChatUsers(chatId).then((users) => {
-        console.log(users);
-      });
+      await this.chatService.getChatUsers(chatId);
     } catch (error) {
       console.error(error);
     }
@@ -74,9 +72,7 @@ export class ChatController {
 
   async getChatToken(chatId: number): Promise<void> {
     try {
-      await this.chatService.getChatToken(chatId).then((tokenData) => {
-        console.log(tokenData);
-      });
+      await this.chatService.getChatToken(chatId);
     } catch (error) {
       console.error(error);
     }

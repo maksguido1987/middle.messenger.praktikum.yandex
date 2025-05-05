@@ -28,10 +28,21 @@ export class ChatInput extends Block {
     });
   }
 
+  private sanitizeMessage(message: string): string {
+    // Удаляем html-теги и потенциально опасные конструкции
+    return message
+      .replace(/<[^>]*>/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
   private fetchFormData(e: SubmitEvent) {
     e.preventDefault();
     const formData = this.getFormData<{message: string}>(e);
-    webSocketController.send({type: 'message', content: formData['message']});
+    const rawMessage = formData['message'] || '';
+    const sanitizedMessage = this.sanitizeMessage(rawMessage);
+    if (!sanitizedMessage) return;
+    webSocketController.send({type: 'message', content: sanitizedMessage});
     this.setState({value: ''});
   }
 

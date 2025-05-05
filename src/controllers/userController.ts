@@ -44,9 +44,7 @@ export class UserController {
 
   async searchUser(login: string): Promise<void> {
     try {
-      await this.userService.searchUser({login}).then((users) => {
-        console.log(users);
-      });
+      await this.userService.searchUser({login});
     } catch (error) {
       console.error(error);
     }

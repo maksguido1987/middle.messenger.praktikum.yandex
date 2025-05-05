@@ -40,10 +40,11 @@ export class AddUserForm extends Block {
     e.preventDefault();
     const formData = this.getFormData<{user_id: string}>(e);
     const chatId = store.state.chats.currentChat?.id;
-    console.log(formData);
+
     if (!this.validateForm(e)) {
       return;
     }
+
     this.chatController
       .addUsers({users: [Number(formData.user_id)], chatId: Number(chatId)})
       .then(() => {
