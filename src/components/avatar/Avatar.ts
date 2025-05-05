@@ -5,7 +5,6 @@ import './style.scss';
 interface AvatarProps extends BlockProps {
   state: {
     src?: string;
-    size?: 'small' | 'medium' | 'large';
   };
 }
 
@@ -14,17 +13,17 @@ export class Avatar extends Block {
     super({
       ...props,
       state: {
-        size: 'medium',
         ...props.state,
       },
     });
   }
 
   render() {
-    const { src, size } = this.state;
-
+    const {src} = this.state;
+    const placeholder = '/images/placeholder_50x50.png';
     return `
-      <div class="avatar avatar--${size}" style="${src ? `background-image: url('https://ya-praktikum.tech/api/v2/resources/${src}');` : ''}">
+      <div class="avatar">
+        <img src="${src ? `https://ya-praktikum.tech/api/v2/resources/${src}` : placeholder}" width="47" height="47" alt="avatar" />
       </div>
     `;
   }

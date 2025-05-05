@@ -4,6 +4,7 @@ import {BlockProps} from '../../../../global-types';
 import {ChatInfo, ChatService} from '../../../../services/chat';
 import {store} from '../../../../store/store';
 import './style.scss';
+import {Avatar} from '../../../../components/avatar/Avatar';
 
 interface ChatItemProps extends Omit<BlockProps, 'state'> {
   state: ChatInfo & {
@@ -12,8 +13,8 @@ interface ChatItemProps extends Omit<BlockProps, 'state'> {
 }
 
 export class ChatItem extends Block {
-  private chatService: ChatService;
-  public chatId: number;
+  private readonly chatService = new ChatService();
+  private chatId: number;
 
   constructor(props: ChatItemProps) {
     super({
@@ -21,13 +22,17 @@ export class ChatItem extends Block {
       state: {
         ...props.state,
       },
+      children: {
+        Avatar: new Avatar({
+          state: {
+            src: props.state.avatar,
+          },
+        }),
+      },
       events: {
-        click: () => {
-          this.onSetCurrentChat();
-        },
+        click: () => this.onSetCurrentChat(),
       },
     });
-    this.chatService = new ChatService();
     this.chatId = props.state.id;
   }
 
@@ -48,7 +53,7 @@ export class ChatItem extends Block {
     return `
       <li class="chat-item {{class}}">
         <div class="chat-item__avatar">
-          <div class="avatar avatar--medium">{{avatar}}</div>
+          {{{ Avatar }}}
         </div>
         <div class="chat-item__info">
           <div class="chat-item__name">{{title}}</div>

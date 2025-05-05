@@ -1,6 +1,7 @@
 import {HTTPClient} from '../core/HTTPClient';
 import {UserData} from './auth';
 import {UserProfileData} from './user';
+export type {UserProfileData};
 
 export interface CreateChatData {
   title: string;

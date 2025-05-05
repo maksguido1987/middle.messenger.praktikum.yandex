@@ -1,4 +1,10 @@
-import {ChatService, CreateChatData, ChatUserData, ChatInfo} from '../services/chat';
+import {
+  ChatService,
+  CreateChatData,
+  ChatUserData,
+  ChatInfo,
+  UserProfileData,
+} from '../services/chat';
 import {store} from '../store/store';
 
 export class ChatController {
@@ -62,21 +68,18 @@ export class ChatController {
     }
   }
 
-  async getChatUsers(chatId: number): Promise<void> {
+  async getChatUsers(chatId: number): Promise<UserProfileData[]> {
     try {
-      await this.chatService.getChatUsers(chatId).then((users) => {
-        console.log(users);
-      });
+      return await this.chatService.getChatUsers(chatId);
     } catch (error) {
       console.error(error);
+      return [];
     }
   }
 
   async getChatToken(chatId: number): Promise<void> {
     try {
-      await this.chatService.getChatToken(chatId).then((tokenData) => {
-        console.log(tokenData);
-      });
+      await this.chatService.getChatToken(chatId);
     } catch (error) {
       console.error(error);
     }
