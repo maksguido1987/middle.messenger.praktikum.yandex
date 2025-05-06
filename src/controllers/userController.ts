@@ -14,7 +14,7 @@ export class UserController {
   async updateProfile(data: UserProfileData): Promise<void> {
     try {
       await this.userService.updateProfile(data).then(() => {
-        store.setState('user', data);
+        // store.setState('user', data);
         this.router.go('/messenger');
       });
     } catch (error) {
@@ -44,9 +44,7 @@ export class UserController {
 
   async searchUser(login: string): Promise<void> {
     try {
-      await this.userService.searchUser({login}).then((users) => {
-        console.log(users);
-      });
+      await this.userService.searchUser({login});
     } catch (error) {
       console.error(error);
     }

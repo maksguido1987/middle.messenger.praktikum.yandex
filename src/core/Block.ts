@@ -100,7 +100,7 @@ export abstract class Block<T extends BlockProps = BlockProps> {
     Object.entries(childrenProps).forEach(([childName, props]) => {
       const child = this.children[childName];
       if (child instanceof Block) {
-        child.setState(props);
+        child.setAttributes(props);
       }
     });
   };
@@ -250,7 +250,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
   }
 
   public componentWillUnmount() {
-    console.log('componentWillUnmount');
     // Удаляем все обработчики событий
     // if (this.events) {
     //   Object.entries(this.events).forEach(([event, callback]) => {

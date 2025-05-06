@@ -1,7 +1,6 @@
 import {Block} from '../../../core/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
-import {UserData} from '../../../services/auth';
 import '../style.scss';
 import {UserController} from '../../../controllers/userController';
 import {UserProfileData} from '../../../services/user';
@@ -9,7 +8,6 @@ import {store, StoreEvents} from '../../../store/store';
 
 export class ProfileForm extends Block {
   private userController: UserController;
-  private userData: UserData | null = null;
 
   constructor() {
     super({
@@ -77,9 +75,9 @@ export class ProfileForm extends Block {
   }
 
   private async getUserData() {
-    this.userData = store.state.user as UserData;
-    if (this.userData) {
-      const {email, login, first_name, second_name, display_name, phone} = this.userData;
+    const userData = store.state.user;
+    if (userData) {
+      const {email, login, first_name, second_name, display_name, phone} = userData;
 
       this.setChildrenProps({
         EmailInput: {value: email},

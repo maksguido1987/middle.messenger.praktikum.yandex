@@ -91,6 +91,25 @@ class Store extends EventBus {
         break;
     }
   }
+
+  public clearStore(): void {
+    this._state = {
+      modals: {
+        createChat: false,
+        addUser: false,
+        deleteUser: false,
+      },
+      user: null,
+      chats: {
+        original: [],
+        filtered: [],
+        currentChat: null,
+        messages: [],
+      },
+      searchChat: '',
+    };
+    this.emit(StoreEvents.STORE_UPDATE);
+  }
 }
 
 export const store = Store.getInstance();
