@@ -1,5 +1,5 @@
-import {BlockProps} from '../global-types';
-import {Block} from './Block';
+import {BlockProps} from '../../global-types';
+import {Block} from '../Block';
 import {Route} from './Route';
 
 export class Router {

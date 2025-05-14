@@ -5,7 +5,7 @@ import {Link} from '../../link/Link';
 import '../style.scss';
 import {AuthController} from '../../../controllers/authController';
 import {SignInData} from '../../../services/auth';
-import {Router} from '../../../core/Router';
+import {Router} from '../../../core/router/Router';
 import {store, StoreEvents} from '../../../store/store';
 export class LoginForm extends Block {
   private authController: AuthController;

@@ -12,3 +12,4 @@ dist
 public
 .github
 *.d.ts
+jest.config.ts

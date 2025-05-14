@@ -14,13 +14,16 @@
     "lint": "eslint src --ext .js,.ts",
     "lint:style": "stylelint \"**/*.scss\"",
     "lint:fix": "eslint src --ext .js,.ts --fix",
-    "lint:style:fix": "stylelint \"**/*.scss\" --fix"
+    "lint:style:fix": "stylelint \"**/*.scss\" --fix",
+    "test": "jest",
+    "prepare": "husky"
   },
   "dependencies": {
     "express": "4.21.2",
     "handlebars": "4.7.8"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "7.1.0",
     "@typescript-eslint/parser": "7.1.0",
     "eslint": "8.57.0",

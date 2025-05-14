@@ -1,4 +1,4 @@
-import {Router} from './Router';
+import {Router} from './router/Router';
 
 export enum HTTPMethod {
   GET = 'GET',
