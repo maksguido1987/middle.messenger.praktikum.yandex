@@ -70,10 +70,10 @@ export class DeleteUserForm extends Block {
       <form class="modal-form" id="delete-user-form">
         <div class="chat-users-list">
           ${
-            users && users.length
-              ? users.map((u) => `<div>${u.first_name} ${u.second_name} (${u.id})</div>`).join('')
-              : '<div>Нет пользователей</div>'
-          }
+  users && users.length
+    ? users.map((u) => `<div>${u.first_name} ${u.second_name} (${u.id})</div>`).join('')
+    : '<div>Нет пользователей</div>'
+}
         </div>
         {{{Input}}}
         {{{SubmitButton}}}
