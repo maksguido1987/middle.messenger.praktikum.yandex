@@ -1,4 +1,4 @@
-import {Router} from './router/Router';
+import {Router} from '../router/Router';
 
 export enum HTTPMethod {
   GET = 'GET',
@@ -22,7 +22,7 @@ type HTTPMethodType = (
 ) => Promise<XMLHttpRequest>;
 
 export class HTTPClient {
-  private static transformDataToQueryString(data: unknown): string {
+  static transformDataToQueryString(data: unknown): string {
     if (!data) return '';
 
     return Object.entries(data)

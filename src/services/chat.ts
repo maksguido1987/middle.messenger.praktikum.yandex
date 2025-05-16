@@ -1,4 +1,4 @@
-import {HTTPClient} from '../core/HTTPClient';
+import {HTTPClient} from '../core/api/HTTPClient';
 import {UserData} from './auth';
 import {UserProfileData} from './user';
 export type {UserProfileData};
