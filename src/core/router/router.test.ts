@@ -1,5 +1,5 @@
 import {Router} from './Router';
-import {Block} from '../Block';
+import {Block} from '../block/Block';
 
 class MockBlock extends Block {
   getContent = jest.fn(() => document.createElement('div'));

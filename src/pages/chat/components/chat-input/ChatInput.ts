@@ -1,4 +1,4 @@
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {AttachButton} from './AttachButton';
 import './style.scss';
 import {webSocketController} from '../../../../controllers/webSocketController';

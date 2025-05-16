@@ -1,4 +1,4 @@
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {store, StoreEvents} from '../../../../store/store';
 import {ChatHeader} from '../chat-header/ChatHeader';
 import {ChatInput} from '../chat-input/ChatInput';

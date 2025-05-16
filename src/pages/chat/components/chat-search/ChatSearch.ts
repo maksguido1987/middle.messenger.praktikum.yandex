@@ -1,11 +1,10 @@
 import {Input} from '../../../../components/input/Input';
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {BlockProps} from '../../../../global-types';
 import {store, StoreEvents} from '../../../../store/store';
 import './style.scss';
 
 export class ChatSearch extends Block {
-
   constructor(props: BlockProps) {
     super({
       ...props,

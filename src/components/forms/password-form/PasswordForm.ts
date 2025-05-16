@@ -1,4 +1,4 @@
-import {Block} from '../../../core/Block';
+import {Block} from '../../../core/block/Block';
 import {Input} from '../../input/Input';
 import {Button} from '../../button/Button';
 import {UserController} from '../../../controllers/userController';

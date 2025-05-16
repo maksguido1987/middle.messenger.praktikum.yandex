@@ -1,4 +1,4 @@
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {BlockProps} from '../../../../global-types';
 import {formatMessageDate} from '../../../../utils/date';
 import './style.scss';

@@ -1,4 +1,4 @@
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 import {Link} from '../../components/link/Link';
 import {ProfileForm} from '../../components/forms/profile-form/ProfileForm';
 import {PasswordForm} from '../../components/forms/password-form/PasswordForm';

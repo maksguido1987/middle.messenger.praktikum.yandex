@@ -1,4 +1,4 @@
-import {Block} from '../Block';
+import {Block} from '../block/Block';
 import {BlockProps} from '../../global-types';
 
 function isEqual(lhs: string, rhs: string) {

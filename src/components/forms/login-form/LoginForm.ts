@@ -1,4 +1,4 @@
-import {Block} from '../../../core/Block';
+import {Block} from '../../../core/block/Block';
 import {Button} from '../../button/Button';
 import {Input} from '../../input/Input';
 import {Link} from '../../link/Link';
