@@ -6,6 +6,11 @@
   "engines": {
     "node": ">=12.0.0"
   },
+  "lint-staged": {
+    "*.ts": "npx tsc --noEmit",
+    "*.{js,jsx,ts,tsx}": "npx eslint",
+    "*.{js,jsx,ts,tsx,html,css}": "npx prettier --check"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -16,7 +21,8 @@
     "lint:fix": "eslint src --ext .js,.ts --fix",
     "lint:style:fix": "stylelint \"**/*.scss\" --fix",
     "test": "jest",
-    "prepare": "husky"
+    "prepare": "husky",
+    "pre-commit": "npm run build && npm run test && npm run lint && npm run lint:style"
   },
   "dependencies": {
     "express": "4.21.2",
@@ -34,6 +40,7 @@
     "husky": "9.1.7",
     "jest": "29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "lint-staged": "^16.0.0",
     "mocha": "^11.2.2",
     "saas": "1.0.0",
     "sass-embedded": "1.85.1",
