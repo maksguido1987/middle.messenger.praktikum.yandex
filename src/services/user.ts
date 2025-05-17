@@ -1,4 +1,4 @@
-import {HTTPClient} from '../core/HTTPClient';
+import {HTTPClient} from '../core/api/HTTPClient';
 
 export interface UserProfileData {
   id: number;

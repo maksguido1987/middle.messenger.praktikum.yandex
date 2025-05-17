@@ -1,9 +1,9 @@
-import {BlockProps, Children, Attributes, EmitEvents, Events, List} from '../global-types';
-import {EventBus, EventHandler} from './EventBus';
+import {BlockProps, Children, Attributes, EmitEvents, Events, List} from '../../global-types';
+import {EventBus, EventHandler} from '../EventBus';
 import * as Handlebars from 'handlebars';
 import {v4 as uuidv4} from 'uuid';
-import {defaultValidationConfig} from './validation';
-import isEqual from '../utils/isEqual';
+import {defaultValidationConfig} from '../validation';
+import isEqual from '../../utils/isEqual';
 
 export abstract class Block<T extends BlockProps = BlockProps> {
   private eventBus: () => EventBus;
@@ -251,30 +251,6 @@ export abstract class Block<T extends BlockProps = BlockProps> {
 
   public componentWillUnmount() {
     // Удаляем все обработчики событий
-    // if (this.events) {
-    //   Object.entries(this.events).forEach(([event, callback]) => {
-    //     this._element?.removeEventListener(event, callback as EventListener);
-    //   });
-    // }
-    // // Вызываем componentWillUnmount у всех дочерних компонентов
-    // Object.values(this.children).forEach((child) => {
-    //   if (child instanceof Block) {
-    //     child.componentWillUnmount();
-    //   }
-    // });
-    // if (this._element) {
-    //   this._element.remove();
-    // }
-    // // Очищаем eventBus
-    // this.eventBus().clear();
-    // // Очищаем ссылки
-    // this._element = null;
-    // this.children = {};
-    // this.events = {};
-    // this.attributes = {} as NonNullable<T['attributes']>;
-    // this.state = {} as NonNullable<T['state']>;
-    // this.list = {};
-    // this.eventBus().emit(EmitEvents.FLOW_CWU);
   }
 
   protected getFormData<T>(e: Event): T {

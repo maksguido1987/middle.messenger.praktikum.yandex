@@ -1,5 +1,5 @@
 import {BlockProps} from '../../global-types';
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 import {FieldConfig, defaultValidationConfig} from '../../core/validation';
 import './style.scss';
 

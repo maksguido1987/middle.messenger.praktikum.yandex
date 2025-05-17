@@ -1,5 +1,5 @@
 import {SignUpForm} from '../../components/forms/sign-up-form/SignUpForm';
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 
 export class SignUpPage extends Block {
   constructor() {

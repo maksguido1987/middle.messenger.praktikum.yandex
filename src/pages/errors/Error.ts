@@ -1,5 +1,5 @@
 import {Link} from '../../components/link/Link';
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 import {BlockProps} from '../../global-types';
 
 export interface ErrorPageProps extends BlockProps {

@@ -1,4 +1,4 @@
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {Avatar} from '../../../../components/avatar/Avatar';
 import {store} from '../../../../store/store';
 import {StoreEvents} from '../../../../store/store';
@@ -16,7 +16,6 @@ interface ChatHeaderProps {
 }
 
 export class ChatHeader extends Block {
-
   constructor(props: ChatHeaderProps) {
     super({
       ...props,

@@ -1,5 +1,5 @@
 import {AuthController} from '../../controllers/authController';
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 import {store, StoreEvents} from '../../store/store';
 import {Chat} from './components/chat/Chat';
 import {ChatList} from './components/chat-list/ChatList';

@@ -1,5 +1,5 @@
 import {webSocketController} from '../../../../controllers/webSocketController';
-import {Block} from '../../../../core/Block';
+import {Block} from '../../../../core/block/Block';
 import {BlockProps} from '../../../../global-types';
 import {ChatInfo, ChatService} from '../../../../services/chat';
 import {store} from '../../../../store/store';

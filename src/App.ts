@@ -1,4 +1,4 @@
-import {Router} from './core/Router';
+import {Router} from './core/router/Router';
 import {ChatPage} from './pages/chat/ChatPage';
 import {ErrorPage} from './pages/errors/Error';
 import {LoginPage} from './pages/login/LoginPage';

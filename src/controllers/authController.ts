@@ -1,4 +1,4 @@
-import {Router} from '../core/Router';
+import {Router} from '../core/router/Router';
 import {AuthService, SignUpData, SignInData, UserData} from '../services/auth';
 import {store} from '../store/store';
 

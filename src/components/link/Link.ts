@@ -1,5 +1,5 @@
-import {Block} from '../../core/Block';
-import {Router} from '../../core/Router';
+import {Block} from '../../core/block/Block';
+import {Router} from '../../core/router/Router';
 import {BlockProps} from '../../global-types';
 import './style.scss';
 

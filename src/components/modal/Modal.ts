@@ -1,4 +1,4 @@
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 import {Button} from '../button/Button';
 import {store, StoreEvents} from '../../store/store';
 import './style.scss';

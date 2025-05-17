@@ -1,5 +1,5 @@
 import {LoginForm} from '../../components/forms/login-form/LoginForm';
-import {Block} from '../../core/Block';
+import {Block} from '../../core/block/Block';
 export class LoginPage extends Block {
   constructor() {
     super({

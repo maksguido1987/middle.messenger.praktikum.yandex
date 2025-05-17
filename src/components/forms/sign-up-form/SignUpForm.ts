@@ -1,5 +1,5 @@
 import {AuthController} from '../../../controllers/authController';
-import {Block} from '../../../core/Block';
+import {Block} from '../../../core/block/Block';
 import {SignUpData} from '../../../services/auth';
 import {Button} from '../../button/Button';
 import {Input} from '../../input/Input';
